@@ -1,14 +1,21 @@
 {
   "name": "ddstats-web",
   "version": "1.0.0",
-  "description": "",
+  "description": "A website showing various statistics related to DDNet.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://git.qwik.space/ddstats/web"
+  },
+  "keywords": [
+    "ddstats",
+    "ddnet"
+  ],
   "author": "furo",
-  "license": "ISC",
+  "license": "WTFPL",
   "type": "module",
   "dependencies": {
     "better-sqlite3": "^8.0.1",
