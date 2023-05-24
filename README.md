@@ -10,3 +10,4 @@ DDStats can be configured through environment variables or with a `.env` file.
 | `DB_PLAYTIME` | `../scripts/db/playtime.db`  | Location of the playtime database.      |
 | `DB_DDNET`    | `../scripts/db/ddnet.sqlite` | Location of the ddnet database.         |
 | `DB_POINTS`   | `../scripts/db/points.db`    | Location of the ranked points database. |
+| `LOG_PATH`    | `./ddstats.log`              | Path to write log file                  |
