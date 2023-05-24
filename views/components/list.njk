@@ -1,0 +1,38 @@
+{% macro new(array, headers, keys, href, hrefkey) %}
+<table>
+    <tbody>
+        <tr>
+            {% for header in headers %}
+            <th>
+                {{ header }}
+            </th>
+            {% endfor %}
+        </tr>
+        {% for item in array %}
+        <tr>
+            {% for key in keys %}
+                <td>
+                    {% if href %}
+                        {% if hrefkey.filter %}
+                            <a href="{{ href }}/{{ item[hrefkey[0]][hrefkey[1]] | urlencode }}">
+                        {% else %}
+                            <a href="{{ href }}/{{ item[hrefkey] | urlencode }}">
+                        {% endif %}
+                    {% endif %}
+                        <div>
+                            {% if key.filter %}
+                                {{ item[key[0]][key[1]] }}
+                            {% else %}
+                                {{ item[key] }}
+                            {% endif %}
+                        </div>
+                    {% if href %}
+                    </a>
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}

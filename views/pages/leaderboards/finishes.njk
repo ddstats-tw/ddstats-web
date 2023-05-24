@@ -1,0 +1,48 @@
+{% extends "templates/base.njk" %}
+{% import "components/list.njk" as list %}
+{% import "components/utils.njk" as utils %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="/assets/css/app.css">
+	<title>Leaderboard | Most finishes | DDStats</title>
+{% endblock %}
+
+{% block main %}
+<h1>Leaderboard for most finishes</h1>
+
+<ul class="buttons">
+    <li><a class="{{ "active" if category == "Any" }}" href="/leaderboard/finishes/category/Any/">Total</a></li>
+    <li><a class="{{ "active" if category == "Novice" }}" href="/leaderboard/finishes/category/Novice/">Novice</a></li>
+    <li><a class="{{ "active" if category == "Moderate" }}" href="/leaderboard/finishes/category/Moderate/">Moderate</a></li>
+    <li><a class="{{ "active" if category == "Brutal" }}" href="/leaderboard/finishes/category/Brutal/">Brutal</a></li>
+    <li><a class="{{ "active" if category == "Insane" }}" href="/leaderboard/finishes/category/Insane/">Insane</a></li>
+    <li><a class="{{ "active" if category == "Dummy" }}" href="/leaderboard/finishes/category/Dummy/">Dummy</a></li>
+    <li><a class="{{ "active" if category == "DDmaX.Easy" }}" href="/leaderboard/finishes/category/DDmaX.Easy/">DDmaX.Easy</a></li>
+    <li><a class="{{ "active" if category == "DDmaX.Next" }}" href="/leaderboard/finishes/category/DDmaX.Next/">DDmaX.Next</a></li>
+    <li><a class="{{ "active" if category == "DDmaX.Pro" }}" href="/leaderboard/finishes/category/DDmaX.Pro/">DDmaX.Pro</a></li>
+    <li><a class="{{ "active" if category == "DDmaX.Nut" }}" href="/leaderboard/finishes/category/DDmaX.Nut/">DDmaX.Nut</a></li>
+    <li><a class="{{ "active" if category == "Oldschool" }}" href="/leaderboard/finishes/category/Oldschool/">Oldschool</a></li>
+    <li><a class="{{ "active" if category == "Solo" }}" href="/leaderboard/finishes/category/Solo/">Solo</a></li>
+    <li><a class="{{ "active" if category == "Race" }}" href="/leaderboard/finishes/category/Race/">Race</a></li>
+    <li><a class="{{ "active" if category == "Fun" }}" href="/leaderboard/finishes/category/Fun/">Fun</a></li>
+</ul>
+
+<table>
+    <tbody>
+        <tr>
+            <th>#</th>
+            <th class="wide">Player</th>
+            <th class="grey">Map</th>
+            <th class="grey">Finishes</th>
+        </tr>
+        {% for player in leaderboard %}
+        <tr>
+            <td class="rank">{{ player.rank }}</td>
+            <td class="wide">{{ player.name }}</td>
+            <td class="grey">{{ player.map }}</td>
+            <td class="grey">{{ player.finishes }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

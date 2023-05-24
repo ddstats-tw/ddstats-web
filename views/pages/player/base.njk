@@ -1,0 +1,33 @@
+{% extends "templates/base.njk" %}
+{% block main %}
+    <h1>Yumiko</h1>
+    <ul class="buttons">
+        <li>
+            <a class="active" href="overview">Overview</a>
+        </li>
+        <li>
+            <a href="overview">Playtime</a>
+        </li>
+        <li>
+            <a href="overview">Rank 1s</a>
+        </li>
+    </ul>
+    <div class="block">
+        <h2>Recent Finishes</h2>
+        <table>
+            <tr>
+                <th>2022-01-01 11:11 Nyan cat</th>
+            </tr>
+            <tr>
+                <th>2022-01-01 11:11</th>
+                <th>Nyan Cat</th>
+                <th>00:33</th>
+            </tr>
+            <tr>
+                <th>2022-01-01 11:11</th>
+                <th>Nyan Cat</th>
+                <th>00:33</th>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

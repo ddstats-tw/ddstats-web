@@ -1,0 +1,35 @@
+<!--
+  ____  ____  ____  _        _       
+ |  _ \|  _ \/ ___|| |_ __ _| |_ ___ 
+ | | | | | | \___ \| __/ _` | __/ __|
+ | |_| | |_| |___) | || (_| | |_\__ \
+ |____/|____/|____/ \__\__,_|\__|___/
+                                     
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+		{% block head %}
+			<title>DDStats</title>
+		{% endblock %}
+	</head>
+
+	<body>
+		<nav class="topnav">
+			<h2>DDStats</h2>
+			<a href="/leaderboards/">Leaderboards</a>
+		</nav>
+
+		<main>
+		{% block main %}
+			<p>Main default content. Hello world!</p>
+		{% endblock %}
+		<main>
+
+	</body>
+</html>

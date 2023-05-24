@@ -1,0 +1,19 @@
+{% macro pageLink(pageNum, currentPage, path) %}
+    <a class="page {{ "current-page" if currentPage === pageNum }}" href="{{ path | safe }}/{{ pageNum }}">{{ pageNum }}</a>
+{% endmacro %}
+
+{% macro pager(pageNum, maxPage, path) %}
+    {{ pageLink(1, pageNum, path) }}
+    <p>{{ "..." if (pageNum - 2 > 1) }}</p>
+
+    {% for page in range(pageNum-2, pageNum+2) %}
+        {% if page > 1 and page < maxPage %}
+            {{ pageLink(page, pageNum, path) }}
+        {% endif %}
+    {% endfor %}
+
+    <p>{{ "..." if (pageNum + 2 < maxPage) }}</p>
+    {% if maxPage > 1 %}
+        {{ pageLink(maxPage, pageNum, path) }}
+    {% endif %}
+{% endmacro %}

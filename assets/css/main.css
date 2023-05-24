@@ -1,0 +1,339 @@
+@font-face {
+    font-family: 'Manrope Regular';
+    font-display: swap;
+    src: url('/assets/fonts/Manrope-Regular.woff2') format('woff2'),
+        url('/assets/fonts/Manrope-Regular.woff') format('woff'),
+        url('/assets/fonts/Manrope-Regular.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Manrope ExtraBold';
+    font-display: swap;
+    src: url('/assets/fonts/Manrope-ExtraBold.ttf') format('ttf');
+}
+
+:root {
+    /* COLORS */
+    --red:      #EF5255;
+    --red1:     #BF3638;
+    --red2:     #D5484A;
+    --red3:     #EF5255;
+    --red4:     #FA7A7C;
+    --red5:     #FA999A;
+
+    --orange:   #EB801B;
+    --orange1:  #AF6118;
+    --orange2:  #DA7516;
+    --orange3:  #EB801B;
+    --orange4:  #F99434;
+    --orange5:  #F9AE67;
+
+    --yellow:   #F4C025;
+    --yellow1:  #BD920F;
+    --yellow2:  #DFAC11;
+    --yellow3:  #F4C025;
+    --yellow4:  #FFD147;
+    --yellow5:  #FFE38F;
+
+    --pear:     #AED651;
+    --pear1:    #7D9A37;
+    --pear2:    #96BB3E;
+    --pear3:    #AED651;
+    --pear4:    #C2E571;
+    --pear5:    #DBF1A7;
+
+    --green:    #72D661;
+    --green1:   #53A545;
+    --green2:   #61C350;
+    --green3:   #72D661;
+    --green4:   #93E684;
+    --green5:   #BCF0B2;
+
+    --sea:      #3DDF89;
+    --sea1:     #2AA764;
+    --sea2:     #2ACB75;
+    --sea3:     #3DDF89;
+    --sea4:     #5DEEA1;
+    --sea5:     #A9F4CC;
+
+    --cyan:     #4CDCDF;
+    --cyan1:    #2CA3A5;
+    --cyan2:    #2DCACD;
+    --cyan3:    #4CDCDF;
+    --cyan4:    #6BE8EB;
+    --cyan5:    #B7EFF0;
+
+    --blue:     #4C9CEF;
+    --blue1:    #1C67B5;
+    --blue2:    #2A83DF;
+    --blue3:    #4C9CEF;
+    --blue4:    #74B6FB;
+    --blue5:    #A3CEFA;
+
+    --indigo:   #4C6DEF;
+    --indigo1:  #2143CA;
+    --indigo2:  #3457E5;
+    --indigo3:  #4C6DEF;
+    --indigo4:  #748FFB;
+    --indigo5:  #B1C0FC;
+
+    --purple:   #967CF4;
+    --purple1:  #613FD9;
+    --purple2:  #7C5DE9;
+    --purple3:  #967CF4;
+    --purple4:  #BCAAFD;
+    --purple5:  #CFC2FE;
+
+    --magenta:  #E175DB;
+    --magenta1: #B63AB0;
+    --magenta2: #D152CB;
+    --magenta3: #E175DB;
+    --magenta4: #EC9AEF;
+    --magenta5: #EFB1F1;
+
+    --pink:     #EE588F;
+    --pink1:    #D0356D;
+    --pink2:    #E2407C;
+    --pink3:    #EE588F;
+    --pink4:    #FA80AC;
+    --pink5:    #FBA7C6;
+
+    --grey1:    #00001F;
+    --grey2:    #10102F;
+    --grey3:    #20203F;
+    --grey4:    #30304F;
+    --grey5:    #40405F;
+    --grey6:    #50506F;
+    --grey7:    #60607F;
+    --grey8:    #70708F;
+    --grey9:    #80809F;
+    --grey10:   #9090AF;
+    --grey11:   #A0A0BF;
+    --grey12:   #B0B0CF;
+    --grey13:   #C0C0DF;
+    --grey14:   #D0D0EF;
+    --grey15:   #E0E0FF;
+
+    /* ALIASES */
+    --primary:   var(--sea);
+    --accent:    var(--cyan);
+    --accent2:   var(--blue);
+    --surface:   var(--grey2);
+    --text:      var(--grey15);
+}
+
+* {
+    font-family: 'Manrope ExtraBold', sans-serif;
+    line-height: 1.5;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    color: var(--text);
+    background-color: var(--surface);
+    min-height: 100vh;
+}
+
+.topnav {
+    background-color: var(--grey3);
+    box-shadow: .5rem 0 4rem var(--grey1);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem;
+}
+  
+.topnav h1 {
+    margin: 0;
+}
+
+.topnav a {
+    text-decoration: none;
+    color: var(--text);
+
+    font-size: 1.25rem;
+}
+
+.topnav a:hover {
+    border-bottom: .1rem solid var(--text);
+}
+
+main {
+    width: 55rem;
+    max-width: 80%;
+    margin: auto;
+}
+
+main > h1 {
+    text-align: center;
+}
+
+.center {
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+
+
+table {
+    margin: 1rem 0;
+    width: 100%;
+
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    border-collapse: collapse;
+}
+
+table tbody {
+    border-collapse: separate;
+    border-spacing: 0.5rem;
+    display: table;
+    width: 100%;
+    font-size: 1.15rem;
+}
+
+tr {
+    background-color: var(--grey3);
+}
+
+tr:nth-child(even) {
+    background-color: var(--grey2);
+}
+
+th,
+td {
+    text-align: center;
+    vertical-align: middle;
+
+    padding: .35rem 0.35rem;
+    border: 1px solid var(--grey4);
+}
+
+.gold {
+    color: var(--yellow4);
+}
+
+.silver {
+    color: var(--grey12);
+}
+
+.bronze {
+    color: var(--orange5);
+}
+
+.platinum {
+    color: var(--grey10);
+}
+
+.grey {
+    text-align: left;
+    color: var(--grey10);
+}
+
+th a, .leaderboard a {
+    color: var(--pink5);
+    text-decoration: none;
+}
+
+th a:hover, .leaderboard a:hover {
+    text-decoration: underline;
+}
+
+.wide {
+    text-align: left;
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    justify-content:center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.buttons li {
+    list-style-type: none;
+}
+
+.buttons a {
+    text-decoration: none;
+    color: var(--text);
+    border-bottom: 0.20rem solid var(--magenta5);
+    padding: 0.20rem;
+    margin: 0.25rem;
+}
+
+.buttons a:hover {
+    transition: border-bottom 0.5s ease;
+    border-bottom: 0.20rem solid var(--blue2);
+}
+
+.buttons .active {
+    border-bottom: 0.20rem solid var(--blue3);
+}
+
+.leaderboards {
+    margin-top: 1rem;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: initial;
+    gap: 1.75rem;
+}
+
+.leaderboard {
+    width: 0;
+    padding: 1.25rem;
+    border: 0.45rem solid var(--magenta5);
+    min-width: 16rem;
+}
+
+
+
+.pages {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.page {
+    margin: .5rem;
+    padding: .15rem .5rem;
+
+    border: .1rem solid var(--magenta5);
+    border-radius: 5px;
+
+    color: var(--text);
+    background-color: transparent;
+
+    cursor: pointer;
+    text-decoration: none transparent;
+    transition: color .3s, background-color .3s;
+}
+
+.page:hover {
+    transition: color .3s, border .3s;
+    border: .1rem solid var(--blue3);
+}
+
+.current-page {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.block {
+    background-color: var(--grey4);
+    border-radius: 0.3rem;
+    display: inline-block;
+}
