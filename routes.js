@@ -76,7 +76,9 @@ routes.get("/leaderboard/finishes/", mostfinishes_route)
 routes.get("/leaderboard/finishes/category/:category", mostfinishes_route)
 
 function players_route(req, res, next) {
-    res.render("pages/player/overview.njk", { })
+    const player = req.params.player
+    const rankings = queries.player_rankings(player)
+    res.render("pages/player/overview.njk", { rankings })
 }
 
 routes.get("/player/:player", players_route)

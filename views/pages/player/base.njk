@@ -1,4 +1,10 @@
 {% extends "templates/base.njk" %}
+
+{% block head %}
+	<script src="/assets/js/sortable.js" defer></script>
+	<title>Yumiko | Player Profile | DDStats</title>
+{% endblock %}
+
 {% block main %}
     <h1>Yumiko</h1>
     <ul class="buttons">
@@ -13,21 +19,33 @@
         </li>
     </ul>
     <div class="block">
-        <h2>Recent Finishes</h2>
-        <table>
+        <h2>Novice</h2>
+        <table class="sortable">
+        <thead>
             <tr>
-                <th>2022-01-01 11:11 Nyan cat</th>
+                <th id="default-sort" class="wide dir-u">Map</th>
+                <th>Time</th>
+                <th>Rank</th>
+                <th>Team Rank</th>
+                <th>Playtime</th>
             </tr>
-            <tr>
-                <th>2022-01-01 11:11</th>
-                <th>Nyan Cat</th>
-                <th>00:33</th>
-            </tr>
-            <tr>
-                <th>2022-01-01 11:11</th>
-                <th>Nyan Cat</th>
-                <th>00:33</th>
-            </tr>
+        </thead>
+        <tbody>
+            {% for rank in rankings %}
+                <tr>
+                    <td>{{ rank.Map}}</td>
+                    <td>{{ rank.Time }}</td>
+                    <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
+                    {% if rank.Teamrank %}
+                    <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    <td>0 hours</td>
+                </tr>
+            {% endfor %}
+        </tbody>
         </table>
+
     </div>
 {% endblock %}

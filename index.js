@@ -17,7 +17,7 @@ const log = getLogger("DDStats |", "cyan")
 
 log.write("Starting server...")
 log.write("Loading middleware...")
-njk.configure(
+let nunjucks = njk.configure(
     "views",
     {
         autoescape: true,
@@ -27,6 +27,14 @@ njk.configure(
     }
 )
 
+function ordinal(n) {
+    var s = ["th", "st", "nd", "rd"]
+    var v = n%100
+    return (s[(v-20)%10] || s[v] || s[0])
+}
+
+nunjucks.addGlobal('ordinal', ordinal)
+  
 server.use("/assets", express.static("assets"))
 server.use(bodyParser.urlencoded({ extended: true }))
 

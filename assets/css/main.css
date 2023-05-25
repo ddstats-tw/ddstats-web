@@ -12,6 +12,16 @@
     src: url('/assets/fonts/Manrope-ExtraBold.ttf') format('ttf');
 }
 
+@font-face {
+    font-family: 'Font Awesome 6 Free';
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url("/assets/fonts/fa-solid-900.woff2") format("woff2"), 
+        url("/assets/fonts/fa-solid-900.ttf") format("ttf"); 
+}
+  
+
 :root {
     /* COLORS */
     --red:      #EF5255;
@@ -163,8 +173,8 @@ body {
 }
 
 main {
-    width: 55rem;
-    max-width: 80%;
+    width: 65rem;
+    max-width: 85%;
     margin: auto;
 }
 
@@ -178,9 +188,7 @@ main > h1 {
     margin-bottom: 0.5rem;
 }
 
-
-
-table {
+.leaderboard table {
     margin: 1rem 0;
     width: 100%;
 
@@ -191,7 +199,7 @@ table {
     border-collapse: collapse;
 }
 
-table tbody {
+.leaderboard table tbody {
     border-collapse: separate;
     border-spacing: 0.5rem;
     display: table;
@@ -199,16 +207,21 @@ table tbody {
     font-size: 1.15rem;
 }
 
-tr {
+.leaderboard tr {
     background-color: var(--grey3);
 }
 
-tr:nth-child(even) {
+.leaderboard tr:nth-child(even) {
     background-color: var(--grey2);
 }
 
-th,
-td {
+.leaderboard .wide {
+    text-align: left;
+    width: 100%;
+}
+
+.leaderboard th,
+.leaderboard td {
     text-align: center;
     vertical-align: middle;
 
@@ -237,18 +250,13 @@ td {
     color: var(--grey10);
 }
 
-th a, .leaderboard a {
+.leaderboard th a, .leaderboard a {
     color: var(--pink5);
     text-decoration: none;
 }
 
-th a:hover, .leaderboard a:hover {
+.leaderboard th a:hover, .leaderboard a:hover {
     text-decoration: underline;
-}
-
-.wide {
-    text-align: left;
-    width: 100%;
 }
 
 .buttons {
@@ -289,7 +297,7 @@ th a:hover, .leaderboard a:hover {
     gap: 1.75rem;
 }
 
-.leaderboard {
+.leaderboards > .leaderboard {
     width: 0;
     padding: 1.25rem;
     border: 0.45rem solid var(--magenta5);
@@ -333,7 +341,59 @@ th a:hover, .leaderboard a:hover {
 }
 
 .block {
-    background-color: var(--grey4);
+
     border-radius: 0.3rem;
     display: inline-block;
+    width: 100%;
+}
+
+.sortable {
+    overflow-x: auto;
+    white-space: nowrap;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.sortable th {
+    cursor: pointer
+}
+
+.sortable td, .sortable th {
+    padding: 0.30rem;
+    border: solid var(--grey4) 0.20rem;
+}
+
+.sortable tr:nth-child(even), .sortable th {
+    background-color: var(--grey3);
+}
+
+.sortable th.no-sort {
+    pointer-events: none
+}
+
+.sortable th {
+    text-align: left;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.sortable {
+    width: 100%;
+}
+
+.sortable th::after {
+    font-family: 'Font Awesome 6 Free';
+    margin-left: 3px;
+    margin-right: 5px;
+    content: "\f0dc";
+    text-align: right;
+    float:right;
+}
+
+.sortable th.dir-d::after {
+    content: "\f0de";
+}
+
+.sortable th.dir-u::after {
+    content: "\f0dd";
 }
