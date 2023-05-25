@@ -45,7 +45,6 @@ function rank1s_route(req, res, next) {
     const page = isNaN(req.params.page) ? 1 : Number(req.params.page)
 
     const leaderboard = queries.leaderboard_rank1s(type, category, sorting, page)
-    console.log(leaderboard)
     res.render("pages/leaderboards/rank1s.njk", { leaderboard, sorting, type, category })
 }
 
