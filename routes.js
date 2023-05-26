@@ -6,7 +6,6 @@ const categories = [
     "Any",
     "Novice",
     "Moderate",
-    "Moderate",
     "Brutal",
     "Insane",
     "Dummy",
@@ -78,7 +77,7 @@ routes.get("/leaderboard/finishes/category/:category", mostfinishes_route)
 function players_route(req, res, next) {
     const player = req.params.player
     const rankings = queries.player_rankings(player)
-    res.render("pages/player/overview.njk", { rankings })
+    res.render("pages/player/overview.njk", { player, rankings })
 }
 
 routes.get("/player/:player", players_route)

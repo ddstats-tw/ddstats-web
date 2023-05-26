@@ -33,7 +33,7 @@ function ordinal(n) {
     return (s[(v-20)%10] || s[v] || s[0])
 }
 
-nunjucks.addGlobal('ordinal', ordinal)
+nunjucks.addGlobal("ordinal", ordinal)
   
 server.use("/assets", express.static("assets"))
 server.use(bodyParser.urlencoded({ extended: true }))

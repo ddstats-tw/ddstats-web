@@ -3,13 +3,22 @@
     font-display: swap;
     src: url('/assets/fonts/Manrope-Regular.woff2') format('woff2'),
         url('/assets/fonts/Manrope-Regular.woff') format('woff'),
-        url('/assets/fonts/Manrope-Regular.ttf') format('ttf');
+        url('/assets/fonts/Manrope-Regular.ttf') format('truetype');
 }
+
+@font-face {
+    font-family: 'Manrope Medium';
+    font-display: swap;
+    src: url('/assets/fonts/Manrope-Medium.woff2') format('woff2'),
+        url('/assets/fonts/Manrope-Medium.ttf') format('truetype');
+}
+
 
 @font-face {
     font-family: 'Manrope ExtraBold';
     font-display: swap;
-    src: url('/assets/fonts/Manrope-ExtraBold.ttf') format('ttf');
+    src: url('/assets/fonts/Manrope-ExtraBold.woff2') format('woff2'),
+        url('/assets/fonts/Manrope-ExtraBold.ttf') format('truetype');
 }
 
 @font-face {
@@ -133,7 +142,7 @@
 }
 
 * {
-    font-family: 'Manrope ExtraBold', sans-serif;
+    font-family: 'Manrope Medium', sans-serif;
     line-height: 1.5;
     scroll-behavior: smooth;
     margin: 0;
@@ -145,6 +154,15 @@ body {
     color: var(--text);
     background-color: var(--surface);
     min-height: 100vh;
+}
+
+a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .topnav {
@@ -355,7 +373,10 @@ main > h1 {
 }
 
 .sortable th {
-    cursor: pointer
+    cursor: pointer;
+    text-align: center;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .sortable td, .sortable th {
@@ -369,12 +390,6 @@ main > h1 {
 
 .sortable th.no-sort {
     pointer-events: none
-}
-
-.sortable th {
-    text-align: left;
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 .sortable {
@@ -396,4 +411,22 @@ main > h1 {
 
 .sortable th.dir-u::after {
     content: "\f0dd";
+}
+
+.transparent {
+    width: 100%;
+}
+
+.transparent th, .transparent td {
+    text-align: left;
+    padding-right: 1.2rem;
+}
+
+th {
+    font-family: 'Manrope ExtraBold';
+}
+
+.graph {
+    margin: auto;
+    width: 70%;
 }

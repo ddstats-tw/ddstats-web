@@ -1,12 +1,12 @@
 {% extends "templates/base.njk" %}
-
+{% import "components/utils.njk" as utils %}
 {% block head %}
-	<script src="/assets/js/sortable.js" defer></script>
-	<title>Yumiko | Player Profile | DDStats</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.umd.min.js"></script>
+    <script src="/assets/js/sortable.js" defer></script>
+    <title>{{ player }} | Overview | Player Profile | DDStats</title>
 {% endblock %}
-
 {% block main %}
-    <h1>Yumiko</h1>
+    <h1>{{ player }}</h1>
     <ul class="buttons">
         <li>
             <a class="active" href="overview">Overview</a>
@@ -18,34 +18,95 @@
             <a href="overview">Rank 1s</a>
         </li>
     </ul>
-    <div class="block">
-        <h2>Novice</h2>
-        <table class="sortable">
-        <thead>
-            <tr>
-                <th id="default-sort" class="wide dir-u">Map</th>
-                <th>Time</th>
-                <th>Rank</th>
-                <th>Team Rank</th>
-                <th>Playtime</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for rank in rankings %}
-                <tr>
-                    <td>{{ rank.Map}}</td>
-                    <td>{{ rank.Time }}</td>
-                    <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
-                    {% if rank.Teamrank %}
-                    <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
-                    {% else %}
-                    <td></td>
-                    {% endif %}
-                    <td>0 hours</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        </table>
 
-    </div>
-{% endblock %}
+<h2 class="center">Points graph</h2>
+<div class="graph">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+  const ctx = document.getElementById('myChart');
+  const data = [
+    { year: 2010, count: 10 },
+    { year: 2011, count: 20 },
+    { year: 2012, count: 15 },
+    { year: 2013, count: 25 },
+    { year: 2014, count: 22 },
+    { year: 2015, count: 30 },
+    { year: 2016, count: 28 },
+  ];
+
+  new Chart(
+    ctx,
+    {
+      type: 'line',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+  );
+</script>
+
+    {% set categories = ["Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
+    {% for category in categories %}
+        <div class="block">
+            <h2>{{ category }}</h2>
+            <div class="points">
+                <table class="transparent">
+                    <thead>
+                    <tr>
+                        <th>Points</th>
+                        <th>Rank Points</th>
+                        <th>Team Points</th>
+                        <th>Rank 1s</th>
+                        <th>Team Rank1s</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>4<sup>{{ ordinal(4) }}</sup> with 500 points</td>
+                            <td>2<sup>{{ ordinal(2) }}</sup> with 470 points</td>
+                            <td>5<sup>{{ ordinal(5) }}</sup> with 500 points</td>
+                            <td>8<sup>{{ ordinal(8) }}</sup> with 12 records</td>
+                            <td>Unranked</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table class="sortable">
+                <thead>
+                    <tr>
+                        <th id="default-sort" class="wide dir-u">Map</th>
+                        <th>Time</th>
+                        <th>Rank</th>
+                        <th>Team Rank</th>
+                        <th>Playtime</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rank in rankings[category] %}
+                        <tr>
+                            <td><a href="/maps/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
+                            <td data-sort="{{ rank.Time }}">{{ utils.fancy_time(rank.Time) }}</td>
+                            <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
+                            {% if rank.Teamrank %}
+                                <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td data-sort="{{ rank.Playtime }}">{{ utils.time_format(rank.Playtime) if rank.Playtime else "Unplayed" }}</td>
+                            <td>{{ rank.Points }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    {% endblock %}
