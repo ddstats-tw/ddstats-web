@@ -2,7 +2,7 @@
 
 
 ## Configuration
-DDStats can be configured through environment variables or with a `.env` file. 
+DDStats can be configured through environment variables or with a `.env` file. You can find a template in the `template.env` file which you can copy or rename to `.env`.
 
 | Variable      | Default                      | Description                                |
 | ------------- | ---------------------------- | ------------------------------------------ |
