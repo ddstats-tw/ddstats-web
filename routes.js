@@ -78,8 +78,8 @@ function players_route(req, res, next) {
     const player = req.params.player
     const rankings = queries.player_rankings(player)
     const rankedPointsGraph = queries.getRankedPointsGraph(player)
-
-    res.render("pages/player/overview.njk", { player, rankings, rankedPointsGraph })
+    const page = req.params.type ?? "overview"
+    res.render("pages/player/overview.njk", { page, player, rankings, rankedPointsGraph })
 }
 
 routes.get("/player/:player", players_route)

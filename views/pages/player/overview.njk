@@ -1,1 +1,170 @@
 {% extends "pages/player/base.njk" %}
+{% import "components/utils.njk" as utils %}
+
+{% block player %}
+<div class="graph">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    function formatNumber(value) {
+        if (value >= 1000000000 || value <= -1000000000) {
+            return value / 1e9 + 'B';
+        } else if (value >= 1000000 || value <= -1000000) {
+            return value / 1e6 + 'M';
+        } else if (value >= 1000 || value <= -1000) {
+            return floor10(value / 1e3, -1) + 'K';
+        }
+        return value;
+    }
+
+  const ctx = document.getElementById('myChart');
+  const data = [
+    {% for row in rankedPointsGraph %}
+    { x: "{{ row.date }}", y: {{ row.rankpoints }}, y2: {{ row.teampoints }} },
+    {% endfor %}
+  ];
+
+  new Chart(
+    ctx,
+    {
+      type: 'line',
+      data: {
+            datasets: [{
+                label: 'Rank Points',
+                data: data,
+                fill: false,
+                borderColor: '#4C9CEF',
+                tension: 0,
+                pointRadius: 0
+            },
+            {
+                label: 'Team Points',
+                data: data,
+                fill: false,
+                borderColor: '#EF5255',
+                tension: 0,
+                pointRadius: 0,
+                parsing: {
+                    yAxisKey: 'y2'
+                }
+            }
+            ]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                },
+                title: {
+                    color: "#E0E0FF",
+                    display: true,
+                    align: 'start',
+                    text: "Points graph",
+                    padding: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    font: {
+                        weight: 'bold',
+                        size: 23,
+                    },
+                }
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: false
+            },
+            scales: {
+                x: {
+                    grid: {
+                        color: "#30304F"
+                    },
+                    ticks: {
+                        color: "#E0E0FF",
+                        font: {
+                            weight: 'bold',
+                            size: 20,
+                        }
+                    },
+                    type: 'time',
+                    time: {
+                        unit: 'year'
+                    }
+                },
+                y: {
+                    suggestedMax: 250,
+                    grid: {
+                        color: "#30304F"
+                    },
+                    ticks: {
+                        color: "#E0E0FF",
+                        font: {
+                            size: 17,
+                        }
+                    }
+                }
+            }
+        }
+    }
+  );
+</script>
+
+{% set categories = ["Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
+{% for category in categories %}
+    <div class="block">
+        <h2>{{ category }}</h2>
+        <div class="points">
+            <table class="transparent">
+                <thead>
+                <tr>
+                    <th>Points</th>
+                    <th>Rank Points</th>
+                    <th>Team Points</th>
+                    <th>Rank 1s</th>
+                    <th>Team Rank1s</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>4<sup>{{ ordinal(4) }}</sup> with 500 points</td>
+                        <td>2<sup>{{ ordinal(2) }}</sup> with 470 points</td>
+                        <td>5<sup>{{ ordinal(5) }}</sup> with 500 points</td>
+                        <td>8<sup>{{ ordinal(8) }}</sup> with 12 records</td>
+                        <td>Unranked</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <table class="sortable">
+            <thead>
+                <tr>
+                    <th id="default-sort" class="wide dir-u">Map</th>
+                    <th>Time</th>
+                    <th>Rank</th>
+                    <th>Team Rank</th>
+                    <th>Playtime</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rank in rankings[category] %}
+                    <tr>
+                        <td><a href="/maps/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
+                        <td data-sort="{{ rank.Time }}">{{ utils.fancy_time(rank.Time) }}</td>
+                        <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
+                        {% if rank.Teamrank %}
+                            <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td data-sort="{{ rank.Playtime }}">{{ utils.time_format(rank.Playtime) if rank.Playtime else "Unplayed" }}</td>
+                        <td>{{ rank.Points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}
