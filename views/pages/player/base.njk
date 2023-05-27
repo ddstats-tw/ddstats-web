@@ -2,6 +2,7 @@
 {% import "components/utils.njk" as utils %}
 {% block head %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="/assets/js/sortable.js" defer></script>
     <title>{{ player }} | Overview | Player Profile | DDStats</title>
 {% endblock %}
@@ -25,15 +26,22 @@
 </div>
 
 <script>
+    function formatNumber(value) {
+        if (value >= 1000000000 || value <= -1000000000) {
+            return value / 1e9 + 'B';
+        } else if (value >= 1000000 || value <= -1000000) {
+            return value / 1e6 + 'M';
+        } else if (value >= 1000 || value <= -1000) {
+            return floor10(value / 1e3, -1) + 'K';
+        }
+        return value;
+    }
+
   const ctx = document.getElementById('myChart');
   const data = [
-    { year: 2010, count: 10 },
-    { year: 2011, count: 20 },
-    { year: 2012, count: 15 },
-    { year: 2013, count: 25 },
-    { year: 2014, count: 22 },
-    { year: 2015, count: 30 },
-    { year: 2016, count: 28 },
+    {% for row in rankedPointsGraph %}
+    { x: "{{ row.date }}", y: {{ row.rankpoints }}, y2: {{ row.teampoints }} },
+    {% endfor %}
   ];
 
   new Chart(
@@ -41,14 +49,59 @@
     {
       type: 'line',
       data: {
-        labels: data.map(row => row.year),
-        datasets: [
-          {
-            label: 'Acquisitions by year',
-            data: data.map(row => row.count)
-          }
-        ]
-      }
+            datasets: [{
+                label: 'Rank Points',
+                data: data,
+                fill: false,
+                borderColor: '#4C9CEF',
+                tension: 0,
+                pointRadius: 0
+            },
+            {
+                label: 'Team Points',
+                data: data,
+                fill: false,
+                borderColor: '#EF5255',
+                tension: 0,
+                pointRadius: 0,
+                parsing: {
+                    yAxisKey: 'y2'
+                }
+            }
+            ]
+        },
+        options: {
+            scales: {
+                x: {
+                    grid: {
+                        color: "#30304F"
+                    },
+                    ticks: {
+                        color: "#E0E0FF",
+                        font: {
+                            weight: 'bold',
+                            size: 20,
+                        }
+                    },
+                    type: 'time',
+                    time: {
+                        unit: 'year'
+                    }
+                },
+                y: {
+                    suggestedMax: 250,
+                    grid: {
+                        color: "#30304F"
+                    },
+                    ticks: {
+                        color: "#E0E0FF",
+                        font: {
+                            size: 17,
+                        }
+                    }
+                }
+            }
+        }
     }
   );
 </script>
