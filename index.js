@@ -8,12 +8,13 @@ import routes from "./routes.js"
 
 dotenv.config()
 
+const log = getLogger("DDStats |", "cyan")
 export const PORT = process.env.PORT ?? 12345
 
+log.write("Loading databases...")
 dbInit()
 
 const server = express()
-const log = getLogger("DDStats |", "cyan")
 
 log.write("Starting server...")
 log.write("Loading middleware...")
