@@ -263,7 +263,6 @@ main > h1 {
 }
 
 .leaderboard th a, .leaderboard a {
-    color: var(--pink5);
     text-decoration: none;
 }
 

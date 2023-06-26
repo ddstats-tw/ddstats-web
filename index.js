@@ -1,10 +1,11 @@
 import dotenv from "dotenv"
-import dbInit from "./lib/database.js"
+import { dbInit } from "./lib/database.js"
 import getLogger from "./lib/logger.js"
 import express from "express"
 import bodyParser from "body-parser"
 import njk from "nunjucks"
-import routes from "./routes.js"
+import router from "./routes/router.js"
+import setupExpress from "./lib/express.js"
 
 dotenv.config()
 
@@ -14,33 +15,9 @@ export const PORT = process.env.PORT ?? 12345
 log.write("Loading databases...")
 dbInit()
 
-const server = express()
-
 log.write("Starting server...")
-log.write("Loading middleware...")
-let nunjucks = njk.configure(
-    "views",
-    {
-        autoescape: true,
-        lstripBlocks: true,
-        trimBlocks: true,
-        express: server,
-    }
-)
-
-function ordinal(n) {
-    var s = ["th", "st", "nd", "rd"]
-    var v = n%100
-    return (s[(v-20)%10] || s[v] || s[0])
-}
-
-nunjucks.addGlobal("ordinal", ordinal)
-  
-server.use("/assets", express.static("assets"))
-server.use(bodyParser.urlencoded({ extended: true }))
-
-log.write("Assembling all routes...")
-server.use(routes)
+const server = express()
+setupExpress(server)
 
 log.write("Binding to port...")
 server.listen(

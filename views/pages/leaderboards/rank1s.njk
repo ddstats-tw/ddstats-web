@@ -47,7 +47,7 @@
             {% for player in leaderboard.data %}
             <tr>
                 <td class="rank">{{ player.rank }}</td>
-                <td class="wide">{{ player.Name }}</td>
+                <td class="wide"><a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a></td>
                 <td class="gold">{{ player.rank1s }}</td>
                 <td class="Silver">{{ player.rank2s }}</td>
                 <td class="bronze">{{ player.rank3s }}</td>
