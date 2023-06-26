@@ -2,9 +2,6 @@ import dotenv from "dotenv"
 import { dbInit } from "./lib/database.js"
 import getLogger from "./lib/logger.js"
 import express from "express"
-import bodyParser from "body-parser"
-import njk from "nunjucks"
-import router from "./routes/router.js"
 import setupExpress from "./lib/express.js"
 
 dotenv.config()
