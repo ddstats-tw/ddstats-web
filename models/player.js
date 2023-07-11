@@ -33,6 +33,18 @@ const Player = {
         `, [player]), "map")
     }, log),
     /**
+     * Get the most played maps in seconds.
+     * @param {string} player
+     * @param {integer} limit
+     * @returns {Object}
+     */
+    mostPlayedMaps: handleErrors((player, limit) => {
+        return dbQuery(playtime, `
+            SELECT map, SUM(time) as Playtime FROM record_playtime
+                WHERE player = ? GROUP BY map ORDER BY Playtime DESC LIMIT ${limit}           
+        `, [player])
+    }, log),
+    /**
      * Get historical ranked points data of a player.
      * @param {string} player
      * @returns {Array}
@@ -52,9 +64,58 @@ const Player = {
      */
     recentPlaytime: handleErrors((player, limit) => {
         return dbQuery(playtime, `
-            SELECT date, map, player, SUM(time) FROM record_playtime 
+            SELECT date, map, player, SUM(time) as Playtime FROM record_playtime 
+                WHERE player = ?
+            GROUP BY date, map ORDER BY date DESC, time DESC LIMIT ${limit};
+        `, [player])
+    }, log),
+    /**
+     * Get playtime in the different DDNet categories.
+     * @param {string} player
+     * @returns {Array}
+     */
+    playtimeCategories: handleErrors((player) => {
+        return dbQuery(playtime, `
+            SELECT Server as Category, SUM(time)/60/60 as Playtime FROM record_playtime 
+                JOIN maps ON record_playtime.map = maps.map 
                 WHERE player = ? 
-            GROUP BY date, map ORDER BY date, time DESC LIMIT ${limit};         
+            GROUP BY Category ORDER BY Category DESC
+        `, [player])
+    }, log),
+    /**
+     * Get playtime in their most played game types (CTF, DDRace, ...).
+     * @param {string} player
+     * @returns {Array}
+     */
+    playtimeGametypes: handleErrors((player) => {
+        return dbQuery(playtime, `
+            SELECT Gametype, SUM(time)/60/60 as Playtime FROM record_playtime 
+                WHERE player = ? 
+            GROUP BY gametype ORDER BY Playtime DESC LIMIT 15
+        `, [player])
+    }, log),
+    /**
+     * Get playtime in their most played locations (eu, as:cn, as, na, sa, af, oc)
+     * @param {string} player
+     * @returns {Array}
+     */
+    playtimeLocation: handleErrors((player) => {
+        return dbQuery(playtime, `
+            SELECT Location, SUM(time)/60/60 as Playtime FROM record_playtime 
+                WHERE player = ? 
+            GROUP BY Location ORDER BY Playtime DESC LIMIT 15
+        `, [player])
+    }, log),
+    /**
+     * Get the playtime for each month for the past 12 months.
+     * @param {string} player
+     * @returns {Array}
+     */
+    playtimePerMonth: handleErrors((player) => {
+        return dbQuery(playtime, `
+            SELECT strftime('%Y', date) AS Year, strftime('%m', date) AS Month, SUM(time)/60/60 as Playtime FROM record_playtime 
+                WHERE player = ? AND date >= date('now','-12 month') 
+            GROUP BY Year, Month ORDER BY year ASC, month ASC
         `, [player])
     }, log),
     /**

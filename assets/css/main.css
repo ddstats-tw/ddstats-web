@@ -148,6 +148,7 @@ body {
     color: var(--text);
     background-color: var(--surface);
     min-height: 100vh;
+    margin-bottom: 2rem;
 }
 
 a {
@@ -195,6 +196,7 @@ main > h1 {
 }
 
 .center {
+    margin: auto;
     text-align: center;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
@@ -315,8 +317,6 @@ main > h1 {
     min-width: 16rem;
 }
 
-
-
 .pages {
     display: flex;
     flex-wrap: wrap;
@@ -421,5 +421,42 @@ th {
 
 .graph {
     margin: auto;
-    width: 70%;
+    width: 65%;
+}
+
+.graph-wide {
+    width: 90%;
+    height: 350px;
+}
+
+.doughnut {
+    float: left;
+    width: 80%;
+}
+
+.container {
+    margin-top: 2rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.box {
+    border-radius: 0.4rem;
+    background: var(--grey3);
+    padding: 20px;
+    text-align: left;
+    box-shadow: .25rem 0 2rem var(--grey1);
+}
+
+.show-more {
+    margin-top: 5px;
+    float: right;
+}
+
+@media screen and (max-width:900px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
 }

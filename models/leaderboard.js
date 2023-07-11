@@ -11,7 +11,7 @@ const Leaderboard = {
      * @param {string} category - Filter leaderboard by category. "Any" for no filtering.
      * @param {1|2|3|4|5} sorting - The rank to sort by.
      * @param {integer} page - The page to fetch.
-     * @returns {Array}
+     * @returns {Object}
      */
     rank1s: handleErrors((type, category, sorting, page) => {
         category = category == "Any" ? "%" : category

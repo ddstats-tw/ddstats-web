@@ -1,0 +1,270 @@
+{% extends "pages/player/base.njk" %}
+{% import "components/utils.njk" as utils %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Recent Activity</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/activity">Show more</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Map</th>
+                <th>Playtime</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for activity in recentPlaytime %}
+                <tr>
+                    <td>{{ activity.date }}</td>
+                    <td>{{ activity.map }}</td>
+                    <td>{{ time_format(activity.Playtime) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box">
+        <h2 style="float: left">Most played maps</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/mostplayed">Show more</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Map</th>
+                <th>Playtime</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for map in mostPlayedMaps %}
+                <tr>
+                    <td>{{ map.map }}</td>
+                    <td>{{ time_format(map.Playtime) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2>Playtime each month</h2>
+        <div class="graph-wide center">
+            <canvas id="playtimePerMonth"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2>Most played categories</h2>
+        <div class="graph doughnut">
+            <canvas id="mostPlayedCategories"></canvas>
+        </div>
+    </div>
+    <div class="box">
+        <h2>Most played gamemodes</h2>
+        <div class="graph doughnut">
+            <canvas id="mostPlayedGametypes"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2>Most played Regions</h2>
+        <div class="graph doughnut">
+            <canvas id="mostPlayedRegions"></canvas>
+        </div>
+    </div>
+    <div class="box">
+        <h2>Most ?!?!?</h2>
+        <p>:3</p>
+    </div>
+</div>
+
+<script>
+  const ctx1 = document.getElementById('mostPlayedCategories');
+  const ctx2 = document.getElementById('playtimePerMonth');
+  const ctx3 = document.getElementById('mostPlayedGametypes');
+  const ctx4 = document.getElementById('mostPlayedRegions')
+
+  Chart.defaults.color = "#E0E0FF"
+  Chart.defaults.font.family = "'Manrope Medium', sans-serif"
+  Chart.defaults.font.size = 12
+
+  new Chart(
+    ctx1,
+    {
+      type: 'doughnut',
+      data: {
+        labels: [
+            {% for row in playtimeCategories %}
+            '{{ row.Category }}',
+            {% endfor %}
+        ],
+        datasets: [{
+            label: '',
+            data: [
+                {% for row in playtimeCategories %}
+                '{{ row.Playtime }}',
+                {% endfor %}
+            ],
+            backgroundColor: [
+                '#EE588F',
+                '#E175DB',
+                '#967CF4',
+                '#4C6DEF',
+                '#4C9CEF',
+                '#4CDCDF',
+                '#3DDF89',
+                '#72D661',
+                '#AED651',
+                '#F4C025',
+                '#EB801B',
+                '#EF5255',
+            ],
+            label: 'Hours',
+            hoverOffset: 4
+        }]
+      },
+      options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'left'
+            }
+        }
+       }
+    })
+
+  new Chart(
+    ctx2,
+    {
+      type: 'bar',
+      data: {
+        labels: [
+            {% for row in playtimePerMonth %}
+            '{{ Months[row.Month] }}',
+            {% endfor %}
+        ],
+        datasets: [{
+            label: '',
+            data: [
+                {% for row in playtimePerMonth %}
+                '{{ row.Playtime }}',
+                {% endfor %}
+            ],
+            backgroundColor: '#4C9CEF',
+            label: 'Hours',
+            hoverOffset: 4
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+       }
+    })
+
+
+  new Chart(
+    ctx3,
+    {
+      type: 'doughnut',
+      data: {
+        labels: [
+            {% for row in playtimeGametypes %}
+            '{{ row.gametype }}',
+            {% endfor %}
+        ],
+        datasets: [{
+            label: '',
+            data: [
+                {% for row in playtimeGametypes %}
+                '{{ row.Playtime }}',
+                {% endfor %}
+            ],
+            backgroundColor: [
+                '#EE588F',
+                '#E175DB',
+                '#967CF4',
+                '#4C6DEF',
+                '#4C9CEF',
+                '#4CDCDF',
+                '#3DDF89',
+                '#72D661',
+                '#AED651',
+                '#F4C025',
+                '#EB801B',
+                '#EF5255',
+            ],
+            label: 'Hours',
+            hoverOffset: 4
+        }]
+      },
+      options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'left'
+            }
+        }
+       }
+    })
+
+    new Chart(
+    ctx4,
+    {
+      type: 'doughnut',
+      data: {
+        labels: [
+            {% for row in playtimeLocation %}
+            '{{ row.location }}',
+            {% endfor %}
+        ],
+        datasets: [{
+            label: '',
+            data: [
+                {% for row in playtimeLocation %}
+                '{{ row.Playtime }}',
+                {% endfor %}
+            ],
+            backgroundColor: [
+                '#EE588F',
+                '#E175DB',
+                '#967CF4',
+                '#4C6DEF',
+                '#4C9CEF',
+                '#4CDCDF',
+                '#3DDF89',
+                '#72D661',
+                '#AED651',
+                '#F4C025',
+                '#EB801B',
+                '#EF5255',
+            ],
+            label: 'Hours',
+            hoverOffset: 4
+        }]
+      },
+      options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'left'
+            }
+        }
+       }
+    })
+</script>
+
+{% endblock %}
