@@ -17,3 +17,18 @@
         {{ pageLink(maxPage, pageNum, path) }}
     {% endif %}
 {% endmacro %}
+
+{% macro stars (stars, max) %}
+{% for i in range(0, stars) %}★{% endfor %}
+{% for i in range(0, max - stars) %}☆{% endfor %}
+{% endmacro %}
+
+{% macro diff (diff1, diff2) %}
+{% if diff1 - diff2 < 0 %}
+<td><span style="color: #EF5255;">+{{ fancy_time(diff2 - diff1) }}</span></td>
+{% elseif diff1 - diff2 > 0 %}
+<td><span style="color: #3DDF89;">-{{ fancy_time(diff1 - diff2) }}</span></td>
+{% else %}
+<td><span style="color: #3DDF89;">-00:00.00</span></td>
+{% endif %}
+{% endmacro %}

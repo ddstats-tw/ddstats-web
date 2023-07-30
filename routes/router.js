@@ -1,6 +1,7 @@
 import { Router } from "express"
 import leaderboardRoutes from "./leaderboards.js"
 import playerRoutes from "./player.js"
+import mapRoutes from "./map.js"
 
 const routes = Router()
 
@@ -20,5 +21,6 @@ routes.get("/", (req, res) => {
 
 routes.use("/", leaderboardRoutes)
 routes.use("/", playerRoutes)
+routes.use("/", mapRoutes)
 
 export default routes

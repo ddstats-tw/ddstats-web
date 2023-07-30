@@ -1,0 +1,126 @@
+{% extends "pages/map/base.njk" %}
+{% import "components/utils.njk" as utils %}
+
+{% block map %}
+
+<div class="container">
+    <div class="box">
+        <img class="center" src="https://ddnet.org/ranks/maps/{{ info.Map | replace(r/[À-ž]/g, "__") | replace(r/[^a-zA-Z0-9]/g, "_") }}.png">
+    </div>
+    <div class="box">
+        <h2 style="float: left">Info</h2>
+        <table class="transparent">
+            <tbody>
+                <tr>
+                    <td>Release date</td>
+                    <td>{{ info.Timestamp if info.Timestamp != '0000-00-00 00:00:00' else 'Unknown'}}</td>
+                </tr>
+                <tr>
+                    <td>Mapper</td>
+                    <td>{{ info.Mapper }}</td>
+                </tr>
+                <tr>
+                    <td>Difficulty</td>
+                    <td>{{ info.Server }} {{ utils.stars(info.Stars, 5) }}</td>
+                </tr>
+                <tr>
+                    <td>Finishes</td>
+                    <td>4<sup>th</sup> with 89309 tees (TODO)</td>
+                </tr>
+                <tr>
+                    <td>Points</td>
+                    <td>{{ info.Points }} Points</td>
+                </tr>
+                <tr>
+                    <td>Median time</td>
+                    <td>38:57 (TODO)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Rankings</h2>
+        <a class="show-more" href="/map/{{ map | urlencode | safe }}/rankings">Show more</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Time</th>
+                <th>Diff</th>
+                {% if not teamrankings | length %}
+                <th>Date</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+                {% for rank in rankings %}
+                <tr>
+                    <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
+                    <td><img height="14px" src="https://ddnet.org/countryflags/{{ rank.Server }}.png"> <a href="/player/{{ rank.Name | urlencode }}">{{ rank.Name }}</a></td>
+                    <td>{{ fancy_time(rank.Time) }}</td>
+                    {{ utils.diff(rankings[0].Time, rank.Time) }}
+                    {% if not teamrankings | length %}
+                    <td>{{ rank.Timestamp }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if teamrankings | length %}
+    <div class="box">
+        <h2 style="float: left">Teamrankings</h2>
+        <a class="show-more" href="/map/{{ map | urlencode | safe }}/teamrankings">Show more</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Players</th>
+                <th>Time</th>
+                <th>Diff</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for id, rank in teamrankings %}
+                {% if loop.first %}
+                {% set time1 = rank[0].Time %}
+                {% endif %}
+                <tr>
+                    <td>{{ rank[0].Rank }}<sup>{{ ordinal(rank[0].Rank) }}</sup></td>
+                    <td>
+                    <img height="14px" src="https://ddnet.org/countryflags/{{ rank[0].Server }}.png">
+                    {% for player in rank %}
+                        {% if (loop.first) and (loop.length > 2)  %}
+                        <a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a>,
+                        {% elseif (loop.first) and loop.length == 2 %}
+                        <a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a> &
+                        {% elseif (loop.last) and (loop.length > 2) %}
+                            & <a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a>
+                        {% elseif (not loop.last) %}
+                        <a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a>,
+                        {% else %}
+                        <a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>{{ fancy_time(rank[0].Time) }}</td>
+                    {% if time1 - rank[0].Time < 0 %}
+                    <td><span style="color: #EF5255;">+{{ fancy_time(rank[0].Time - time1) }}</span></td>
+                    {% else %}
+                    <td><span style="color: #3DDF89;">-00:00.00</span></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -2,8 +2,12 @@
 {% import "components/utils.njk" as utils %}
 
 {% block player %}
-<div class="graph">
-    <canvas id="myChart"></canvas>
+<div class="container">
+    <div class="box">
+        <div class="graph">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -26,7 +30,7 @@
   ];
 
   Chart.defaults.color = "#E0E0FF"
-  Chart.defaults.font.family = "'Manrope Medium', sans-serif"
+  Chart.defaults.font.family = "'Roboto Regular', sans-serif"
   Chart.defaults.font.size = 12
 
   new Chart(
@@ -56,6 +60,7 @@
             ]
         },
         options: {
+            maintainAspectRatio: false,
             spanGaps: true,
             animation: true,
             plugins: {
@@ -116,60 +121,64 @@
 
 {% set categories = ["Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
 {% for category in categories %}
-    <div class="block">
-        <h2>{{ category }}</h2>
-        <div class="points">
-            <table class="transparent">
+<div class="container">
+    <div class="box">
+        <div class="block">
+            <h2>{{ category }}</h2>
+            <div class="points">
+                <table class="transparent">
+                    <thead>
+                    <tr>
+                        <th>Points</th>
+                        <th>Rank Points</th>
+                        <th>Team Points</th>
+                        <th>Rank 1s</th>
+                        <th>Team Rank1s</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>4<sup>{{ ordinal(4) }}</sup> with 500 points</td>
+                            <td>2<sup>{{ ordinal(2) }}</sup> with 470 points</td>
+                            <td>5<sup>{{ ordinal(5) }}</sup> with 500 points</td>
+                            <td>8<sup>{{ ordinal(8) }}</sup> with 12 records</td>
+                            <td>Unranked</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table class="sortable">
                 <thead>
-                <tr>
-                    <th>Points</th>
-                    <th>Rank Points</th>
-                    <th>Team Points</th>
-                    <th>Rank 1s</th>
-                    <th>Team Rank1s</th>
-                </tr>
+                    <tr>
+                        <th id="default-sort" class="wide dir-u">Map</th>
+                        <th>Time</th>
+                        <th>Rank</th>
+                        <th>Team Rank</th>
+                        <th>Playtime</th>
+                        <th>Points</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>4<sup>{{ ordinal(4) }}</sup> with 500 points</td>
-                        <td>2<sup>{{ ordinal(2) }}</sup> with 470 points</td>
-                        <td>5<sup>{{ ordinal(5) }}</sup> with 500 points</td>
-                        <td>8<sup>{{ ordinal(8) }}</sup> with 12 records</td>
-                        <td>Unranked</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <table class="sortable">
-            <thead>
-                <tr>
-                    <th id="default-sort" class="wide dir-u">Map</th>
-                    <th>Time</th>
-                    <th>Rank</th>
-                    <th>Team Rank</th>
-                    <th>Playtime</th>
-                    <th>Points</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for rank in rankings[category] %}
-                    <tr>
-                        <td><a href="/maps/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
-                        <td data-sort="{{ rank.Time }}">{{ fancy_time(rank.Time) }}</td>
-                        <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
-                        {% if rank.Teamrank %}
-                            <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                        <td data-sort="{{ playtime[rank.Map].Playtime if playtime[rank.Map].Playtime else 0 }}">
-                            {{ time_format(playtime[rank.Map].Playtime) if playtime[rank.Map].Playtime else "Unplayed" }}
-                        </td>
-                        <td>{{ rank.Points }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    {% for rank in rankings[category] %}
+                        <tr>
+                            <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
+                            <td data-sort="{{ rank.Time }}">{{ fancy_time(rank.Time) }}</td>
+                            <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
+                            {% if rank.Teamrank %}
+                                <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td data-sort="{{ playtime[rank.Map].Playtime if playtime[rank.Map].Playtime else 0 }}">
+                                {{ time_format(playtime[rank.Map].Playtime) if playtime[rank.Map].Playtime else "Unplayed" }}
+                            </td>
+                            <td>{{ rank.Points }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+</div>
     {% endfor %}
 {% endblock %}

@@ -20,7 +20,7 @@
                 {% for activity in recentPlaytime %}
                 <tr>
                     <td>{{ activity.date }}</td>
-                    <td>{{ activity.map }}</td>
+                    <td><a href="/map/{{ activity.map | urlencode | safe }}">{{ activity.map }}</a></td>
                     <td>{{ time_format(activity.Playtime) }}</td>
                 </tr>
                 {% endfor %}
@@ -42,7 +42,7 @@
             <tbody>
                 {% for map in mostPlayedMaps %}
                 <tr>
-                    <td>{{ map.map }}</td>
+                    <td><a href="/map/{{ map.map | urlencode | safe }}">{{ map.map }}</a></td>
                     <td>{{ time_format(map.Playtime) }}</td>
                 </tr>
                 {% endfor %}
@@ -95,7 +95,7 @@
   const ctx4 = document.getElementById('mostPlayedRegions')
 
   Chart.defaults.color = "#E0E0FF"
-  Chart.defaults.font.family = "'Manrope Medium', sans-serif"
+  Chart.defaults.font.family = "'Roboto Regular', sans-serif"
   Chart.defaults.font.size = 12
 
   new Chart(
@@ -266,5 +266,4 @@
        }
     })
 </script>
-
 {% endblock %}

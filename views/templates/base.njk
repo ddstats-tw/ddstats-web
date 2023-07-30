@@ -20,9 +20,12 @@
 	</head>
 
 	<body>
-		<nav class="topnav">
+		<nav id="nav" class="topnav">
 			<h2>DDStats</h2>
-			<a href="/leaderboards/">Leaderboards</a>
+			<p>
+				<a href="/maps/">Maps</a>
+				<a href="/leaderboards/">Leaderboards</a>
+			</p>
 		</nav>
 
 		<main>
@@ -30,6 +33,17 @@
 			<p>Main default content. Hello world!</p>
 		{% endblock %}
 		</main>
-
 	</body>
+	<footer>
+		<p>
+			DDStats
+		</p>
+		<p>
+			<a href="https://git.qwik.space/ddstats">Source Code</a> •
+			<a href="/faq">FAQ</a> •
+			<a href="/credits">Credits</a> •
+			<a href="/changelog">Changelogs</a> •
+			<a href="/status">Server Status</a>
+		</p>
+	</footer>
 </html>

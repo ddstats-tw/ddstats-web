@@ -119,22 +119,64 @@ const Player = {
         `, [player])
     }, log),
     /**
-     * Get recent finishes of a player
+     * Get a players favourite partners for rank1s.
      * @param {string} player
      * @param {integer} limit - amount of entries to return.
      * @returns {Array}
      */
-    recentFinishes: handleErrors((player, limit) => {
+    rank1sPartners: handleErrors((player, limit) => {
         return dbQuery(ddnet, `
-            SELECT race.timestamp, race.map, race.time, race.server, rankings.rank FROM race 
-                LEFT JOIN rankings ON race.name = rankings.name 
-                    AND race.map = rankings.map 
-                    AND race.timestamp = rankings.timestamp 
-                    AND race.time = rankings.time 
-                WHERE race.name = ? 
-            ORDER BY race.timestamp DESC LIMIT ${limit}
+            SELECT Name, COUNT(*) as Amount FROM teamrankings WHERE id IN (
+                SELECT id FROM teamrankings WHERE Name = ? AND Rank = 1 
+            ) AND name != ? GROUP BY name ORDER BY COUNT(*) DESC LIMIT ${limit}
+        `, [player, player])
+    }, log),
+    /**
+     * Get recent top10s for a player.
+     * @param {string} player
+     * @param {integer} limit - amount of entries to return.
+     * @returns {Array}
+     */
+    recentTop10s: handleErrors((player, limit) => {
+        return dbQuery(ddnet, `
+            SELECT r.timestamp, r.server, r.name, r.time, r.map, t.rank FROM rankings as r 
+                LEFT JOIN teamrankings AS t 
+                    ON r.name = t.name AND r.timestamp = t.timestamp 
+            WHERE r.name = ? AND r.rank <= 10 ORDER BY r.timestamp DESC LIMIT ${limit}
         `, [player])
+    }, log),
+    /**
+     * Get the amount of top10 placements
+     * @param {string} player
+     * @returns {Array}
+     */
+    AmountOfTop10Placements: handleErrors(player => {
+        return dbQuery(ddnet, `
+            SELECT r.Name, r.Rank, COUNT(*) AS RankAmount, TeamRankAmount FROM rankings AS r 
+                LEFT JOIN (
+                    SELECT Name, Rank, COUNT(*) AS TeamRankAmount FROM teamrankings 
+                        WHERE Name = ? AND Rank <= 10 GROUP BY rank
+                ) AS t ON r.Rank = t.Rank 
+            WHERE r.Name = ? AND r.Rank <= 10 GROUP BY r.rank ORDER BY r.Rank ASC;
+        `, [player, player])
+    }, log),
+    /**
+     * Get all top10s
+     * @param {string} player
+     * @returns {Array}
+     */
+    allTop10s: handleErrors(player => {
+        return dbQuery(ddnet, `
+            SELECT m.Server, m.map, r.Rank as rank, rtime, t.Rank as teamrank, Ttime FROM maps AS m 
+                LEFT JOIN (SELECT map, rank, time as rtime FROM rankings WHERE name = ?) as r 
+                    ON r.Map = m.Map 
+                LEFT JOIN (SELECT map, rank, min(time) as ttime FROM teamrankings WHERE name = ? GROUP BY map) as t 
+                    ON t.Map = m.Map 
+            WHERE r.Rank <= 10 OR t.Rank <= 10;
+        `, [player, player])
     }, log),
 }
 
 export default Player
+
+// SELECT strftime('%Y-%W', timestamp), SUM(points), GROUP_CONCAT(map, ', ') FROM (SELECT MIN(r.timestamp) as timestamp, r.map, m.points FROM race AS r JOIN maps AS m ON r.map = m.map WHERE name = 'deen' GROUP BY r.map) GROUP BY strftime('%Y-%W', timestamp);

@@ -1,0 +1,128 @@
+{% extends "pages/player/base.njk" %}
+{% import "components/utils.njk" as utils %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Recent Top10s</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/activity">Show more</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Map</th>
+                <th>Time</th>
+                <th>Rank</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for rank in recentTop10s %}
+                <tr>
+                    <td><img height="14px" src="https://ddnet.org/countryflags/{{ rank.Server }}.png">{{ rank.Timestamp }}</td>
+                    <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
+                    <td>{{ fancy_time(rank.Time) }}</td>
+                    <td>{{ rank.Rank }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box">
+        <h2 style="float: left">Favourite partners</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/rank1s/partners">Show more</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Player</th>
+                <th>Maps togheter</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for player in rank1sPartners %}
+                <tr>
+                    <td><a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a></td>
+                    <td>{{ player.Amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Total Top10s</h2>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Placement</th>
+                <th>Ranks</th>
+                <th>Teamranks</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% set rank_total, team_total = 0%}
+                {% for placement in AmountOfTop10Placements %}
+                <tr>
+                    <td>{{ placement.Rank }}<sup>{{ ordinal(placement.Rank) }}</sup></td>
+                    <td>{{ placement.RankAmount }}</td>
+                    <td>{{ placement.TeamRankAmount }}</td>
+                </tr>
+                {% set rank_total = rank_total + placement.RankAmount %}
+                {% set team_total = team_total + placement.TeamRankAmount %}
+                {% endfor %}
+                <tr>
+                    <td><b>Total</b></td>
+                    <td><b>{{ rank_total }}</b></td>
+                    <td><b>{{ team_total }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="box">
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2>All Top10s</h2>
+
+        <table class="sortable">
+            <thead>
+                <tr>
+                    <th>Server</th>
+                    <th>Map</th>
+                    <th id="default-sort" class="wide dir-u">Rank</th>
+                    <th>Time</th>
+                    <th>Teamrank</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for map in allTop10s %}
+                    <tr>
+                        <td>{{ map.Server }}</a></td>
+                        <td><a href="/map/{{ map.Map | urlencode | safe }}">{{ map.Map }}</a></td>
+                        <td>{{ map.rank }}<sup>{{ ordinal(map.rank) }}</sup></td>
+                        <td data-sort="{{ map.rtime }}">{{ fancy_time(map.rtime) }}</td>
+                        {% if map.teamrank %}
+                        <td>{{ map.teamrank }}<sup>{{ ordinal(map.teamrank) }}</sup></td>
+                        <td data-sort="{{ map.ttime }}">{{ fancy_time(map.ttime) }}</td>
+                        {% else %}
+                        <td></td>
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

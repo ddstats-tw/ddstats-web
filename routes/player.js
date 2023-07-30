@@ -14,6 +14,9 @@ function players_overview_route(req, res) {
     res.render("pages/player/overview.njk", { page, player, rankings, rankedPointsGraph, playtime })
 }
 
+routes.get("/player/:player", players_overview_route)
+routes.get("/player/:player/:type(overview)", players_overview_route)
+
 function players_playtime_route(req, res) {
     const player = req.params.player
     const recentPlaytime = Player.recentPlaytime(player, 10)
@@ -28,11 +31,22 @@ function players_playtime_route(req, res) {
         playtimePerMonth, playtimeCategories, Months, mostPlayedMaps })
 }
 
-routes.get("/player/:player", players_overview_route)
-routes.get("/player/:player/:type(overview)", players_overview_route)
-
 routes.get("/player/:player/:type(playtime)", players_playtime_route)
 
-//routes.get("/player/:player/:type(rank1s|worstranks|graphs|playtime)", players_route)
+
+function players_rank1s_route(req, res) {
+    const player = req.params.player
+    const rank1sPartners = Player.rank1sPartners(player, 10)
+    const recentTop10s = Player.recentTop10s(player, 10)
+    const AmountOfTop10Placements = Player.AmountOfTop10Placements(player)
+    const allTop10s = Player.allTop10s(player)
+    const page = req.params.type
+
+    console.log(recentTop10s)
+    res.render("pages/player/rank1s.njk", { player, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
+}
+
+routes.get("/player/:player/:type(rank1s)", players_rank1s_route)
+
 
 export default routes
