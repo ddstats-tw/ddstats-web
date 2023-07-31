@@ -40,3 +40,11 @@
 Unranked
 {% endif %}
 {% endmacro %}
+
+{% macro joinArray(array, link) %}
+  {% for item in array %}
+    <a href="{{ link.replace('%s', item | urlencode ) }}">{{- item -}}</a>
+    {{- ', ' if not loop.last and loop.revindex != 2 -}}
+    {{- ' & ' if loop.revindex == 2 -}}
+  {% endfor %}
+{% endmacro %}

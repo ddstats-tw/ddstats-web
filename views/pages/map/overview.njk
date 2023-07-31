@@ -12,27 +12,27 @@
         <table class="transparent">
             <tbody>
                 <tr>
-                    <td>Release date</td>
+                    <td><b>Release date</b></td>
                     <td>{{ info.Timestamp if info.Timestamp != '0000-00-00 00:00:00' else 'Unknown'}}</td>
                 </tr>
                 <tr>
-                    <td>Mapper</td>
-                    <td>{{ info.Mapper }}</td>
+                    <td><b>Mapper</b></td>
+                    <td>{{ utils.joinArray(info.Mapper, "/mapper/%s") }}</td>
                 </tr>
                 <tr>
-                    <td>Difficulty</td>
+                    <td><b>Difficulty</b></td>
                     <td>{{ info.Server }} {{ utils.stars(info.Stars, 5) }}</td>
                 </tr>
                 <tr>
-                    <td>Finishes</td>
+                    <td><b>Finishes</b></td>
                     <td>4<sup>th</sup> with 89309 tees (TODO)</td>
                 </tr>
                 <tr>
-                    <td>Points</td>
+                    <td><b>Points</b></td>
                     <td>{{ info.Points }} Points</td>
                 </tr>
                 <tr>
-                    <td>Median time</td>
+                    <td><b>Median time</b></td>
                     <td>38:57 (TODO)</td>
                 </tr>
             </tbody>
