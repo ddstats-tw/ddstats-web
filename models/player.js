@@ -1,8 +1,9 @@
-import { ddnet, playtime, points, dbQuery } from "../lib/database.js"
+import { ddnet, playtime, points, dbQuery, redis } from "../lib/database.js"
+import Map from "./map.js"
 import { createIndex, handleErrors } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
 
-const log = getLogger("SQLite3 |", "yellow")
+const log = getLogger("Database  |", "yellow")
 
 const Player = {
     /**
@@ -174,6 +175,26 @@ const Player = {
                     ON t.Map = m.Map 
             WHERE r.Rank <= 10 OR t.Rank <= 10;
         `, [player, player])
+    }, log),
+    /**
+     * Get all types of points.
+     * @param {string} player
+     * @returns {Array}
+     */
+    points: handleErrors(async player => {
+        const types = ["points", "rankpoints", "teampoints"]
+        let points = {}
+        for(const type of types) {
+            points[type] = {}
+            const rankings = await redis.hGetAll(`player:${player}:${type}`)
+            for(const category in rankings) {
+                points[type][category] = {}
+                points[type][category]["rank"] = rankings[category]
+                points[type][category]["points"] = await redis.zScore(`leaderboard:${type}:${category}`, player)
+            }
+        }
+
+        return points
     }, log),
 }
 

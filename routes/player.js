@@ -4,14 +4,15 @@ import Player from "../models/player.js"
 
 const routes = Router()
 
-function players_overview_route(req, res) {
+async function players_overview_route(req, res) {
     const player = req.params.player
     const rankings = groupBy(Player.rankings(player), "Category")
     const rankedPointsGraph = Player.rankedpoints(player)
     const playtime = Player.playtime(player)
+    const points = await Player.points(player)
     const page = req.params.type ?? "overview"
 
-    res.render("pages/player/overview.njk", { page, player, rankings, rankedPointsGraph, playtime })
+    res.render("pages/player/overview.njk", { page, player, points, rankings, rankedPointsGraph, playtime })
 }
 
 routes.get("/player/:player", players_overview_route)

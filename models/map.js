@@ -2,7 +2,7 @@ import { ddnet, playtime, dbQuery } from "../lib/database.js"
 import { handleErrors, groupBy } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
 
-const log = getLogger("SQLite3 |", "yellow")
+const log = getLogger("Database  |", "yellow")
 
 const Map = {
     categories: [

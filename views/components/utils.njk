@@ -32,3 +32,11 @@
 <td><span style="color: #3DDF89;">-00:00.00</span></td>
 {% endif %}
 {% endmacro %}
+
+{% macro points (data, type, category) %}
+{% if data[type][category].rank %}
+{{ data[type][category].rank }}<sup>{{ ordinal(data[type][category].rank) }}</sup> with {{ data[type][category].points }} points
+{% else %}
+Unranked
+{% endif %}
+{% endmacro %}

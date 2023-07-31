@@ -138,10 +138,10 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>4<sup>{{ ordinal(4) }}</sup> with 500 points</td>
-                            <td>2<sup>{{ ordinal(2) }}</sup> with 470 points</td>
-                            <td>5<sup>{{ ordinal(5) }}</sup> with 500 points</td>
-                            <td>8<sup>{{ ordinal(8) }}</sup> with 12 records</td>
+                            <td>{{ utils.points(points, "points", category) }}</td>
+                            <td>{{ utils.points(points, "rankpoints", category) }}</td>
+                            <td>{{ utils.points(points, "teampoints", category) }}</td>
+                            <td>Unranked</td>
                             <td>Unranked</td>
                         </tr>
                     </tbody>
