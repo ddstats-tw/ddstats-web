@@ -50,12 +50,30 @@ const Player = {
      * @param {string} player
      * @returns {Array}
      */
-    rankedpoints: handleErrors(player => {
+    rankedpointsGraph: handleErrors(player => {
         return dbQuery(points, `
             SELECT date, rankpoints, teampoints FROM rankedpoints 
                 WHERE player = ? AND strftime('%w', date) = '2'
             ORDER BY date
         `, [player])
+    }, log),
+    /**
+     * Get historical points data of a player.
+     * @param {string} player
+     * @returns {Array}
+     */
+    pointsGraph: handleErrors(player => {
+        let points = dbQuery(ddnet, `
+            SELECT strftime('%Y-%m-%d', timestamp) as date, SUM(points) as points, GROUP_CONCAT(map, ', ') as maps FROM (
+                SELECT MIN(r.timestamp) as timestamp, r.map, m.points FROM race AS r JOIN maps AS m ON r.map = m.map WHERE name = ? GROUP BY r.map
+            ) GROUP BY strftime('%Y-%W', timestamp);
+        `, [player])
+        points.reduce((accumulator, currentValue, currentIndex) => {
+            if (currentIndex !== 0)
+                currentValue.points += accumulator.points
+            return currentValue
+        })
+        return points
     }, log),
     /**
      * Get recent playtime of a player
@@ -199,5 +217,3 @@ const Player = {
 }
 
 export default Player
-
-// SELECT strftime('%Y-%W', timestamp), SUM(points), GROUP_CONCAT(map, ', ') FROM (SELECT MIN(r.timestamp) as timestamp, r.map, m.points FROM race AS r JOIN maps AS m ON r.map = m.map WHERE name = 'deen' GROUP BY r.map) GROUP BY strftime('%Y-%W', timestamp);

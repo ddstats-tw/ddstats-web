@@ -7,12 +7,13 @@ const routes = Router()
 async function players_overview_route(req, res) {
     const player = req.params.player
     const rankings = groupBy(Player.rankings(player), "Category")
-    const rankedPointsGraph = Player.rankedpoints(player)
+    const rankedPointsGraph = Player.rankedpointsGraph(player)
+    const pointsGraph = Player.pointsGraph(player)
     const playtime = Player.playtime(player)
     const points = await Player.points(player)
     const page = req.params.type ?? "overview"
 
-    res.render("pages/player/overview.njk", { page, player, points, rankings, rankedPointsGraph, playtime })
+    res.render("pages/player/overview.njk", { page, player, points, rankings, rankedPointsGraph, pointsGraph, playtime })
 }
 
 routes.get("/player/:player", players_overview_route)
@@ -43,7 +44,6 @@ function players_rank1s_route(req, res) {
     const allTop10s = Player.allTop10s(player)
     const page = req.params.type
 
-    console.log(recentTop10s)
     res.render("pages/player/rank1s.njk", { player, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
 }
 

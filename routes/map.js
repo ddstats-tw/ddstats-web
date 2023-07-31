@@ -10,7 +10,6 @@ function maps_overview_route(req, res) {
     const rankings = Map.rankings(map, 20)
     const teamrankings = Map.teamrankings(map, 20)
     const page = req.params.type ?? "overview"
-    console.log(info)
 
     res.render("pages/map/overview.njk", { map, page, info, rankings, teamrankings })
 }
@@ -24,7 +23,6 @@ function maps_timecps_route(req, res) {
     const info = Map.info(map)
     const timecps = Map.timecps(map, 20)
     const page = req.params.type ?? "overview"
-    console.log(timecps)
 
     res.render("pages/map/timecps.njk", { map, page, info, timecps })
 }

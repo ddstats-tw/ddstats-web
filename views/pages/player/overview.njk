@@ -24,9 +24,18 @@
 
   const ctx = document.getElementById('myChart');
   const data = [
+    { x: "{{ pointsGraph[0].date }}", y: 0, y2: 0 },
     {% for row in rankedPointsGraph %}
     { x: "{{ row.date }}", y: {{ row.rankpoints }}, y2: {{ row.teampoints }} },
     {% endfor %}
+    { x: "2023-07-31", y: {{ (rankedPointsGraph | last).rankpoints }}, y2: {{ (rankedPointsGraph | last).teampoints }} }
+  ];
+
+  const data2 = [
+    {% for row in pointsGraph %}
+    { x: "{{ row.date }}", y: {{ row.points }}, maps: "{{ row.maps }}" },
+    {% endfor %}
+    { x: "2023-07-31", y: {{ (pointsGraph | last).points }}, maps: "" }
   ];
 
   Chart.defaults.color = "#E0E0FF"
@@ -56,8 +65,15 @@
                 parsing: {
                     yAxisKey: 'y2'
                 }
-            }
-            ]
+            },
+            {
+                label: 'Points',
+                data: data2,
+                fill: false,
+                borderColor: '#EFB1F1',
+                tension: 0,
+                pointRadius: 0,
+            }]
         },
         options: {
             maintainAspectRatio: false,
@@ -100,7 +116,7 @@
                     type: 'time',
                     time: {
                         unit: 'year'
-                    }
+                    },
                 },
                 y: {
                     suggestedMax: 250,
