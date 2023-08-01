@@ -75,7 +75,6 @@ const Map = {
      * @returns {Array}
      */
     search: handleErrors(search => {
-        console.log("GOT")
         search.mapper = search.mapper ?? "*"
         return splitMappers(dbQuery(ddnet, `
             SELECT * FROM maps WHERE map LIKE FORMAT('%%%s%', ?) AND (mapper GLOB FORMAT('%s', ?)
