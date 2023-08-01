@@ -32,8 +32,7 @@ routes.get("/map/:map/:type(timecps)", maps_timecps_route)
 
 function mapper_route(req, res) {
     const mapper = req.params.mapper
-    const maps = Map.search(mapper)
-    console.log(maps)
+    const maps = Map.search({ mapper: mapper })
     res.render("pages/map/mapper.njk", { maps, mapper })
 }
 

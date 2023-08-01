@@ -214,6 +214,16 @@ const Player = {
 
         return points
     }, log),
+    /**
+     * Search for players.
+     * @param {string} query
+     * @returns {Array}
+     */
+    search: handleErrors((query, limit) => {
+        return dbQuery(ddnet, `
+            SELECT Name, Points FROM players WHERE Name MATCH FORMAT('*%s*', ?) ORDER BY Points DESC LIMIT ${limit};
+        `, [query])
+    }, log),
 }
 
 export default Player

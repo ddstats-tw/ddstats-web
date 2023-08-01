@@ -470,7 +470,61 @@ th, b {
     margin-top: 5px;
     float: right;
 }
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center
+}
 
+input {
+    font-size: 1.05rem;
+    width: min(75ch, 80vw)
+}
+
+input {
+    color: var(--grey15);
+    background-color: var(--grey3);
+    margin: 1em 0;
+    padding: .75em 1.25em;
+    outline: 0 none transparent;
+    border: .2rem solid transparent;
+    border-radius: .5rem;
+    box-shadow: .25rem 0 2rem var(--grey1);
+    transition: border .3s, background-color .5s, border-radius .5s
+}
+
+input:hover {
+    background-color: var(--grey4);
+    border-radius: 1rem
+}
+
+.result {
+    width: min(75ch, 80vw)
+}
+
+.right {
+    float: right;
+}
+
+.result li {
+    padding: 0.25rem;
+    background-color: var(--grey3);
+    margin: 0.5rem;
+    border-radius: 0.25rem;
+    text-align: left;
+    list-style-type: none;
+}
+
+.result .selected {
+    background-color: var(--grey5);
+    color: var(--text);
+}
+
+input:active,
+input:focus {
+    border: .2rem solid var(--magenta5)
+}
 @media screen and (max-width:900px) {
     .container {
         grid-template-columns: 1fr;

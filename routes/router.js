@@ -2,6 +2,7 @@ import { Router } from "express"
 import leaderboardRoutes from "./leaderboards.js"
 import playerRoutes from "./player.js"
 import mapRoutes from "./map.js"
+import miscRoutes from "./misc.js"
 
 const routes = Router()
 
@@ -16,11 +17,12 @@ const errFunc = (fn, res) => {
 }
 
 routes.get("/", (req, res) => {
-    res.redirect("/leaderboards")
+    res.render("pages/home.njk")
 })
 
 routes.use("/", leaderboardRoutes)
 routes.use("/", playerRoutes)
 routes.use("/", mapRoutes)
+routes.use("/", miscRoutes)
 
 export default routes

@@ -1,0 +1,99 @@
+{% extends "templates/base.njk" %}
+{% import "components/list.njk" as list %}
+
+{% block head %}
+	<title>DDStats</title>
+{% endblock %}
+
+{% block main %}
+
+<div class="center">
+    <form action="/search" method="get">
+        <h1>Search for a player or map...</h1>
+        <input id="typeahead" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ..." autofocus>
+
+        <div class="result" id="result"></div>
+    </form>
+</div>
+
+<script>
+    let cache = {}
+    const input = document.getElementById('typeahead');
+    input.addEventListener('input', handleInput);
+
+    function handleInput(event) {
+        const value = event.target.value;
+
+        if (cache[value])
+            showResults(cache[value]);
+        else {
+            fetch('/search/api?q=' + value)
+                .then(response => response.json())
+                .then(data => {
+                    cache[value] = data; // Save result in cache.
+                    showResults(data);
+                })
+        }
+    }
+
+    function showResults(results) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = '';
+
+        let ul = document.createElement('ul');
+        ul.setAttribute('id', 'playerList');
+    
+        results.forEach(item => {
+            let li = document.createElement('li');
+            let p = document.createElement('p');
+            let a = document.createElement('a');
+            let span = document.createElement('span')
+
+            span.classList.add('right')
+            span.textContent = `${item.points} points`
+
+            a.setAttribute('href', '/player/' + encodeURIComponent(item.name));
+            a.textContent = item.name;
+
+            p.appendChild(a)
+            p.appendChild(span)
+            
+            li.appendChild(p);
+            ul.appendChild(li);
+        });
+
+        resultDiv.appendChild(ul);
+    }
+
+
+    input.addEventListener('keydown', handleKeydown);
+    function handleKeydown(event) {
+        const ul = document.getElementById('playerList');
+        const selected = ul.querySelector('.selected');
+
+        if(event.key === "ArrowDown") {
+            if(selected && selected.nextSibling) {
+                selected.nextSibling.classList.add('selected');
+                selected.classList.remove('selected');
+            } else {
+                ul.firstChild.classList.add('selected');
+                ul.lastChild.classList.remove('selected')
+            }
+        } else if (event.key === "ArrowUp") {
+            if(selected && selected.previousSibling) {
+                selected.previousSibling.classList.add('selected');
+                selected.classList.remove('selected');
+            } else {
+                ul.lastChild.classList.add('selected');
+                ul.firstChild.classList.remove('selected')
+            }
+        } else if (event.key === "Enter") {
+            if(selected) {
+                event.preventDefault();
+                window.location.href = selected.firstChild.firstChild.getAttribute('href');
+            }
+        }
+    }
+</script>
+
+{% endblock %}

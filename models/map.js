@@ -68,18 +68,22 @@ const Map = {
         `, [map])
     }, log),
     /**
-     * Search a map. Currently only supports searching by mapper.
-     * @param {string} mapper
+     * Search for player.
+     * @param {object}  search
+     * @param {string}  [search.map]
+     * @param {string}  [search.mapper]
      * @returns {Array}
      */
-    search: handleErrors((mapper) => {
+    search: handleErrors(search => {
+        console.log("GOT")
+        search.mapper = search.mapper ?? "*"
         return splitMappers(dbQuery(ddnet, `
-            SELECT * FROM maps WHERE mapper = ?
+            SELECT * FROM maps WHERE map LIKE FORMAT('%%%s%', ?) AND (mapper GLOB FORMAT('%s', ?)
                 OR mapper GLOB FORMAT('%s *', ?) 
                 OR mapper GLOB FORMAT('* %s', ?)
                 OR mapper GLOB FORMAT('%s, *', ?)
-                OR mapper GLOB FORMAT('*, %s, *', ?)
-        `, [mapper, mapper, mapper, mapper, mapper]))
+                OR mapper GLOB FORMAT('*, %s, *', ?))
+        `, [search.map, search.mapper, search.mapper, search.mapper, search.mapper, search.mapper]))
     }, log),
 }
 

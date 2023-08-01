@@ -9,7 +9,7 @@
     <div class="container">
         {% for map in maps %}
         <div class="box">  
-            <div class="center"><h2>{{ map.Map }}</h2></div>
+            <div class="center"><h2>{{ map.Server }} - {{ map.Map }}</h2></div>
             <p class="center">{{ utils.joinArray(map.Mapper, "/mapper/%s") }}</p>
             <a href="/map/{{ map.Map | urlencode }}">
                 <img class="center" src="https://ddnet.org/ranks/maps/{{ map.Map | replace(r/[À-ž]/g, "__") | replace(r/[^a-zA-Z0-9]/g, "_") }}.png">
