@@ -6,10 +6,10 @@ const routes = Router()
 
 async function players_overview_route(req, res) {
     const player = req.params.player
-    const rankings = groupBy(Player.rankings(player), "Category")
-    const rankedPointsGraph = Player.rankedpointsGraph(player)
-    const pointsGraph = Player.pointsGraph(player)
-    const playtime = Player.playtime(player)
+    const rankings = groupBy(await Player.rankings(player), "Category")
+    const rankedPointsGraph = await Player.rankedpointsGraph(player)
+    const pointsGraph = await Player.pointsGraph(player)
+    const playtime = await Player.playtime(player)
     const points = await Player.points(player)
     const page = req.params.type ?? "overview"
 
@@ -19,14 +19,14 @@ async function players_overview_route(req, res) {
 routes.get("/player/:player", players_overview_route)
 routes.get("/player/:player/:type(overview)", players_overview_route)
 
-function players_playtime_route(req, res) {
+async function players_playtime_route(req, res) {
     const player = req.params.player
-    const recentPlaytime = Player.recentPlaytime(player, 10)
-    const playtimeCategories = Player.playtimeCategories(player)
-    const playtimeGametypes = Player.playtimeGametypes(player)
-    const playtimeLocation = Player.playtimeLocation(player)
-    const playtimePerMonth = Player.playtimePerMonth(player)
-    const mostPlayedMaps = Player.mostPlayedMaps(player, 10)
+    const recentPlaytime = await Player.recentPlaytime(player, 10)
+    const playtimeCategories = await Player.playtimeCategories(player)
+    const playtimeGametypes = await Player.playtimeGametypes(player)
+    const playtimeLocation = await Player.playtimeLocation(player)
+    const playtimePerMonth = await Player.playtimePerMonth(player)
+    const mostPlayedMaps = await Player.mostPlayedMaps(player, 10)
     const page = req.params.type
 
     res.render("pages/player/playtime.njk", { player, page, recentPlaytime, playtimeLocation, playtimeGametypes, 
@@ -36,12 +36,12 @@ function players_playtime_route(req, res) {
 routes.get("/player/:player/:type(playtime)", players_playtime_route)
 
 
-function players_rank1s_route(req, res) {
+async function players_rank1s_route(req, res) {
     const player = req.params.player
-    const rank1sPartners = Player.rank1sPartners(player, 10)
-    const recentTop10s = Player.recentTop10s(player, 10)
-    const AmountOfTop10Placements = Player.AmountOfTop10Placements(player)
-    const allTop10s = Player.allTop10s(player)
+    const rank1sPartners = await Player.rank1sPartners(player, 10)
+    const recentTop10s = await Player.recentTop10s(player, 10)
+    const AmountOfTop10Placements = await Player.AmountOfTop10Placements(player)
+    const allTop10s = await Player.allTop10s(player)
     const page = req.params.type
 
     res.render("pages/player/rank1s.njk", { player, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })

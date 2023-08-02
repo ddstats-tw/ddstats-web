@@ -25,10 +25,10 @@ const Map = {
      * Get information about a map
      * @param {string} map
      * @param {integer} top - How many ranks to return?
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    info: handleErrors(map => {
-        let info = dbQuery(ddnet, `
+    info: handleErrors(async map => {
+        let info = await dbQuery(ddnet, `
             SELECT * FROM maps WHERE map = ?;
         `, [map], true)
         info.Mapper = info.Mapper.split(/, | & /)
@@ -38,10 +38,10 @@ const Map = {
      * Get rankings of a map.
      * @param {string} map
      * @param {integer} top - How many ranks to return?
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    rankings: handleErrors((map, top) => {
-        return dbQuery(ddnet, `
+    rankings: handleErrors(async (map, top) => {
+        return await dbQuery(ddnet, `
             SELECT * FROM rankings WHERE map = ? AND rank <= ?;
         `, [map, top])
     }, log),
@@ -49,10 +49,10 @@ const Map = {
      * Get teamrankings of a map.
      * @param {string} map
      * @param {integer} top - How many ranks to return?
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    teamrankings: handleErrors((map, top) => {
-        return groupBy(dbQuery(ddnet, `
+    teamrankings: handleErrors(async (map, top) => {
+        return groupBy(await dbQuery(ddnet, `
             SELECT * FROM teamrankings WHERE map = ? AND rank <= ?;
         `, [map, top]), "ID")
     }, log),
@@ -60,10 +60,10 @@ const Map = {
      * Get timecps of a map.
      * @param {string} map
      * @param {integer} top - How many ranks to return?
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    timecps: handleErrors((map, limit) => {
-        return dbQuery(ddnet, `
+    timecps: handleErrors(async (map, limit) => {
+        return await dbQuery(ddnet, `
             SELECT Name, cp1, cp2, cp3, cp4, cp5, cp6, cp7, cp8, time FROM race WHERE map = ? GROUP BY name ORDER BY time ASC LIMIT ${limit};
         `, [map])
     }, log),
@@ -72,11 +72,11 @@ const Map = {
      * @param {object}  search
      * @param {string}  [search.map]
      * @param {string}  [search.mapper]
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    search: handleErrors(search => {
+    search: handleErrors(async search => {
         search.mapper = search.mapper ?? "*"
-        return splitMappers(dbQuery(ddnet, `
+        return splitMappers(await dbQuery(ddnet, `
             SELECT * FROM maps WHERE map LIKE FORMAT('%%%s%', ?) AND (mapper GLOB FORMAT('%s', ?)
                 OR mapper GLOB FORMAT('%s *', ?) 
                 OR mapper GLOB FORMAT('* %s', ?)

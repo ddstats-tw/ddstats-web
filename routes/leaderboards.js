@@ -8,14 +8,15 @@ routes.get("/leaderboards/", (req, res) => {
     res.render("pages/leaderboards.njk")
 })
 
-function rank1s_route(req, res) {
+async function rank1s_route(req, res) {
     const valid = [1, 2, 3, 4, 5]
     const sorting = valid.includes(Number(req.params.sort)) ? req.params.sort : 1
     const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
     const type = req.params.type
     const page = isNaN(req.params.page) ? 1 : Number(req.params.page)
 
-    const leaderboard = Leaderboard.rank1s(type, category, sorting, page)
+    const leaderboard = await Leaderboard.rank1s(type, category, sorting, page)
+
     res.render("pages/leaderboards/rank1s.njk", { leaderboard, sorting, type, category })
 }
 
@@ -24,10 +25,10 @@ routes.get("/leaderboard/:type(teamrank1s|rank1s)/category/:category/sortby/:sor
 routes.get("/leaderboard/:type(teamrank1s|rank1s)/category/:category/sortby/:sort/page/:page", rank1s_route)
 
 
-function worsttimes_route(req, res) {
+async function worsttimes_route(req, res) {
     const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
 
-    const leaderboard = Leaderboard.worsttimes(category)
+    const leaderboard = await Leaderboard.worsttimes(category)
     res.render("pages/leaderboards/worsttimes.njk", { leaderboard, category })
 }
 

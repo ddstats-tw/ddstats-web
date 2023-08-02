@@ -9,10 +9,10 @@ const Player = {
     /**
      * Get rankings of a player.
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    rankings: handleErrors(player => {
-        return dbQuery(ddnet, `
+    rankings: handleErrors(async player => {
+        return await dbQuery(ddnet, `
             SELECT rankings.map, rankings.name, rankings.time, rankings.map, rankings.server, 
                 rankings.rank, min(teamrankings.rank) as Teamrank, maps.Server as Category, maps.Points FROM rankings as rankings
                 JOIN maps AS maps 
@@ -25,10 +25,10 @@ const Player = {
     /**
      * Get playtime in seconds for each map of a player.
      * @param {string} player
-     * @returns {Object}
+     * @returns {Promise<Object>}
      */
-    playtime: handleErrors(player => {
-        return createIndex(dbQuery(playtime, `
+    playtime: handleErrors(async player => {
+        return createIndex(await dbQuery(playtime, `
             SELECT map, SUM(time) as Playtime FROM record_playtime
                 WHERE player = ? GROUP BY map            
         `, [player]), "map")
@@ -37,10 +37,10 @@ const Player = {
      * Get the most played maps in seconds.
      * @param {string} player
      * @param {integer} limit
-     * @returns {Object}
+     * @returns {Promise<Object>}
      */
-    mostPlayedMaps: handleErrors((player, limit) => {
-        return dbQuery(playtime, `
+    mostPlayedMaps: handleErrors(async (player, limit) => {
+        return await dbQuery(playtime, `
             SELECT map, SUM(time) as Playtime FROM record_playtime
                 WHERE player = ? GROUP BY map ORDER BY Playtime DESC LIMIT ${limit}           
         `, [player])
@@ -48,10 +48,10 @@ const Player = {
     /**
      * Get historical ranked points data of a player.
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    rankedpointsGraph: handleErrors(player => {
-        return dbQuery(points, `
+    rankedpointsGraph: handleErrors(async player => {
+        return await dbQuery(points, `
             SELECT date, rankpoints, teampoints FROM rankedpoints 
                 WHERE player = ? AND strftime('%w', date) = '2'
             ORDER BY date
@@ -60,10 +60,10 @@ const Player = {
     /**
      * Get historical points data of a player.
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    pointsGraph: handleErrors(player => {
-        let points = dbQuery(ddnet, `
+    pointsGraph: handleErrors(async player => {
+        let points = await dbQuery(ddnet, `
             SELECT strftime('%Y-%m-%d', timestamp) as date, SUM(points) as points, GROUP_CONCAT(map, ', ') as maps FROM (
                 SELECT MIN(r.timestamp) as timestamp, r.map, m.points FROM race AS r JOIN maps AS m ON r.map = m.map WHERE name = ? GROUP BY r.map
             ) GROUP BY strftime('%Y-%W', timestamp);
@@ -79,10 +79,10 @@ const Player = {
      * Get recent playtime of a player
      * @param {string} player
      * @param {integer} limit - amount of entries to return.
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    recentPlaytime: handleErrors((player, limit) => {
-        return dbQuery(playtime, `
+    recentPlaytime: handleErrors(async (player, limit) => {
+        return await dbQuery(playtime, `
             SELECT date, map, player, SUM(time) as Playtime FROM record_playtime 
                 WHERE player = ?
             GROUP BY date, map ORDER BY date DESC, time DESC LIMIT ${limit};
@@ -91,10 +91,10 @@ const Player = {
     /**
      * Get playtime in the different DDNet categories.
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    playtimeCategories: handleErrors((player) => {
-        return dbQuery(playtime, `
+    playtimeCategories: handleErrors(async (player) => {
+        return await dbQuery(playtime, `
             SELECT Server as Category, SUM(time)/60/60 as Playtime FROM record_playtime 
                 JOIN maps ON record_playtime.map = maps.map 
                 WHERE player = ? 
@@ -104,10 +104,10 @@ const Player = {
     /**
      * Get playtime in their most played game types (CTF, DDRace, ...).
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    playtimeGametypes: handleErrors((player) => {
-        return dbQuery(playtime, `
+    playtimeGametypes: handleErrors(async (player) => {
+        return await dbQuery(playtime, `
             SELECT Gametype, SUM(time)/60/60 as Playtime FROM record_playtime 
                 WHERE player = ? 
             GROUP BY gametype ORDER BY Playtime DESC LIMIT 15
@@ -116,10 +116,10 @@ const Player = {
     /**
      * Get playtime in their most played locations (eu, as:cn, as, na, sa, af, oc)
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    playtimeLocation: handleErrors((player) => {
-        return dbQuery(playtime, `
+    playtimeLocation: handleErrors(async (player) => {
+        return await dbQuery(playtime, `
             SELECT Location, SUM(time)/60/60 as Playtime FROM record_playtime 
                 WHERE player = ? 
             GROUP BY Location ORDER BY Playtime DESC LIMIT 15
@@ -128,10 +128,10 @@ const Player = {
     /**
      * Get the playtime for each month for the past 12 months.
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    playtimePerMonth: handleErrors((player) => {
-        return dbQuery(playtime, `
+    playtimePerMonth: handleErrors(async (player) => {
+        return await dbQuery(playtime, `
             SELECT strftime('%Y', date) AS Year, strftime('%m', date) AS Month, SUM(time)/60/60 as Playtime FROM record_playtime 
                 WHERE player = ? AND date >= date('now','-12 month') 
             GROUP BY Year, Month ORDER BY year ASC, month ASC
@@ -141,10 +141,10 @@ const Player = {
      * Get a players favourite partners for rank1s.
      * @param {string} player
      * @param {integer} limit - amount of entries to return.
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    rank1sPartners: handleErrors((player, limit) => {
-        return dbQuery(ddnet, `
+    rank1sPartners: handleErrors(async (player, limit) => {
+        return await dbQuery(ddnet, `
             SELECT Name, COUNT(*) as Amount FROM teamrankings WHERE id IN (
                 SELECT id FROM teamrankings WHERE Name = ? AND Rank = 1 
             ) AND name != ? GROUP BY name ORDER BY COUNT(*) DESC LIMIT ${limit}
@@ -154,10 +154,10 @@ const Player = {
      * Get recent top10s for a player.
      * @param {string} player
      * @param {integer} limit - amount of entries to return.
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    recentTop10s: handleErrors((player, limit) => {
-        return dbQuery(ddnet, `
+    recentTop10s: handleErrors(async (player, limit) => {
+        return await dbQuery(ddnet, `
             SELECT r.timestamp, r.server, r.name, r.time, r.map, t.rank FROM rankings as r 
                 LEFT JOIN teamrankings AS t 
                     ON r.name = t.name AND r.timestamp = t.timestamp 
@@ -167,10 +167,10 @@ const Player = {
     /**
      * Get the amount of top10 placements
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    AmountOfTop10Placements: handleErrors(player => {
-        return dbQuery(ddnet, `
+    AmountOfTop10Placements: handleErrors(async player => {
+        return await dbQuery(ddnet, `
             SELECT r.Name, r.Rank, COUNT(*) AS RankAmount, TeamRankAmount FROM rankings AS r 
                 LEFT JOIN (
                     SELECT Name, Rank, COUNT(*) AS TeamRankAmount FROM teamrankings 
@@ -182,10 +182,10 @@ const Player = {
     /**
      * Get all top10s
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    allTop10s: handleErrors(player => {
-        return dbQuery(ddnet, `
+    allTop10s: handleErrors(async player => {
+        return await dbQuery(ddnet, `
             SELECT m.Server, m.map, r.Rank as rank, rtime, t.Rank as teamrank, Ttime FROM maps AS m 
                 LEFT JOIN (SELECT map, rank, time as rtime FROM rankings WHERE name = ?) as r 
                     ON r.Map = m.Map 
@@ -197,7 +197,7 @@ const Player = {
     /**
      * Get all types of points.
      * @param {string} player
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
     points: handleErrors(async player => {
         const types = ["points", "rankpoints", "teampoints"]
@@ -205,24 +205,33 @@ const Player = {
         for(const type of types) {
             points[type] = {}
             const rankings = await redis.hGetAll(`player:${player}:${type}`)
+            const promises = []
+        
             for(const category in rankings) {
                 points[type][category] = {}
                 points[type][category]["rank"] = rankings[category]
-                points[type][category]["points"] = await redis.zScore(`leaderboard:${type}:${category}`, player)
+                const promise = redis.zScore(`leaderboard:${type}:${category}`, player)
+                promises.push(promise)
+            }
+            
+            const results = await Promise.all(promises)
+            let i = 0
+            for(const category in rankings) {
+                points[type][category]["points"] = results[i]
+                i++
             }
         }
-
         return points
     }, log),
     /**
      * Search for players.
      * @param {string} query
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
-    search: handleErrors((query, limit) => {
-        return dbQuery(ddnet, `
+    search: handleErrors(async (query, limit) => {
+        return await dbQuery(ddnet, `
             SELECT Name, Points FROM players WHERE Name MATCH FORMAT('*%s*', ?) ORDER BY Points DESC LIMIT ${limit};
-        `, [query])
+        `, [query], false, false)
     }, log),
 }
 

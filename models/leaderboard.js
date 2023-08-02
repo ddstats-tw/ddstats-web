@@ -11,20 +11,20 @@ const Leaderboard = {
      * @param {string} category - Filter leaderboard by category. "Any" for no filtering.
      * @param {1|2|3|4|5} sorting - The rank to sort by.
      * @param {integer} page - The page to fetch.
-     * @returns {Object}
+     * @returns {Promise<Object>}
      */
-    rank1s: handleErrors((type, category, sorting, page) => {
+    rank1s: handleErrors(async (type, category, sorting, page) => {
         category = category == "Any" ? "%" : category
         const table = type == "rank1s" ? "rankings" : "teamrankings"
     
-        const count = dbQuery(ddnet, `
+        const count = await dbQuery(ddnet, `
             SELECT CEIL(COUNT(distinct(name))/50)+1 as total FROM ${table} as rankings
                 JOIN maps ON rankings.map = maps.map 
                     WHERE rank = ${sorting} AND maps.server LIKE ?
         `, [category])
     
         // TODO: remove INDEXED BY
-        const data = dbQuery(ddnet, `
+        const data = await dbQuery(ddnet, `
             SELECT  RANK() OVER (ORDER BY COUNT(CASE WHEN rank = ${sorting} THEN 1 END) DESC) AS rank, Name,
                     COUNT(CASE WHEN rank = 1 THEN 1 END) AS rank1s,
                     COUNT(CASE WHEN rank = 2 THEN 1 END) AS rank2s,
@@ -48,7 +48,7 @@ const Leaderboard = {
     /**
      * Get the worst times leaderboard.
      * @param {string} category - Filter leaderboard by category. "Any" for no filtering.
-     * @returns {Array}
+     * @returns {Promise<Array>}
      */
     worsttimes: handleErrors(category => {
         category = category == "Any" ? "%" : category
