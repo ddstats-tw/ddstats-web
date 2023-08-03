@@ -15,6 +15,10 @@ routes.get("/search", search_route)
 
 async function search_api_route(req, res) {
     const query = req.query.q
+    console.log(query)
+    if(typeof query !== "string")
+        return res.json({ error: "Arrays not allowed." })
+
     const players = await Player.search(query, 10)
     res.json(players)
 }
