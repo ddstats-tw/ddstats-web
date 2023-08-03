@@ -128,7 +128,7 @@
     --grey15:   #E0E0FF;
 
     /* ALIASES */
-    --primary:   var(--sea);
+    --primary:   var(--magenta5);
     --accent:    var(--cyan);
     --accent2:   var(--blue);
     --surface:   var(--grey2);
@@ -297,7 +297,7 @@ main > h1 {
 .buttons a {
     text-decoration: none;
     color: var(--text);
-    border-bottom: 0.20rem solid var(--magenta5);
+    border-bottom: 0.20rem solid var(--primary);
     padding: 0.20rem;
     margin: 0.25rem;
 }
@@ -324,7 +324,7 @@ main > h1 {
 .leaderboards > .leaderboard {
     width: 0;
     padding: 1.25rem;
-    border: 0.45rem solid var(--magenta5);
+    border: 0.45rem solid var(--primary);
     min-width: 16rem;
 }
 
@@ -341,7 +341,7 @@ main > h1 {
     margin: .5rem;
     padding: .15rem .5rem;
 
-    border: .1rem solid var(--magenta5);
+    border: .1rem solid var(--primary);
     border-radius: 5px;
 
     color: var(--text);
@@ -363,14 +363,12 @@ main > h1 {
 }
 
 .block {
-
     border-radius: 0.3rem;
     display: inline-block;
     width: 100%;
 }
 
 .sortable {
-    overflow-x: auto;
     white-space: nowrap;
     border-spacing: 0;
     border-collapse: collapse;
@@ -463,7 +461,7 @@ th, b {
     padding: 1rem;
     text-align: left;
     box-shadow: .25rem 0 2rem var(--grey1);
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 .show-more {
@@ -523,7 +521,7 @@ input:hover {
 
 input:active,
 input:focus {
-    border: .2rem solid var(--magenta5)
+    border: .2rem solid var(--primary)
 }
 @media screen and (max-width:900px) {
     .container {
