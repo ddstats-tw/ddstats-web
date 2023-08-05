@@ -31,7 +31,9 @@ const Map = {
         let info = await dbQuery(ddnet, `
             SELECT * FROM maps WHERE map = ?;
         `, [map], true)
-        info.Mapper = info.Mapper.split(/, | & /)
+
+        if(info)
+            info.Mapper = info.Mapper.split(/, | & /)
         return info
     }, log),
     /**

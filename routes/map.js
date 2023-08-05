@@ -11,6 +11,7 @@ async function maps_overview_route(req, res) {
     const page = req.params.type ?? "overview"
 
     res.render("pages/map/overview.njk", { map, page, info, rankings, teamrankings })
+    
 }
 
 routes.get("/map/:map/", maps_overview_route)

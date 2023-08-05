@@ -1,9 +1,12 @@
 {% extends "templates/base.njk" %}
 {% import "components/utils.njk" as utils %}
 {% block head %}
-    <title>{{ info.Map }} | {{ page }} | Maps | DDStats</title>
+
+    <title>{{ (info.Map ~ ' | ' ~ page) if info else "Map not found" }} | DDStats</title>
 {% endblock %}
 {% block main %}
+
+    {% if info %}
     <h1>{{ info.Map }}</h1>
     <ul class="buttons">
         <li>
@@ -20,5 +23,9 @@
     {% block map %}
 
     {% endblock %}
+    {% else %}
+    <h1>404 - Map not found</h1>
+    <
+    {% endif %}
 
 {% endblock %}
