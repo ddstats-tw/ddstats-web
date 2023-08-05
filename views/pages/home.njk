@@ -49,7 +49,6 @@
         ul.setAttribute('id', 'playerList');
     
         for(const type of ["maps", "players"]) {
-            console.log(type)
             results[type].forEach(item => {
                 let li = document.createElement('li');
                 let p = document.createElement('p');
@@ -103,6 +102,10 @@
                 ul.firstChild.classList.remove('selected')
             }
         } else if (event.key === "Enter") {
+            if(ul.firstChild == ul.lastChild) {
+                event.preventDefault();
+                window.location.href = ul.firstChild.firstChild.firstChild.getAttribute('href')
+            }
             if(selected) {
                 event.preventDefault();
                 window.location.href = selected.firstChild.firstChild.getAttribute('href');

@@ -20,7 +20,7 @@
             <tbody>
                 {% for rank in recentTop10s %}
                 <tr>
-                    <td><img height="14px" src="https://ddnet.org/countryflags/{{ rank.Server }}.png">{{ rank.Timestamp }}</td>
+                    <td>{{ utils.flag(rank.Server) }}{{ rank.Timestamp }}</td>
                     <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
                     <td>{{ fancy_time(rank.Time) }}</td>
                     <td>{{ rank.Rank }}</td>

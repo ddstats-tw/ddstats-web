@@ -5,7 +5,7 @@
 <div class="container">
     <div class="box">
         <div class="graph">
-            <canvas id="myChart"></canvas>
+            <canvas id="pointsChart"></canvas>
         </div>
     </div>
 </div>
@@ -22,20 +22,22 @@
         return value;
     }
 
-  const ctx = document.getElementById('myChart');
+  const ctx = document.getElementById('pointsChart');
   const data = [
+    {% if rankedPointsGraph | length %}
     { x: "{{ pointsGraph[0].date }}", y: 0, y2: 0 },
     {% for row in rankedPointsGraph %}
     { x: "{{ row.date }}", y: {{ row.rankpoints }}, y2: {{ row.teampoints }} },
     {% endfor %}
     { x: "2023-07-31", y: {{ (rankedPointsGraph | last).rankpoints }}, y2: {{ (rankedPointsGraph | last).teampoints }} }
+    {% endif %}
   ];
 
   const data2 = [
     {% for row in pointsGraph %}
-    { x: "{{ row.date }}", y: {{ row.points }}, maps: "{{ row.maps }}" },
+    { x: "{{ row.date }}", y: {{ row.points }} },
     {% endfor %}
-    { x: "2023-07-31", y: {{ (pointsGraph | last).points }}, maps: "" }
+    { x: "2023-07-31", y: {{ (pointsGraph | last).points }} }
   ];
 
   Chart.defaults.color = "#E0E0FF"
@@ -78,11 +80,11 @@
         options: {
             maintainAspectRatio: false,
             spanGaps: true,
-            animation: true,
+            animation: false,
             plugins: {
                 tooltip: {
                     mode: 'index',
-                    intersect: false
+                    intersect: false,
                 },
                 title: {
                     display: true,
@@ -137,63 +139,66 @@
 
 {% set categories = ["Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
 {% for category in categories %}
+
 <div class="container">
     <div class="box">
-        <div class="block">
-            <h2>{{ category }}</h2>
-            <div class="points">
-                <table class="transparent">
-                    <thead>
-                    <tr>
-                        <th>Points</th>
-                        <th>Rank Points</th>
-                        <th>Team Points</th>
-                        <th>Rank 1s</th>
-                        <th>Team Rank1s</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ utils.points(points, "points", category) }}</td>
-                            <td>{{ utils.points(points, "rankpoints", category) }}</td>
-                            <td>{{ utils.points(points, "teampoints", category) }}</td>
-                            <td>Unranked</td>
-                            <td>Unranked</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <table class="sortable">
+        <h2>{{ category }}</h2>
+        {% if rankings[category ] %}
+        <div class="points">
+            <table class="transparent">
                 <thead>
-                    <tr>
-                        <th id="default-sort" class="wide dir-u">Map</th>
-                        <th>Time</th>
-                        <th>Rank</th>
-                        <th>Team Rank</th>
-                        <th>Playtime</th>
-                        <th>Points</th>
-                    </tr>
+                <tr>
+                    <th>Points</th>
+                    <th>Rank Points</th>
+                    <th>Team Points</th>
+                    <th>Rank 1s</th>
+                    <th>Team Rank1s</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {% for rank in rankings[category] %}
-                        <tr>
-                            <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
-                            <td data-sort="{{ rank.Time }}">{{ fancy_time(rank.Time) }}</td>
-                            <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
-                            {% if rank.Teamrank %}
-                                <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
-                            <td data-sort="{{ playtime[rank.Map].Playtime if playtime[rank.Map].Playtime else 0 }}">
-                                {{ time_format(playtime[rank.Map].Playtime) if playtime[rank.Map].Playtime else "Unplayed" }}
-                            </td>
-                            <td>{{ rank.Points }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td>{{ utils.points(points, "points", category) }}</td>
+                        <td>{{ utils.points(points, "rankpoints", category) }}</td>
+                        <td>{{ utils.points(points, "teampoints", category) }}</td>
+                        <td>Unranked</td>
+                        <td>Unranked</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <table class="sortable">
+            <thead>
+                <tr>
+                    <th id="default-sort" class="wide dir-u">Map</th>
+                    <th>Time</th>
+                    <th>Rank</th>
+                    <th>Team Rank</th>
+                    <th>Playtime</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for rank in rankings[category] %}
+                <tr>
+                    <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
+                    <td data-sort="{{ rank.Time }}">{{ fancy_time(rank.Time) }}</td>
+                    <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
+                    {% if rank.Teamrank %}
+                        <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td data-sort="{{ playtime[rank.Map].Playtime if playtime[rank.Map].Playtime else 0 }}">
+                        {{ time_format(playtime[rank.Map].Playtime) if playtime[rank.Map].Playtime else "Unplayed" }}
+                    </td>
+                    <td>{{ rank.Points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>{{ player }} has not finished any {{ category }} maps and is unranked within the category.</p>
+        {% endif %}
     </div>
 </div>
     {% endfor %}

@@ -48,3 +48,7 @@ Unranked
     {{- ' & ' if loop.revindex == 2 -}}
   {% endfor %}
 {% endmacro %}
+
+{% macro flag(server) %}
+<img height="14px" src="https://ddnet.org/countryflags/{{ "UNK" if server == "" else server }}.png">
+{% endmacro %}
