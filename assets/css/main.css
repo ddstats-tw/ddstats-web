@@ -198,7 +198,6 @@ main {
     width: 70rem;
     max-width: 85%;
     margin: auto;
-    margin-top: 0;
 }
 
 main > h1 {
@@ -287,7 +286,6 @@ main > h1 {
     display: flex;
     justify-content:center;
     flex-wrap: wrap;
-    gap: 1rem;
 }
 
 .buttons li {
@@ -472,7 +470,8 @@ form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center
+    align-items: center;
+    margin-bottom: 5rem;
 }
 
 input {
@@ -503,6 +502,19 @@ input:hover {
 
 .right {
     float: right;
+}
+
+li {
+    padding: 0.25rem;
+    margin-left: 1rem;
+}
+
+.failure {
+    color: #EF5255;
+}
+
+.success {
+    color: #3DDF89;
 }
 
 .result li {

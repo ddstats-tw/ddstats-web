@@ -1,0 +1,67 @@
+{% extends "templates/base.njk" %}
+{% import "components/list.njk" as list %}
+
+{% block head %}
+	<title>Status | DDStats</title>
+{% endblock %}
+
+{% block main %}
+
+<h1>Server Status</h1>
+
+<div class="container">
+    <div class="box">
+        <h2>Databases</h2>
+        <table class="transparent">
+            <tr>
+                <td><b>DDNet</b></td>
+                <td>26 million rows</td>
+                <td>7.5 GB</td>
+            </tr>
+            <tr>
+                <td><b>Playtime</b></td>
+                <td>149 million rows</td>
+                <td>14 GB</td>
+            </tr>
+            <tr>
+                <td><b>Historical points</b></td>
+                <td>10 million rows</td>
+                <td>816 MB</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2>Data updates</h2>
+        <p>
+            Next data update is in 3 hours and 47 minutes. Data updates are performed every 24 hours at 3 AM CET.
+        </p>
+        <table class="transparent">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time to update</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2020-08-02</td>
+                    <td>6 minutes and 27 seconds</td>
+                    <td class="failure">Failed</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>2020-08-01</td>
+                    <td>7 minutes and 30 seconds</td>
+                    <td class="success">Success</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
