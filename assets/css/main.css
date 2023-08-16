@@ -540,3 +540,9 @@ input:focus {
         grid-template-columns: 1fr;
     }
 }
+
+@media screen and (max-width:600px) {
+    main {
+        max-width: 100%;
+    }
+}
