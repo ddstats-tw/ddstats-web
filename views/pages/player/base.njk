@@ -4,9 +4,14 @@
     <script src="/assets/js/chart-umd.js"></script>
     <script src="/assets/js/chart-date-fns.js"></script>
     <script src="/assets/js/sortable.js" defer></script>
-    <title>{{ player }} | {{ page | capitalize }} | Player Profile | DDStats</title>
+    <title>{{ (player ~ ' | ' ~ page | capitalize) if player else "Player not found" }} | Player Profile | DDStats</title>
 {% endblock %}
 {% block main %}
+
+{% if not player %}
+<h1>404 - Player not found</h1>
+{% else %}
+
     <h1>{{ player }}</h1>
     <ul class="buttons">
         <li>
@@ -23,5 +28,5 @@
     {% block player %}
 
     {% endblock %}
-
+{% endif %}
 {% endblock %}
