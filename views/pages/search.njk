@@ -30,13 +30,17 @@
 {% endif %}
 
 <h2>Players</h2>
+{% if players | length %}
 {% for player in players %}
 <div class="container">
     <div class="box">
-        <h3>{{ player.name }} - {{ player.points }}</h3>
+        <h3><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a> - {{ player.points }} points</h3>
     </div>
 </div>
 {% endfor %}
+{% else %}
+<p>No players found.</p>
+{% endif %}
 
 
 {% endblock %}
