@@ -29,6 +29,6 @@ async function search_api_route(req, res) {
 routes.get("/search/api", search_api_route)
 
 routes.get("/faq", (req, res) => { res.render("pages/faq.njk") })
-routes.get("/status", (req, res) => { res.render("pages/status.njk") })
+routes.get("/status-WIP", (req, res) => { res.render("pages/status.njk") })
 
 export default routes
