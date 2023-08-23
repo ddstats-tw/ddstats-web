@@ -29,7 +29,7 @@
     {% for row in rankedPointsGraph %}
     { x: "{{ row.date }}", y: {{ row.rankpoints }}, y2: {{ row.teampoints }} },
     {% endfor %}
-    { x: "2023-07-31", y: {{ (rankedPointsGraph | last).rankpoints }}, y2: {{ (rankedPointsGraph | last).teampoints }} }
+    { x: "{{ current_date() }}", y: {{ (rankedPointsGraph | last).rankpoints }}, y2: {{ (rankedPointsGraph | last).teampoints }} }
     {% endif %}
   ];
 
@@ -37,7 +37,7 @@
     {% for row in pointsGraph %}
     { x: "{{ row.date }}", y: {{ row.points }} },
     {% endfor %}
-    { x: "2023-07-31", y: {{ (pointsGraph | last).points }} }
+    { x: "{{ current_date() }}", y: {{ (pointsGraph | last).points }} }
   ];
 
   Chart.defaults.color = "#E0E0FF"
@@ -151,8 +151,8 @@
                     <th>Points</th>
                     <th>Rank Points</th>
                     <th>Team Points</th>
-                    <th>Rank 1s</th>
                     <th>Team Rank1s</th>
+                    <th>Rank 1s</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -171,8 +171,8 @@
                 <tr>
                     <th id="default-sort" class="wide dir-u">Map</th>
                     <th>Time</th>
-                    <th>Rank</th>
                     <th>Team Rank</th>
+                    <th>Rank</th>
                     <th>Playtime</th>
                     <th>Points</th>
                 </tr>
@@ -182,12 +182,12 @@
                 <tr>
                     <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
                     <td data-sort="{{ rank.Time }}">{{ fancy_time(rank.Time) }}</td>
-                    <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
                     {% if rank.Teamrank %}
-                        <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
+                    <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
                     {% else %}
                         <td></td>
                     {% endif %}
+                    <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
                     <td data-sort="{{ playtime[rank.Map].Playtime if playtime[rank.Map].Playtime else 0 }}">
                         {{ time_format(playtime[rank.Map].Playtime) if playtime[rank.Map].Playtime else "Unplayed" }}
                     </td>
