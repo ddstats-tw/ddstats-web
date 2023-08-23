@@ -41,7 +41,18 @@ async function players_playtime_route(req, res) {
 }
 
 routes.get("/player/:player/:type(playtime)", players_playtime_route)
-
+routes.get("/player/:player/:type(playtime)/mostplayed", async (req, res) => {
+    const player = req.params.player
+    const mostPlayedMaps = await Player.mostPlayedMaps(player, 10000)
+    const page = req.params.type
+    res.render("pages/player/mostplayed.njk", { player, page, mostPlayedMaps }) 
+})
+routes.get("/player/:player/:type(playtime)/activity", async (req, res) => {
+    const player = req.params.player
+    const recentPlaytime = await Player.recentPlaytime(player, 1000)
+    const page = req.params.type
+    res.render("pages/player/activity.njk", { player, page, recentPlaytime }) 
+})
 
 async function players_rank1s_route(req, res) {
     const player = req.params.player

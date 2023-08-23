@@ -1,0 +1,35 @@
+{% extends "pages/player/base.njk" %}
+{% import "components/utils.njk" as utils %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Recent Activity</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/playtime">Go back</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Map</th>
+                <th>Playtime</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for activity in recentPlaytime %}
+                <tr>
+                    <td>{{ activity.date }}</td>
+                    {% if activity.Server %}
+                    <td><a href="/map/{{ activity.map | urlencode | safe }}">{{ activity.map }}</a></td>
+                    {% else %}
+                    <td>{{ truncate_string(activity.map) }}</td>
+                    {% endif %}
+                    <td>{{ time_format(activity.Playtime) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
