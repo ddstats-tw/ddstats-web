@@ -41,8 +41,9 @@ const Player = {
      */
     mostPlayedMaps: handleErrors(async (player, limit) => {
         return await dbQuery(playtime, `
-            SELECT map, SUM(time) as Playtime FROM record_playtime
-                WHERE player = ? GROUP BY map ORDER BY Playtime DESC LIMIT ${limit}           
+            SELECT p.map, SUM(time) as Playtime, maps.Server FROM record_playtime AS p
+                LEFT JOIN maps ON maps.map = p.map
+                WHERE player = ? GROUP BY p.map ORDER BY Playtime DESC LIMIT ${limit}           
         `, [player])
     }, log),
     /**
@@ -83,9 +84,10 @@ const Player = {
      */
     recentPlaytime: handleErrors(async (player, limit) => {
         return await dbQuery(playtime, `
-            SELECT date, map, player, SUM(time) as Playtime FROM record_playtime 
-                WHERE player = ?
-            GROUP BY date, map ORDER BY date DESC, time DESC LIMIT ${limit};
+            SELECT date, p.map, player, SUM(time) as Playtime, maps.Server FROM record_playtime as p
+                LEFT JOIN maps ON p.map = maps.map 
+                WHERE player = ? 
+            GROUP BY date, p.map ORDER BY date DESC, time DESC LIMIT ${limit};
         `, [player])
     }, log),
     /**

@@ -20,7 +20,11 @@
                 {% for activity in recentPlaytime %}
                 <tr>
                     <td>{{ activity.date }}</td>
+                    {% if activity.Server %}
                     <td><a href="/map/{{ activity.map | urlencode | safe }}">{{ activity.map }}</a></td>
+                    {% else %}
+                    <td>{{ activity.map }}</td>
+                    {% endif %}
                     <td>{{ time_format(activity.Playtime) }}</td>
                 </tr>
                 {% endfor %}
@@ -42,7 +46,11 @@
             <tbody>
                 {% for map in mostPlayedMaps %}
                 <tr>
+                    {% if map.Server %}
                     <td><a href="/map/{{ map.map | urlencode | safe }}">{{ map.map }}</a></td>
+                    {% else %}
+                    <td>{{ map.map }}</td>
+                    {% endif %}
                     <td>{{ time_format(map.Playtime) }}</td>
                 </tr>
                 {% endfor %}
