@@ -1,4 +1,4 @@
-import { ddnet, dbQuery } from "../lib/database.js"
+import { ddnet, playtime, dbQuery } from "../lib/database.js"
 import { handleErrors } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
 
@@ -59,6 +59,22 @@ const Leaderboard = {
                     WHERE maps.server LIKE ? AND mapinfo.BONUS = 0 ORDER BY time DESC LIMIT 100)
         `, [category])
     }, log),
+    /**
+     * Get the most played maps leaderboard.
+     * @param {string} category - Filter leaderboard by category. "Any" for no filtering.
+     * @returns {Promise<Array>}
+     */
+    mostplayed: handleErrors(category => {
+        category = category == "Any" ? "%" : category
+
+        return dbQuery(playtime, `
+            SELECT RANK() OVER (ORDER BY p.seconds DESC) AS rank, maps.server, p.map, p.seconds, p.mostaddicted, p.mostaddicted_seconds FROM maps_playtime AS p
+                JOIN maps ON maps.map = p.map WHERE maps.server LIKE ?
+            ORDER BY seconds DESC;
+        `, [category])
+    }, log),
 }
+
+// SELECT RANK() OVER (ORDER BY seconds DESC) as '#', map, seconds/60/60/24/365 FROM maps_playtime ORDER BY seconds DESC LIMIT 10;
 
 export default Leaderboard

@@ -35,4 +35,16 @@ async function worsttimes_route(req, res) {
 routes.get("/leaderboard/worsttimes/", worsttimes_route)
 routes.get("/leaderboard/worsttimes/category/:category", worsttimes_route)
 
+
+async function mostplayed_route(req, res) {
+    const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
+
+    const leaderboard = await Leaderboard.mostplayed(category)
+    res.render("pages/leaderboards/mostplayed.njk", { leaderboard, category })
+}
+
+routes.get("/leaderboard/mostplayed/", mostplayed_route)
+routes.get("/leaderboard/mostplayed/category/:category", mostplayed_route)
+
+
 export default routes
