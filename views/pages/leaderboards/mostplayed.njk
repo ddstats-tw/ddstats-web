@@ -42,7 +42,7 @@
                 <td class="">{{ map.Server }}</td>
                 <td class="wide"><a href="/map/{{ map.map | urlencode }}">{{ map.map }}</a></td>
                 <td class="grey">{{ time_format(map.seconds) }}</td>
-                <td class="wide"><a href="/map/{{ map.mostaddicted | urlencode }}">{{ map.mostaddicted }}</a> ({{ time_format(map.mostaddicted_seconds) }})</td>
+                <td class="wide"><a href="/player/{{ map.mostaddicted | urlencode }}">{{ map.mostaddicted }}</a> ({{ time_format(map.mostaddicted_seconds) }})</td>
             </tr>
             {% endfor %}
         </tbody>
