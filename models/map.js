@@ -29,7 +29,7 @@ const Map = {
      */
     info: handleErrors(async map => {
         let info = await dbQuery(ddnet, `
-            SELECT maps.*, ROUND(mediantime) as mediantime, mediantimerank, finishes, finishesrank FROM maps JOIN mapstats ON maps.map = mapstats.map WHERE maps.map = ?;
+            SELECT maps.*, ROUND(mediantime) as mediantime, finishes, finishesrank FROM maps JOIN mapstats ON maps.map = mapstats.map WHERE maps.map = ?;
         `, [map], true)
         if(info)
             info.Mapper = info.Mapper.split(/, | & /)
