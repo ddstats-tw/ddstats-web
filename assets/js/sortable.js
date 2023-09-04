@@ -1,9 +1,7 @@
-/* Sortable 2.1.3 - Credit Jonas Earendel (https://github.com/tofsjonas/sortable) 
-BUGS:
-- Empty/Null values aren't last in sorting.
-*/
-document.addEventListener("click",function(c){try{function f(a,b){return a.nodeName===b?a:f(a.parentNode,b)}var x=c.shiftKey||c.altKey,d=f(c.target,"TH"),m=f(d,"TR"),g=f(m,"TABLE");function n(a,b){a.classList.remove("dir-d");a.classList.remove("dir-u");b&&a.classList.add(b)}function p(a){return x&&a.dataset.sortAlt||a.dataset.sort||a.textContent}if(g.classList.contains("sortable")){var q,e=m.cells,r=parseInt(d.dataset.sortTbr);for(c=0;c<e.length;c++)e[c]===d?q=parseInt(d.dataset.sortCol)||c:n(e[c],
-    "");e="dir-d";if(d.classList.contains("dir-d")||g.classList.contains("asc")&&!d.classList.contains("dir-u"))e="dir-u";n(d,e);var t="dir-u"===e,v=function(a,b,h){var u=p((t?a:b).cells[h]);a=p((t?b:a).cells[h]);b=parseFloat(u)-parseFloat(a);return isNaN(b)?u.localeCompare(a):b};for(c=0;c<g.tBodies.length;c++){var k=g.tBodies[c],w=[].slice.call(k.rows,0);w.sort(function(a,b){var h=v(a,b,q);return 0!==h||isNaN(r)?h:v(a,b,r)});var l=k.cloneNode();l.append.apply(l,w);g.replaceChild(l,k)}}}catch(f){}})
-
+/* Sortable 2.3.2 - Credit Jonas Earendel (https://github.com/tofsjonas/sortable) */
+document.addEventListener("click",function(c){try{function h(b,a){return b.nodeName===a?b:h(b.parentNode,a)}var w=c.shiftKey||c.altKey,d=h(c.target,"TH"),m=d.parentNode,n=m.parentNode,g=n.parentNode;function p(b,a){b.classList.remove("dir-d");b.classList.remove("dir-u");a&&b.classList.add(a)}function q(b){var a;return w?b.dataset.sortAlt:null!==(a=b.dataset.sort)&&void 0!==a?a:b.textContent}if("THEAD"===n.nodeName&&g.classList.contains("sortable")&&!d.classList.contains("no-sort")){var r,f=m.cells,
+    t=parseInt(d.dataset.sortTbr);for(c=0;c<f.length;c++)f[c]===d?r=parseInt(d.dataset.sortCol)||c:p(f[c],"");f="dir-d";if(d.classList.contains("dir-d")||g.classList.contains("asc")&&!d.classList.contains("dir-u"))f="dir-u";p(d,f);var x="dir-u"===f,y=g.classList.contains("n-last"),u=function(b,a,e){a=q(a.cells[e]);b=q(b.cells[e]);if(y){if(""===a&&""!==b)return-1;if(""===b&&""!==a)return 1}e=Number(a)-Number(b);a=isNaN(e)?a.localeCompare(b):e;return x?-a:a};for(c=0;c<g.tBodies.length;c++){var k=g.tBodies[c],
+    v=[].slice.call(k.rows,0);v.sort(function(b,a){var e=u(b,a,r);return 0!==e||isNaN(t)?e:u(b,a,t)});var l=k.cloneNode();l.append.apply(l,v);g.replaceChild(l,k)}}}catch(h){}});
+    
 document.getElementById("default-sort").click()
 document.getElementById("default-sort").click()

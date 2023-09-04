@@ -93,7 +93,7 @@
     <div class="box">
         <h2>All Top10s</h2>
 
-        <table class="sortable">
+        <table class="sortable n-last">
             <thead>
                 <tr>
                     <th>Server</th>
@@ -112,7 +112,7 @@
                         <td>{{ map.rank }}<sup>{{ ordinal(map.rank) }}</sup></td>
                         <td data-sort="{{ map.rtime }}">{{ fancy_time(map.rtime) }}</td>
                         {% if map.teamrank %}
-                        <td>{{ map.teamrank }}<sup>{{ ordinal(map.teamrank) }}</sup></td>
+                        <td data-sort="{{ map.teamrank }}">{{ map.teamrank }}<sup>{{ ordinal(map.teamrank) }}</sup></td>
                         <td data-sort="{{ map.ttime }}">{{ fancy_time(map.ttime) }}</td>
                         {% else %}
                         <td></td>

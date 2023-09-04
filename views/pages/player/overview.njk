@@ -166,7 +166,7 @@
                 </tbody>
             </table>
         </div>
-        <table class="sortable">
+        <table class="sortable n-last">
             <thead>
                 <tr>
                     <th id="default-sort" class="wide dir-u">Map</th>
@@ -183,7 +183,7 @@
                     <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
                     <td data-sort="{{ rank.Time }}">{{ fancy_time(rank.Time) }}</td>
                     {% if rank.Teamrank %}
-                    <td>{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
+                    <td data-sort="{{ rank.Teamrank }}">{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
                     {% else %}
                         <td></td>
                     {% endif %}
