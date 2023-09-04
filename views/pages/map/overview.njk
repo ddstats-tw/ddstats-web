@@ -25,15 +25,19 @@
                 </tr>
                 <tr>
                     <td><b>Finishes</b></td>
-                    <td>4<sup>th</sup> with 89309 tees (TODO)</td>
+                    {% if info.finishes %}
+                    <td>{{ info.finishesrank }}<sup>{{ ordinal(info.finishesrank) }}</sup> with {{ plural(info.finishes, "finish", "es") }}</td>
+                    {% else %}
+                    <td>Unfinished</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td><b>Points</b></td>
-                    <td>{{ info.Points }} Points</td>
+                    <td>{{ plural(info.Points, "Point") }}</td>
                 </tr>
                 <tr>
                     <td><b>Median time</b></td>
-                    <td>38:57 (TODO)</td>
+                    <td>{{ fancy_time(info.mediantime, true) if info.finishes else "Unfinished" }}</td>
                 </tr>
             </tbody>
         </table>
@@ -42,6 +46,7 @@
 
 <div class="container">
     <div class="box">
+        {% if rankings | length %}
         <h2 style="float: left">Rankings</h2>
         <a class="show-more" href="/map/{{ map | urlencode | safe }}/rankings">Show more</a>
 
@@ -71,6 +76,10 @@
                 {% endfor %}
             </tbody>
         </table>
+    {% else %}
+        <h2>Rankings</h2>
+        <p>Nobody has finished this map. {{ "It's in the Fun category, so it's most likely unfinishable." if info.Server == "Fun" else "Maybe you will become the first one?" }} </p>
+    {% endif %}
     </div>
     {% if teamrankings | length %}
     <div class="box">
