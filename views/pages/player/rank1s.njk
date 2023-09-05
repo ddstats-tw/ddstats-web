@@ -38,7 +38,7 @@
             <thead>
             <tr>
                 <th>Player</th>
-                <th>Maps together</th>
+                <th>Rank1s together</th>
             </tr>
             </thead>
             <tbody>
@@ -109,7 +109,7 @@
                     <tr>
                         <td>{{ map.Server }}</a></td>
                         <td><a href="/map/{{ map.Map | urlencode | safe }}">{{ map.Map }}</a></td>
-                        <td>{{ map.rank }}<sup>{{ ordinal(map.rank) }}</sup></td>
+                        <td data-sort="{{ map.rank }}">{{ map.rank }}<sup>{{ ordinal(map.rank) }}</sup></td>
                         <td data-sort="{{ map.rtime }}">{{ fancy_time(map.rtime) }}</td>
                         {% if map.teamrank %}
                         <td data-sort="{{ map.teamrank }}">{{ map.teamrank }}<sup>{{ ordinal(map.teamrank) }}</sup></td>

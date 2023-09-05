@@ -187,7 +187,7 @@
                     {% else %}
                         <td></td>
                     {% endif %}
-                    <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
+                    <td data-sort="{{ rank.Rank }}">{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
                     <td data-sort="{{ playtime[rank.Map].Playtime if playtime[rank.Map].Playtime else 0 }}">
                         {{ time_format(playtime[rank.Map].Playtime) if playtime[rank.Map].Playtime else "Unplayed" }}
                     </td>
