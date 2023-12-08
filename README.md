@@ -1,4 +1,4 @@
-# ddstats/web
+# ddstats-web
 
 
 ## Configuration
