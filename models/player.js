@@ -218,8 +218,11 @@ const Player = {
             
             const results = await Promise.all(promises)
             let i = 0
+            points[type]["total"] = {}
+            points[type]["total"]["points"] = 0
             for(const category in rankings) {
                 points[type][category]["points"] = results[i]
+                points[type]["total"]["points"] += results[i]
                 i++
             }
         }
