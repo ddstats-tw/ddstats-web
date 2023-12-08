@@ -72,7 +72,7 @@ async function players_rank1s_route(req, res) {
 routes.get("/player/:player/:type(rank1s)", players_rank1s_route)
 
 async function players_json(req, res) {
-    const player = req.params.player
+    const player = req.query.player
     const rankings = groupBy(await Player.rankings(player), "Category")
     if(!Object.keys(rankings).length)
         return res.render("pages/player/base.njk")
@@ -97,6 +97,6 @@ async function players_json(req, res) {
     return res.json({ player, points, rankings, rankedPointsGraph, pointsGraph, playtime, recentPlaytime, playtimeCategories, playtimeGametypes, playtimeLocation, playtimePerMonth, mostPlayedMaps, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
 }
 
-routes.get("/player/:player/json", players_json)
+routes.get("/player/json", players_json)
 
 export default routes
