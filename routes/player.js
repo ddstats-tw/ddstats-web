@@ -19,6 +19,7 @@ async function players_overview_route(req, res) {
     res.render("pages/player/overview.njk", { page, player, points, rankings, rankedPointsGraph, pointsGraph, playtime })
 }
 
+routes.get("/player/json", players_json)
 routes.get("/player/:player", players_overview_route)
 routes.get("/player/:player/:type(overview)", players_overview_route)
 
@@ -96,7 +97,5 @@ async function players_json(req, res) {
 
     return res.json({ player, points, rankings, rankedPointsGraph, pointsGraph, playtime, recentPlaytime, playtimeCategories, playtimeGametypes, playtimeLocation, playtimePerMonth, mostPlayedMaps, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
 }
-
-routes.get("/player/json", players_json)
 
 export default routes
