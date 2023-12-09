@@ -76,7 +76,9 @@ async function players_json(req, res) {
     const player = req.query.player
     const rankings = groupBy(await Player.rankings(player), "Category")
     if(!Object.keys(rankings).length)
-        return res.render("pages/player/base.njk")
+        return res.status(404).json({
+            "error": "player not found"
+        })
 
     const rankedPointsGraph = await Player.rankedpointsGraph(player)
     const pointsGraph = await Player.pointsGraph(player)
