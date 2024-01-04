@@ -8,8 +8,8 @@
 
 {% block main %}
 
-<form action="/search" method="get">
-    <input type="text" value="{{ query }}" name="q" placeholder="nameless tee, Multeasymap, ...">
+<form class="form-search-default" action="/search" method="get">
+    <input class="input-search-default" type="text" value="{{ query }}" name="q" placeholder="nameless tee, Multeasymap, ...">
 </form>
 
 <h2>Maps</h2>
@@ -41,6 +41,4 @@
 {% else %}
 <p>No players found.</p>
 {% endif %}
-
-
 {% endblock %}

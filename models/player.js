@@ -1,4 +1,4 @@
-import { ddnet, playtime, points, dbQuery, redis } from "../lib/database.js"
+import { ddnet, master, points, dbQuery, redis } from "../lib/database.js"
 import Map from "./map.js"
 import { createIndex, handleErrors } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
@@ -23,12 +23,35 @@ const Player = {
         `, [player])
     }, log),
     /**
+     * Get recent playerinfo of a player
+     * @param {string} player
+     * @returns {Promise<Array>}
+     */
+    playerinfo: handleErrors(async player => {
+        return await dbQuery(master, `
+            SELECT * FROM record_playerinfo
+                WHERE name = ? ORDER BY date DESC LIMIT 1
+        `, [player])
+    }, log),
+    /**
+     * Get recent playerinfo of a player
+     * @param {string} player
+     * @param {integer} limit - amount of entries to return.
+     * @returns {Promise<Array>}
+     */
+    recentPlayerinfo: handleErrors(async (player, limit) => {
+        return await dbQuery(master, `
+            SELECT * FROM record_playerinfo
+                WHERE name = ? ORDER BY date DESC LIMIT ${limit}
+        `, [player])
+    }, log),
+    /**
      * Get playtime in seconds for each map of a player.
      * @param {string} player
      * @returns {Promise<Object>}
      */
     playtime: handleErrors(async player => {
-        return createIndex(await dbQuery(playtime, `
+        return createIndex(await dbQuery(master, `
             SELECT map, SUM(time) as Playtime FROM record_playtime
                 WHERE player = ? GROUP BY map            
         `, [player]), "map")
@@ -40,7 +63,7 @@ const Player = {
      * @returns {Promise<Object>}
      */
     mostPlayedMaps: handleErrors(async (player, limit) => {
-        return await dbQuery(playtime, `
+        return await dbQuery(master, `
             SELECT p.map, SUM(time) as Playtime, maps.Server FROM record_playtime AS p
                 LEFT JOIN maps ON maps.map = p.map
                 WHERE player = ? GROUP BY p.map ORDER BY Playtime DESC LIMIT ${limit}           
@@ -83,7 +106,7 @@ const Player = {
      * @returns {Promise<Array>}
      */
     recentPlaytime: handleErrors(async (player, limit) => {
-        return await dbQuery(playtime, `
+        return await dbQuery(master, `
             SELECT date, p.map, player, SUM(time) as Playtime, maps.Server FROM record_playtime as p
                 LEFT JOIN maps ON p.map = maps.map 
                 WHERE player = ? 
@@ -96,7 +119,7 @@ const Player = {
      * @returns {Promise<Array>}
      */
     playtimeCategories: handleErrors(async (player) => {
-        return await dbQuery(playtime, `
+        return await dbQuery(master, `
             SELECT Server as Category, SUM(time)/60/60 as Playtime FROM record_playtime 
                 JOIN maps ON record_playtime.map = maps.map 
                 WHERE player = ? 
@@ -109,7 +132,7 @@ const Player = {
      * @returns {Promise<Array>}
      */
     playtimeGametypes: handleErrors(async (player) => {
-        return await dbQuery(playtime, `
+        return await dbQuery(master, `
             SELECT Gametype, SUM(time)/60/60 as Playtime FROM record_playtime 
                 WHERE player = ? 
             GROUP BY gametype ORDER BY Playtime DESC LIMIT 15
@@ -121,7 +144,7 @@ const Player = {
      * @returns {Promise<Array>}
      */
     playtimeLocation: handleErrors(async (player) => {
-        return await dbQuery(playtime, `
+        return await dbQuery(master, `
             SELECT Location, SUM(time)/60/60 as Playtime FROM record_playtime 
                 WHERE player = ? 
             GROUP BY Location ORDER BY Playtime DESC LIMIT 15
@@ -133,7 +156,7 @@ const Player = {
      * @returns {Promise<Array>}
      */
     playtimePerMonth: handleErrors(async (player) => {
-        return await dbQuery(playtime, `
+        return await dbQuery(master, `
             SELECT strftime('%Y', date) AS Year, strftime('%m', date) AS Month, SUM(time)/60/60 as Playtime FROM record_playtime 
                 WHERE player = ? AND date >= date('now','-12 month') 
             GROUP BY Year, Month ORDER BY year ASC, month ASC

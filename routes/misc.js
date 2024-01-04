@@ -11,7 +11,7 @@ async function search_route(req, res) {
 
     const players = await Player.search(query, 30)
     const maps = await Map.search({ map: query })
-    res.render("pages/search.njk", { query, maps, players })
+    res.render("pages/search.njk", { query, maps, players, "search": true })
 }
 
 routes.get("/search", search_route)
@@ -28,7 +28,7 @@ async function search_api_route(req, res) {
 
 routes.get("/search/api", search_api_route)
 
-routes.get("/faq", (req, res) => { res.render("pages/faq.njk") })
-routes.get("/status-WIP", (req, res) => { res.render("pages/status.njk") })
+routes.get("/faq", (req, res) => { res.render("pages/faq.njk"), {"search": true }})
+routes.get("/status-WIP", (req, res) => { res.render("pages/status.njk"), { "search": true }})
 
 export default routes

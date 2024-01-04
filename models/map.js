@@ -1,4 +1,4 @@
-import { ddnet, playtime, dbQuery } from "../lib/database.js"
+import { ddnet, master, dbQuery } from "../lib/database.js"
 import { handleErrors, groupBy, splitMappers } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
 

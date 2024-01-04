@@ -161,15 +161,78 @@ a:hover {
     text-decoration: underline;
 }
 
+.playerinfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.playerinfo-border {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* color: var(--grey15); */
+    background-color: var(--grey3);
+    border: .2rem solid transparent;
+    border-radius: 0rem 0rem .5rem .5rem;
+    transition: background-color .5s;
+    /* transition: border .3s, background-color .5s, border-radius .5s */
+}
+
+.playerinfo-border>div {
+    padding: 2em;
+}
+
+.playerinfo-border:hover {
+    background-color: var(--grey4);
+    /* border-radius: 0rem 0rem 1rem 1rem;
+    border: .2rem solid var(--primary); */
+}
+
+.playerinfo-mid {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tee-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tee {
+    position: relative;
+    width: 96em;
+    height: 96em;
+}
+
+.tee-medium {
+    scale: .75;
+}
+
+.tee-small {
+    scale: .5;
+}
+
 .topnav,
 footer {
     background-color: var(--grey3);
     box-shadow: .5rem 0 4rem var(--grey1);
-    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1rem;
+}
+
+.topnav {
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    width: 100;
+    z-index: 1;
 }
 
 .topnav h1 {
@@ -192,7 +255,6 @@ footer {
     display: flex;
     justify-content: space-around;
     flex-direction: column;
-
 }
 
 main {
@@ -298,18 +360,18 @@ main>h1 {
 .buttons a {
     text-decoration: none;
     color: var(--text);
-    border-bottom: 0.20rem solid var(--primary);
-    padding: 0.20rem;
-    margin: 0.25rem;
+    border-bottom: 0.2rem solid var(--primary);
+    padding: 0.4rem;
+    margin: 0.5rem;
 }
 
 .buttons a:hover {
     transition: border-bottom 0.5s ease;
-    border-bottom: 0.20rem solid var(--blue2);
+    border-bottom: 0.2rem solid var(--blue2);
 }
 
 .buttons .active {
-    border-bottom: 0.20rem solid var(--blue3);
+    border-bottom: 0.2rem solid var(--blue3);
 }
 
 .leaderboards {
@@ -474,20 +536,9 @@ b {
     float: right;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 5rem;
-}
-
-input {
+.input-search-home {
     font-size: 1.05rem;
-    width: min(75ch, 80vw)
-}
-
-input {
+    width: min(75ch, 80vw);
     color: var(--grey15);
     background-color: var(--grey3);
     margin: 1em 0;
@@ -499,33 +550,62 @@ input {
     transition: border .3s, background-color .5s, border-radius .5s
 }
 
+.form-search-home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5rem;
+    background-color: var(--black3);
+}
+
+.result-home {
+    width: min(75ch, 80vw)
+}
+
+.input-search-nav {
+    font-size: 1.05rem;
+    width: min(30ch, 30vw);
+    color: var(--grey15);
+    background-color: var(--grey3);
+    padding: .5rem .5rem .5rem .5rem;
+    outline: 0 none transparent;
+    border: .2rem solid transparent;
+    border-radius: .5rem;
+    box-shadow: .25rem 0 0.5rem var(--grey1);
+    transition: border .3s, background-color .5s, border-radius .5s
+}
+
+.form-search-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-nav {
+    width: min(30ch, 30vw);
+    background-color: var(--surface);
+}
+
+.search-nav {
+    position: fixed;
+    top: 0.75rem;
+    left: 7.5rem;
+}
+
 input:hover {
     background-color: var(--grey4);
     border-radius: 1rem
 }
 
-.result {
-    width: min(75ch, 80vw)
+input:active,
+input:focus {
+    border: .2rem solid var(--primary)
 }
 
-.right {
-    float: right;
-}
-
-li {
-    padding: 0.25rem;
-    margin-left: 1rem;
-}
-
-.failure {
-    color: #EF5255;
-}
-
-.success {
-    color: #3DDF89;
-}
-
-.result li {
+.result-home li,
+.result-nav li {
     padding: 0.25rem;
     background-color: var(--grey3);
     margin: 0.5rem;
@@ -534,14 +614,27 @@ li {
     list-style-type: none;
 }
 
-.result .selected {
+.result-home .selectedHome,
+.result-nav .selectedNav {
     background-color: var(--grey5);
     color: var(--text);
 }
 
-input:active,
-input:focus {
-    border: .2rem solid var(--primary)
+li {
+    padding: 0.25rem;
+    margin-left: 1rem;
+}
+
+.right {
+    float: right;
+}
+
+.failure {
+    color: #EF5255;
+}
+
+.success {
+    color: #3DDF89;
 }
 
 @media screen and (max-width:900px) {

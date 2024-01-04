@@ -5,7 +5,7 @@ import Map from "../models/map.js"
 const routes = Router()
 
 routes.get("/leaderboards/", (req, res) => {
-    res.render("pages/leaderboards.njk")
+    res.render("pages/leaderboards.njk", { "search": true })
 })
 
 async function rank1s_route(req, res) {
@@ -17,7 +17,7 @@ async function rank1s_route(req, res) {
 
     const leaderboard = await Leaderboard.rank1s(type, category, sorting, page)
 
-    res.render("pages/leaderboards/rank1s.njk", { leaderboard, sorting, type, category })
+    res.render("pages/leaderboards/rank1s.njk", { leaderboard, sorting, type, category, "search": true })
 }
 
 routes.get("/leaderboard/:type(teamrank1s|rank1s)/", rank1s_route)
@@ -29,7 +29,7 @@ async function worsttimes_route(req, res) {
     const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
 
     const leaderboard = await Leaderboard.worsttimes(category)
-    res.render("pages/leaderboards/worsttimes.njk", { leaderboard, category })
+    res.render("pages/leaderboards/worsttimes.njk", { leaderboard, category, "search": true})
 }
 
 routes.get("/leaderboard/worsttimes/", worsttimes_route)
@@ -40,7 +40,7 @@ async function mostplayed_route(req, res) {
     const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
 
     const leaderboard = await Leaderboard.mostplayed(category)
-    res.render("pages/leaderboards/mostplayed.njk", { leaderboard, category })
+    res.render("pages/leaderboards/mostplayed.njk", { leaderboard, category, "search": true })
 }
 
 routes.get("/leaderboard/mostplayed/", mostplayed_route)

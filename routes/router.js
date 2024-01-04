@@ -17,7 +17,7 @@ const errFunc = (fn, res) => {
 }
 
 routes.get("/", (req, res) => {
-    res.render("pages/home.njk")
+    res.render("pages/home.njk",  { "search": false })
 })
 
 routes.use("/", leaderboardRoutes)

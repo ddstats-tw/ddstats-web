@@ -1,0 +1,39 @@
+{% extends "pages/player/base.njk" %}
+{% import "components/utils.njk" as utils %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Recent playerinfo</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/activity">Go back</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Date</th>
+                {# <th>Name</th> #}
+                <th>Clan</th>
+                <th>Country</th>
+                <th>Skin</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for activity in recentPlayerinfo %}
+                <tr>
+                    <td>{{ activity.date }}</td>
+                    {# <td>{{ activity.name }}</td> #}
+                    <td>{{ activity.clan }}</td>
+                    <td>{{ utils.player_flag_medium(activity.country) }}</td>
+                    <td>
+                        <div class="tee-medium">
+                            <div class="tee" data-skinimage="https://api.skins.tw/api/resolve/skins/{{ activity.skin_name }}" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

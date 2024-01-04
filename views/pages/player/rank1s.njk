@@ -6,7 +6,7 @@
 <div class="container">
     <div class="box">
         <h2 style="float: left">Recent Top10s</h2>
-        <a class="show-more" href="/player/{{ player | urlencode | safe }}/activity">Show more</a>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/playtime">Show more</a>
 
         <table class="transparent">
             <thead>
@@ -20,7 +20,7 @@
             <tbody>
                 {% for rank in recentTop10s %}
                 <tr>
-                    <td>{{ utils.flag(rank.Server) }}{{ rank.Timestamp }}</td>
+                    <td>{{ utils.server_flag(rank.Server) }}{{ rank.Timestamp }}</td>
                     <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
                     <td>{{ fancy_time(rank.Time) }}</td>
                     <td>{{ rank.Rank }}</td>
@@ -124,5 +124,4 @@
         </table>
     </div>
 </div>
-
 {% endblock %}

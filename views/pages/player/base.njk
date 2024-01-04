@@ -6,19 +6,41 @@
     <script src="/assets/js/sortable.js" defer></script>
     <title>{{ (player ~ ' | ' ~ page | capitalize) if player else "Player not found" }} | Player Profile | DDStats</title>
 {% endblock %}
+
+{% block magic %}
+    <p>its working!</p>
+{% endblock %}
+
 {% block main %}
 
 {% if not player %}
 <h1>404 - Player not found</h1>
 {% else %}
-
+    {% if skin %}
+    <div class="playerinfo">
+        <div class="playerinfo-border">
+            <div>
+                <h1>{{ utils.player_flag_medium(country) }}</h1>
+            </div>
+            <div class="playerinfo-mid">
+                <h1>{{ player }}</h1>
+                <h1>{{ clan }}</h1>
+            </div>
+            <div class="tee-large">
+                <div class="tee" data-skinimage="https://api.skins.tw/api/resolve/skins/{{ skin.name }}" data-bodycolor="{{ skin.color_body }}" data-feetcolor="{{ skin.color_feet }}" data-coloringmode="code"></div>
+            </div>
+        </div>
+    </div>
+    <h4>Last seen: {{ stamp }}</h4>
+    {% else %}
     <h1>{{ player }}</h1>
+    {% endif %}
     <ul class="buttons">
         <li>
             <a class="{{ "active" if page == "overview" }}" href="/player/{{ player | urlencode | safe }}">Overview</a>
         </li>
         <li>
-            <a class="{{ "active" if page == "playtime" }}" href="/player/{{ player | urlencode | safe }}/playtime">Playtime</a>
+            <a class="{{ "active" if page == "activity" }}" href="/player/{{ player | urlencode | safe }}/activity">Activity</a>
         </li>
         <li>
             <a class="{{ "active" if page == "rank1s" }}" href="/player/{{ player | urlencode | safe }}/rank1s">Rank 1s</a>

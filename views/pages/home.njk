@@ -8,45 +8,44 @@
 {% block main %}
 
 <div class="center">
-    <form action="/search" method="get">
+    <form class="form-search-home" action="/search" method="get">
         <h1>Search for a player or map...</h1>
-        <input id="typeahead" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ..." autofocus>
-
-        <div class="result" id="result"></div>
+        <input class="input-search-home" id="typeahead-home" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ..." autofocus>
+        <div class="result-home" id="result-home"></div>
     </form>
 </div>
 
 <script>
-    let cache = {}
-    const input = document.getElementById('typeahead');
-    input.addEventListener('input', handleInput);
+    let cacheHome = {}
+    const inputHome = document.getElementById('typeahead-home');
+    inputHome.addEventListener('input', handleInputHome);
 
-    function handleInput(event) {
+    function handleInputHome(event) {
         const value = event.target.value;
 
         if(!value.length) {
-            const resultDiv = document.getElementById('result');
+            const resultDiv = document.getElementById('result-home');
             resultDiv.innerHTML = '';
             return
         }
-        if (cache[value])
-            showResults(cache[value]);
+        if (cacheHome[value])
+            showResultsHome(cacheHome[value]);
         else {
             fetch('/search/api?q=' + value)
                 .then(response => response.json())
                 .then(data => {
-                    cache[value] = data; // Save result in cache.
-                    showResults(data);
+                    cacheHome[value] = data; // Save result in cacheHome.
+                    showResultsHome(data);
                 })
         }
     }
 
-    function showResults(results) {
-        const resultDiv = document.getElementById('result');
+    function showResultsHome(results) {
+        const resultDiv = document.getElementById('result-home');
         resultDiv.innerHTML = '';
 
         let ul = document.createElement('ul');
-        ul.setAttribute('id', 'playerList');
+        ul.setAttribute('id', 'playerListHome');
     
         for(const type of ["maps", "players"]) {
             results[type].forEach(item => {
@@ -80,38 +79,37 @@
     }
 
 
-    input.addEventListener('keydown', handleKeydown);
-    function handleKeydown(event) {
-        const ul = document.getElementById('playerList');
-        const selected = ul.querySelector('.selected');
+    inputHome.addEventListener('keydown', handleKeydownHome);
+    function handleKeydownHome(event) {
+        const ul = document.getElementById('playerListHome');
+        const selectedHome = ul.querySelector('.selectedHome');
 
         if(event.key === "ArrowDown") {
-            if(selected && selected.nextSibling) {
-                selected.nextSibling.classList.add('selected');
-                selected.classList.remove('selected');
+            if(selectedHome && selectedHome.nextSibling) {
+                selectedHome.nextSibling.classList.add('selectedHome');
+                selectedHome.classList.remove('selectedHome');
             } else {
-                ul.firstChild.classList.add('selected');
-                ul.lastChild.classList.remove('selected')
+                ul.firstChild.classList.add('selectedHome');
+                ul.lastChild.classList.remove('selectedHome')
             }
         } else if (event.key === "ArrowUp") {
-            if(selected && selected.previousSibling) {
-                selected.previousSibling.classList.add('selected');
-                selected.classList.remove('selected');
+            if(selectedHome && selectedHome.previousSibling) {
+                selectedHome.previousSibling.classList.add('selectedHome');
+                selectedHome.classList.remove('selectedHome');
             } else {
-                ul.lastChild.classList.add('selected');
-                ul.firstChild.classList.remove('selected')
+                ul.lastChild.classList.add('selectedHome');
+                ul.firstChild.classList.remove('selectedHome')
             }
         } else if (event.key === "Enter") {
             if(ul.firstChild == ul.lastChild) {
                 event.preventDefault();
                 window.location.href = ul.firstChild.firstChild.firstChild.getAttribute('href')
             }
-            if(selected) {
+            if(selectedHome) {
                 event.preventDefault();
-                window.location.href = selected.firstChild.firstChild.getAttribute('href');
+                window.location.href = selectedHome.firstChild.firstChild.getAttribute('href');
             }
         }
     }
 </script>
-
 {% endblock %}

@@ -49,6 +49,14 @@ Unranked
   {% endfor %}
 {% endmacro %}
 
-{% macro flag(server) %}
+{% macro server_flag(server) %}
 <img height="14px" src="https://ddnet.org/countryflags/{{ "UNK" if server == "" else server }}.png">
+{% endmacro %}
+
+{% macro player_flag_medium(code) %}
+<img height="28px" src="https://ddnet.org/status/countryflags/{{ mapCountryCode(code) }}.png">
+{% endmacro %}
+
+{% macro player_flag_small(code) %}
+<img height="14px" src="https://ddnet.org/status/countryflags/{{ mapCountryCode(code) }}.png">
 {% endmacro %}

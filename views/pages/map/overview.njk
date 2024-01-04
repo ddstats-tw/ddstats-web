@@ -66,7 +66,7 @@
                 {% for rank in rankings %}
                 <tr>
                     <td>{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
-                    <td>{{ utils.flag(rank.Server) }} <a href="/player/{{ rank.Name | urlencode }}">{{ rank.Name }}</a></td>
+                    <td>{{ utils.server_flag(rank.Server) }} <a href="/player/{{ rank.Name | urlencode }}">{{ rank.Name }}</a></td>
                     <td>{{ fancy_time(rank.Time) }}</td>
                     {{ utils.diff(rankings[0].Time, rank.Time) }}
                     {% if not teamrankings | length %}
@@ -103,7 +103,7 @@
                 <tr>
                     <td>{{ rank[0].Rank }}<sup>{{ ordinal(rank[0].Rank) }}</sup></td>
                     <td>
-                    {{ utils.flag(rank[0].Server) }}
+                    {{ utils.server_flag(rank[0].Server) }}
                     {% for player in rank %}
                         {% if (loop.first) and (loop.length > 2)  %}
                         <a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a>,

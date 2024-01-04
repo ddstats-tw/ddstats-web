@@ -1,4 +1,4 @@
-import { ddnet, playtime, dbQuery } from "../lib/database.js"
+import { ddnet, master, dbQuery } from "../lib/database.js"
 import { handleErrors } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
 
@@ -67,7 +67,7 @@ const Leaderboard = {
     mostplayed: handleErrors(category => {
         category = category == "Any" ? "%" : category
 
-        return dbQuery(playtime, `
+        return dbQuery(master, `
             SELECT RANK() OVER (ORDER BY p.seconds DESC) AS rank, maps.server, p.map, p.seconds, p.mostaddicted, p.mostaddicted_seconds FROM maps_playtime AS p
                 JOIN maps ON maps.map = p.map WHERE maps.server LIKE ?
             ORDER BY seconds DESC;
