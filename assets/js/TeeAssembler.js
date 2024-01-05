@@ -1,28 +1,28 @@
 const SKIN = {
-    'size': {
-        'width': 256,
-        'height': 128
+    "size": {
+        "width": 256,
+        "height": 128
     },
-    'elements': {
-        'body': [0, 0, 96, 96],
-        'body_shadow': [96, 0, 96, 96],
-        'hand': [192, 0, 32, 32],
-        'hand_shadow': [224, 0, 32, 32],
-        'foot': [192, 32, 64, 32],
-        'foot_shadow': [192, 64, 64, 32],
-        'credits': [0, 96, 64, 32],
-        'default_eye': [64, 96, 32, 32],
-        'angry_eye': [96, 96, 32, 32],
-        'blink_eye': [128, 96, 32, 32],
-        'happy_eye': [160, 96, 32, 32],
-        'cross_eye': [192, 96, 32, 32],
-        'surprised_eye': [224, 96, 32, 32]
+    "elements": {
+        "body": [0, 0, 96, 96],
+        "body_shadow": [96, 0, 96, 96],
+        "hand": [192, 0, 32, 32],
+        "hand_shadow": [224, 0, 32, 32],
+        "foot": [192, 32, 64, 32],
+        "foot_shadow": [192, 64, 64, 32],
+        "credits": [0, 96, 64, 32],
+        "default_eye": [64, 96, 32, 32],
+        "angry_eye": [96, 96, 32, 32],
+        "blink_eye": [128, 96, 32, 32],
+        "happy_eye": [160, 96, 32, 32],
+        "cross_eye": [192, 96, 32, 32],
+        "surprised_eye": [224, 96, 32, 32]
     }
 }
 
 const genRandomID = (len = 16) => {
-    charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-    let randomString = ''
+    charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    let randomString = ""
     for (let i = 0; i < len; i++) {
         let randomPos = Math.floor(Math.random() * charSet.length)
         randomString += charSet.substring(randomPos, randomPos + 1)
@@ -55,29 +55,29 @@ const setContainer = (_this, container) => {
 			<div class='front_foot_shadow' body-part></div>
 			<div class='front_foot' body-part></div>`
 
-            ; (async () => {
-                let style = document.createElement('style')
-                if (_this.container.getAttribute('data-bodycolor') !== null && _this.container.getAttribute('data-feetcolor') !== null) {
-                    await _this.getTeeImage(_this.container.getAttribute('data-bodycolor'), _this.container.getAttribute('data-feetcolor'), _this.container.getAttribute('data-coloringmode'))
-                }
-                else {
-                    await _this.getTeeImage()
-                }
-                style.innerHTML = `
+        ; (async () => {
+            let style = document.createElement("style")
+            if (_this.container.getAttribute("data-bodycolor") !== null && _this.container.getAttribute("data-feetcolor") !== null) {
+                await _this.getTeeImage(_this.container.getAttribute("data-bodycolor"), _this.container.getAttribute("data-feetcolor"), _this.container.getAttribute("data-coloringmode"))
+            }
+            else {
+                await _this.getTeeImage()
+            }
+            style.innerHTML = `
 				#${_this.randomID}.tee div[body-part] {
 					background-image: url(${_this.imageResult});
 					background-size: 256em 128em;
 				}`
-                let tempStyle = document.querySelector(`#${_this.randomID}.tee style`)
-                if (tempStyle) {
-                    tempStyle.remove()
-                }
-                _this.container.appendChild(style)
-            })()
+            let tempStyle = document.querySelector(`#${_this.randomID}.tee style`)
+            if (tempStyle) {
+                tempStyle.remove()
+            }
+            _this.container.appendChild(style)
+        })()
         _this.lookAt(_this.eyesAngle)
     }
     else {
-        throw Error(`Invalid element: container is not of type HTMLElement`)
+        throw Error("Invalid element: container is not of type HTMLElement")
     }
 }
 
@@ -87,11 +87,11 @@ const teeArray = [],
 class Tee {
     constructor(imageLink, container) {
         teeArray.push(this)
-        this.canvas = document.createElement('canvas')
-        this.ctx = this.canvas.getContext('2d', { willReadFrequently: true })
+        this.canvas = document.createElement("canvas")
+        this.ctx = this.canvas.getContext("2d", { willReadFrequently: true })
         this.elements = new Object()
         this.image = new Image()
-        this.image.crossOrigin = ''
+        this.image.crossOrigin = ""
         this.imageLink = imageLink
         this.teeEyesVariables = false
         this.eyesAngle = 0
@@ -114,11 +114,16 @@ class Tee {
     }
     async loadImage(imageLink) {
         this.image.src = imageLink
-        await this.image.decode()
+        try {
+            await this.image.decode()
+        } catch (err) {
+            this.image.src = "https://ddstats.qwik.space/skins/default.png"
+            await this.image.decode()
+        }
         this.canvas.width = this.image.width
         this.canvas.height = this.image.height
-        this.canvas.style.width = '256px'
-        this.canvas.style.height = '128px'
+        this.canvas.style.width = "256px"
+        this.canvas.style.height = "128px"
         this.ctx.drawImage(this.image, 0, 0, this.canvas.width, this.canvas.height)
     }
     isRatioLegal = () => {
@@ -232,7 +237,7 @@ class Tee {
     colorConvert(color, standard) {
         color = this.getColorArg(color, standard)
 
-        if (standard == 'rgb') {
+        if (standard == "rgb") {
             color = RGBToHSL(color[0], color[1], color[2])
         }
         // Preventing full black or full white skins
@@ -245,13 +250,13 @@ class Tee {
     }
     setColor2(color, standard) {
         color = this.colorConvert(color, standard)
-        this.setColor(color, 'grayscale')
+        this.setColor(color, "grayscale")
         if (this.isBody) {
             this.reorderBody()
         }
-        this.setColor(color, 'default')
+        this.setColor(color, "default")
     }
-    async getTeeImage(player_color_body = 'none', player_color_feet = 'none', coloring_mode = 'code') {
+    async getTeeImage(player_color_body = "none", player_color_feet = "none", coloring_mode = "code") {
         await this.loadImage(this.imageLink)
         player_color_body = player_color_body.toString()
         player_color_feet = player_color_feet.toString()
@@ -260,7 +265,7 @@ class Tee {
             for (let part in body_parts) {
                 let currentPart = body_parts[part]
 
-                this.elements[currentPart] = document.createElement('canvas')
+                this.elements[currentPart] = document.createElement("canvas")
                 let tempCanvas = this.elements[currentPart]
 
                 let multiplier = this.getMultiplier()
@@ -269,12 +274,12 @@ class Tee {
                 tempCanvas.width = this.d[2]
                 tempCanvas.height = this.d[3]
 
-                this.currentCtx = tempCanvas.getContext('2d', {
+                this.currentCtx = tempCanvas.getContext("2d", {
                     willReadFrequently: true
                 })
 
                 this.currentCtx.putImageData(this.ctx.getImageData(this.d[0], this.d[1], this.d[2], this.d[3]), 0, 0)
-                if (body_parts[part] === 'body') {
+                if (body_parts[part] === "body") {
                     this.isBody = true
                 }
                 else {
@@ -282,11 +287,11 @@ class Tee {
                 }
                 this.currentImgData = this.currentCtx.getImageData(0, 0, this.d[2], this.d[3])
 
-                if (player_color_body !== 'none' && player_color_feet !== 'none') {
-                    if (currentPart.includes('foot')) {
+                if (player_color_body !== "none" && player_color_feet !== "none") {
+                    if (currentPart.includes("foot")) {
                         this.setColor2(player_color_feet, coloring_mode)
                     }
-                    else if (!currentPart.includes('credits')) {
+                    else if (!currentPart.includes("credits")) {
                         this.setColor2(player_color_body, coloring_mode)
                     }
                 }
@@ -308,14 +313,14 @@ class Tee {
             }
         }
         else {
-            throw Error('Image has wrong ratio.')
+            throw Error("Image has wrong ratio.")
         }
     }
     bindContainer(container) {
         setContainer(this, container)
     }
     unbindContainer() {
-        this.container.removeAttribute('id')
+        this.container.removeAttribute("id")
         this.container = undefined
     }
     teeEyesTranslateFunction() {
@@ -346,10 +351,10 @@ class Tee {
             this.teeEyesTranslateFunction()
         }
 
-        this.eyeMoveEvent = document.addEventListener('mousemove', this.moveTeeEyesFunction)
+        this.eyeMoveEvent = document.addEventListener("mousemove", this.moveTeeEyesFunction)
     }
     dontLookAtCursor() {
-        document.removeEventListener('mousemove', this.moveTeeEyesFunction)
+        document.removeEventListener("mousemove", this.moveTeeEyesFunction)
     }
     lookAt(deg = 0) {
         this.eyesAngle = deg
@@ -360,6 +365,6 @@ class Tee {
     }
 }
 
-document.querySelectorAll('.tee[data-skinimage]').forEach(el => {
-    new Tee(el.getAttribute('data-skinimage'), el)
+document.querySelectorAll(".tee[data-skinimage]").forEach(el => {
+    new Tee(el.getAttribute("data-skinimage"), el)
 })
