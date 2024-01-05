@@ -260,7 +260,7 @@ footer {
 main {
     width: 70rem;
     max-width: 85%;
-    margin: auto;
+    margin: 3rem auto auto auto;
 }
 
 main>h1 {
