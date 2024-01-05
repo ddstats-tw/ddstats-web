@@ -572,7 +572,7 @@ b {
     outline: 0 none transparent;
     border: .2rem solid transparent;
     border-radius: .5rem;
-    box-shadow: .25rem 0 0.5rem var(--grey1);
+    border: solid 0.2rem var(--grey4);
     transition: border .3s, background-color .5s, border-radius .5s
 }
 
