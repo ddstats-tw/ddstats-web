@@ -27,7 +27,7 @@
                 <h1>{{ clan }}</h1>
             </div>
             <div class="tee-large">
-                <div class="tee" data-skinimage="https://api.skins.tw/api/resolve/skins/{{ skin.name }}" data-bodycolor="{{ skin.color_body }}" data-feetcolor="{{ skin.color_feet }}" data-coloringmode="code"></div>
+                <div class="tee" data-skinimage="https://ddstats.qwik.space/skins/{{ skin.name | urlencode }}.png" data-bodycolor="{{ skin.color_body }}" data-feetcolor="{{ skin.color_feet }}" data-coloringmode="code"></div>
             </div>
         </div>
     </div>
