@@ -162,7 +162,6 @@ a:hover {
 }
 
 .playerinfo {
-    padding-top: 3rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -262,6 +261,7 @@ main {
     width: 70rem;
     max-width: 85%;
     margin: auto;
+    padding-top: 2rem;
 }
 
 main>h1 {
