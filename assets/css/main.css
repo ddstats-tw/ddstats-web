@@ -175,7 +175,7 @@ a:hover {
     /* color: var(--grey15); */
     background-color: var(--grey3);
     border: .2rem solid transparent;
-    border-radius: 0rem 0rem .5rem .5rem;
+    border-radius: 0.5rem;
     transition: background-color .5s;
     /* transition: border .3s, background-color .5s, border-radius .5s */
 }
