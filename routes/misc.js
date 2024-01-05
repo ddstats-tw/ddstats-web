@@ -11,7 +11,7 @@ async function search_route(req, res) {
 
     const players = await Player.search(query, 30)
     const maps = await Map.search({ map: query })
-    res.render("pages/search.njk", { query, maps, players, "search": true })
+    res.render("pages/search.njk", { query, maps, players })
 }
 
 routes.get("/search", search_route)
