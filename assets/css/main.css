@@ -574,6 +574,7 @@ b {
     border: .2rem solid transparent;
     border-radius: .5rem;
     border: solid 0.2rem var(--grey4);
+    background-color: var(--grey2);
     transition: border .3s, background-color .5s, border-radius .5s
 }
 
