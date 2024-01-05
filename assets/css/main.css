@@ -191,7 +191,7 @@ a:hover {
 }
 
 .playerinfo-mid {
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -210,7 +210,12 @@ a:hover {
 }
 
 .tee-medium {
+    position: relative;
+    margin-top: -15px;
+    margin-left: -25px;
     scale: .75;
+    width: 5rem;
+    height: 5rem;
 }
 
 .tee-small {
@@ -346,6 +351,32 @@ main>h1 {
 .leaderboard th a:hover,
 .leaderboard a:hover {
     text-decoration: underline;
+}
+
+.btn-copy {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color .1s;
+}
+
+.btn-copy::hover {
+    background-color: var(--grey2);
+}
+
+.btn-copy-ex {
+    width: 3.5rem;
+    color: var(--grey15);
+    background-color: var(--grey4);
+    padding: .2rem;
+    border: .2rem solid transparent;
+    border-radius: .5rem;
+    transition: border .3s, padding .1s;
+}
+
+.btn-copy-ex:hover {
+    border: .2rem solid var(--primary);
+    padding: 0.4rem;
 }
 
 .buttons {

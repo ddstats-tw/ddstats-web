@@ -12,17 +12,16 @@
             <thead>
             <tr>
                 <th>Date</th>
-                {# <th>Name</th> #}
                 <th>Clan</th>
                 <th>Country</th>
                 <th>Skin</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
                 {% for activity in recentPlayerinfo %}
                 <tr>
                     <td>{{ activity.date }}</td>
-                    {# <td>{{ activity.name }}</td> #}
                     <td>{{ activity.clan }}</td>
                     <td>{{ utils.player_flag_medium(activity.country) }}</td>
                     <td>
@@ -30,10 +29,19 @@
                             <div class="tee" data-skinimage="https://ddstats.qwik.space/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
                         </div>
                     </td>
+                    <td>
+                        <button class="btn-copy-ex" onClick="copyText('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">Copy</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    function copyText(skin, body, feet) {
+        navigator.clipboard.writeText(`player_skin ${skin}; player_color_body ${body}; player_color_feet ${feet}; player_use_custom_color 1`);
+    }
+</script>
 {% endblock %}

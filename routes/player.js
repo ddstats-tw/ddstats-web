@@ -46,15 +46,15 @@ async function players_activity_route(req, res) {
     if(!Object.keys(rankings).length)
         return res.render("pages/player/base.njk", { "search": true })
 
-    const recentPlaytime = await Player.recentPlaytime(player, 10)
+    const recentPlaytime = await Player.recentPlaytime(player, 11)
     const playtimeCategories = await Player.playtimeCategories(player)
     const playtimeGametypes = await Player.playtimeGametypes(player)
     const playtimeLocation = await Player.playtimeLocation(player)
     const playtimePerMonth = await Player.playtimePerMonth(player)
-    const mostPlayedMaps = await Player.mostPlayedMaps(player, 10)
+    const mostPlayedMaps = await Player.mostPlayedMaps(player, 11)
     const page = req.params.type
 
-    const recentPlayerinfo = await Player.recentPlayerinfo(player, 3)
+    const recentPlayerinfo = await Player.recentPlayerinfo(player, 5)
     const playerinfo = await Player.playerinfo(player)
     if(playerinfo[0])
     {
@@ -195,19 +195,19 @@ async function players_json(req, res) {
     const playtime = await Player.playtime(player)
     const points = await Player.points(player)
 
-    const recentPlaytime = await Player.recentPlaytime(player, 10)
+    const recentPlaytime = await Player.recentPlaytime(player, 11)
     const playtimeCategories = await Player.playtimeCategories(player)
     const playtimeGametypes = await Player.playtimeGametypes(player)
     const playtimeLocation = await Player.playtimeLocation(player)
     const playtimePerMonth = await Player.playtimePerMonth(player)
-    const mostPlayedMaps = await Player.mostPlayedMaps(player, 10)
+    const mostPlayedMaps = await Player.mostPlayedMaps(player, 11)
 
     const rank1sPartners = await Player.rank1sPartners(player, 10)
     const recentTop10s = await Player.recentTop10s(player, 10)
     const AmountOfTop10Placements = await Player.AmountOfTop10Placements(player)
     const allTop10s = await Player.allTop10s(player)
 
-    const recentPlayerinfo = await Player.recentPlayerinfo(player, 10)
+    const recentPlayerinfo = await Player.recentPlayerinfo(player, 5)
     const playerinfo = await Player.playerinfo(player)
     if(playerinfo[0])
     {

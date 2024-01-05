@@ -42,7 +42,7 @@ const Player = {
     recentPlayerinfo: handleErrors(async (player, limit) => {
         return await dbQuery(master, `
             SELECT * FROM record_playerinfo
-                WHERE name = ? ORDER BY date DESC LIMIT ${limit}
+                WHERE name = ? GROUP BY skin_name, skin_color_body, skin_color_feet ORDER BY date DESC LIMIT ${limit}
         `, [player])
     }, log),
     /**

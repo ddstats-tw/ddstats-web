@@ -40,7 +40,6 @@
             <thead>
             <tr>
                 <th>Date</th>
-                {# <th>Name</th> #}
                 <th>Clan</th>
                 <th>Country</th>
                 <th>Skin</th>
@@ -50,12 +49,13 @@
                 {% for activity in recentPlayerinfo %}
                 <tr>
                     <td>{{ activity.date }}</td>
-                    {# <td>{{ activity.name }}</td> #}
                     <td>{{ activity.clan }}</td>
                     <td>{{ utils.player_flag_medium(activity.country) }}</td>
                     <td>
                         <div class="tee-medium">
-                            <div class="tee" data-skinimage="https://ddstats.qwik.space/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
+                            <button class="btn-copy" onClick="copyText('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
+                                <div class="tee" data-skinimage="https://ddstats.qwik.space/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -125,181 +125,184 @@
 </div>
 
 <script>
-  const ctx1 = document.getElementById('mostPlayedCategories');
-  const ctx2 = document.getElementById('playtimePerMonth');
-  const ctx3 = document.getElementById('mostPlayedGametypes');
-  const ctx4 = document.getElementById('mostPlayedRegions')
+    function copyText(skin, body, feet) {
+        navigator.clipboard.writeText(`player_skin ${skin}; player_color_body ${body}; player_color_feet ${feet}; player_use_custom_color 1`);
+    }
 
-  Chart.defaults.color = "#E0E0FF"
-  Chart.defaults.font.family = "'Roboto Regular', sans-serif"
-  Chart.defaults.font.size = 12
+    const ctx1 = document.getElementById('mostPlayedCategories');
+    const ctx2 = document.getElementById('playtimePerMonth');
+    const ctx3 = document.getElementById('mostPlayedGametypes');
+    const ctx4 = document.getElementById('mostPlayedRegions')
 
-  new Chart(
-    ctx1,
-    {
-      type: 'doughnut',
-      data: {
-        labels: [
-            {% for row in playtimeCategories %}
-            '{{ row.Category }}',
-            {% endfor %}
-        ],
-        datasets: [{
-            label: '',
-            data: [
+    Chart.defaults.color = "#E0E0FF"
+    Chart.defaults.font.family = "'Roboto Regular', sans-serif"
+    Chart.defaults.font.size = 12
+
+    new Chart(
+        ctx1,
+        {
+        type: 'doughnut',
+        data: {
+            labels: [
                 {% for row in playtimeCategories %}
-                '{{ row.Playtime }}',
+                '{{ row.Category }}',
                 {% endfor %}
             ],
-            backgroundColor: [
-                '#EE588F',
-                '#E175DB',
-                '#967CF4',
-                '#4C6DEF',
-                '#4C9CEF',
-                '#4CDCDF',
-                '#3DDF89',
-                '#72D661',
-                '#AED651',
-                '#F4C025',
-                '#EB801B',
-                '#EF5255',
-            ],
-            label: 'Hours',
-            hoverOffset: 4
-        }]
-      },
-      options: {
-        plugins: {
-            legend: {
-                display: true,
-                position: 'left'
+            datasets: [{
+                label: '',
+                data: [
+                    {% for row in playtimeCategories %}
+                    '{{ row.Playtime }}',
+                    {% endfor %}
+                ],
+                backgroundColor: [
+                    '#EE588F',
+                    '#E175DB',
+                    '#967CF4',
+                    '#4C6DEF',
+                    '#4C9CEF',
+                    '#4CDCDF',
+                    '#3DDF89',
+                    '#72D661',
+                    '#AED651',
+                    '#F4C025',
+                    '#EB801B',
+                    '#EF5255',
+                ],
+                label: 'Hours',
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'left'
+                }
             }
         }
-       }
-    })
-
-  new Chart(
-    ctx2,
-    {
-      type: 'bar',
-      data: {
-        labels: [
-            {% for row in playtimePerMonth %}
-            '{{ Months[row.Month] }}',
-            {% endfor %}
-        ],
-        datasets: [{
-            label: '',
-            data: [
-                {% for row in playtimePerMonth %}
-                '{{ row.Playtime }}',
-                {% endfor %}
-            ],
-            backgroundColor: '#4C9CEF',
-            label: 'Hours',
-            hoverOffset: 4
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
-        }
-       }
-    })
-
-
-  new Chart(
-    ctx3,
-    {
-      type: 'doughnut',
-      data: {
-        labels: [
-            {% for row in playtimeGametypes %}
-            '{{ row.gametype }}',
-            {% endfor %}
-        ],
-        datasets: [{
-            label: '',
-            data: [
-                {% for row in playtimeGametypes %}
-                '{{ row.Playtime }}',
-                {% endfor %}
-            ],
-            backgroundColor: [
-                '#EE588F',
-                '#E175DB',
-                '#967CF4',
-                '#4C6DEF',
-                '#4C9CEF',
-                '#4CDCDF',
-                '#3DDF89',
-                '#72D661',
-                '#AED651',
-                '#F4C025',
-                '#EB801B',
-                '#EF5255',
-            ],
-            label: 'Hours',
-            hoverOffset: 4
-        }]
-      },
-      options: {
-        plugins: {
-            legend: {
-                display: true,
-                position: 'left'
-            }
-        }
-       }
     })
 
     new Chart(
-    ctx4,
-    {
-      type: 'doughnut',
-      data: {
-        labels: [
-            {% for row in playtimeLocation %}
-            '{{ row.location }}',
-            {% endfor %}
-        ],
-        datasets: [{
-            label: '',
-            data: [
-                {% for row in playtimeLocation %}
-                '{{ row.Playtime }}',
+        ctx2,
+        {
+        type: 'bar',
+        data: {
+            labels: [
+                {% for row in playtimePerMonth %}
+                '{{ Months[row.Month] }}',
                 {% endfor %}
             ],
-            backgroundColor: [
-                '#EE588F',
-                '#E175DB',
-                '#967CF4',
-                '#4C6DEF',
-                '#4C9CEF',
-                '#4CDCDF',
-                '#3DDF89',
-                '#72D661',
-                '#AED651',
-                '#F4C025',
-                '#EB801B',
-                '#EF5255',
-            ],
-            label: 'Hours',
-            hoverOffset: 4
-        }]
-      },
-      options: {
-        plugins: {
-            legend: {
-                display: true,
-                position: 'left'
+            datasets: [{
+                label: '',
+                data: [
+                    {% for row in playtimePerMonth %}
+                    '{{ row.Playtime }}',
+                    {% endfor %}
+                ],
+                backgroundColor: '#4C9CEF',
+                label: 'Hours',
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
             }
         }
-       }
+    })
+
+    new Chart(
+        ctx3,
+        {
+        type: 'doughnut',
+        data: {
+            labels: [
+                {% for row in playtimeGametypes %}
+                '{{ row.gametype }}',
+                {% endfor %}
+            ],
+            datasets: [{
+                label: '',
+                data: [
+                    {% for row in playtimeGametypes %}
+                    '{{ row.Playtime }}',
+                    {% endfor %}
+                ],
+                backgroundColor: [
+                    '#EE588F',
+                    '#E175DB',
+                    '#967CF4',
+                    '#4C6DEF',
+                    '#4C9CEF',
+                    '#4CDCDF',
+                    '#3DDF89',
+                    '#72D661',
+                    '#AED651',
+                    '#F4C025',
+                    '#EB801B',
+                    '#EF5255',
+                ],
+                label: 'Hours',
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'left'
+                }
+            }
+        }
+    })
+
+    new Chart(
+        ctx4,
+        {
+        type: 'doughnut',
+        data: {
+            labels: [
+                {% for row in playtimeLocation %}
+                '{{ row.location }}',
+                {% endfor %}
+            ],
+            datasets: [{
+                label: '',
+                data: [
+                    {% for row in playtimeLocation %}
+                    '{{ row.Playtime }}',
+                    {% endfor %}
+                ],
+                backgroundColor: [
+                    '#EE588F',
+                    '#E175DB',
+                    '#967CF4',
+                    '#4C6DEF',
+                    '#4C9CEF',
+                    '#4CDCDF',
+                    '#3DDF89',
+                    '#72D661',
+                    '#AED651',
+                    '#F4C025',
+                    '#EB801B',
+                    '#EF5255',
+                ],
+                label: 'Hours',
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'left'
+                }
+            }
+        }
     })
 </script>
 {% endblock %}
