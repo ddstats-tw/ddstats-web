@@ -5,7 +5,9 @@
 
 <div class="container">
     <div class="box">
-        <img class="center" src="https://ddnet.org/ranks/maps/{{ info.Map | replace(r/[À-ž]/g, "__") | replace(r/[^a-zA-Z0-9]/g, "_") }}.png">
+        <a href="https://ddstats.qwik.space/map-inspect/?map={{ info.Map | urlencode }}">
+            <img class="center" src="https://ddnet.org/ranks/maps/{{ info.Map | replace(r/[À-ž]/g, "__") | replace(r/[^a-zA-Z0-9]/g, "_") }}.png">
+        </a>
     </div>
     <div class="box">
         <h2 style="float: left">Info</h2>
@@ -134,7 +136,10 @@
 
 <div class="container">
     <div class="box">
-        <h3><a href="https://github.com/ddnet/ddnet-maps/raw/master/types/{{ info.Server | lower }}/maps/{{ info.Map | urlencode }}.map">Download Map</a></h3>
+        <h3>
+            <a href="https://github.com/ddnet/ddnet-maps/raw/master/types/{{ info.Server | lower }}/maps/{{ info.Map | urlencode }}.map">Download Map</a> -
+            <a href="https://ddstats.qwik.space/map-inspect/?map={{ info.Map | urlencode }}">Preview Map</a>
+        </h3>
     </div>
 </div>
 
