@@ -258,7 +258,7 @@ const Player = {
      */
     search: handleErrors(async (query, limit) => {
         return await dbQuery(ddnet, `
-            SELECT Name, Points FROM players WHERE Name MATCH FORMAT('*%s*', ?) ORDER BY Points DESC LIMIT ${limit};
+            SELECT Name, Points FROM players WHERE Name MATCH FORMAT('%s', ?) ORDER BY Points DESC LIMIT ${limit};
         `, [escapeFTS(query)], false, false)
     }, log),
 }
