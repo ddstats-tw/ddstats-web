@@ -83,8 +83,9 @@ const Map = {
                 OR mapper GLOB FORMAT('%s *', ?) 
                 OR mapper GLOB FORMAT('* %s', ?)
                 OR mapper GLOB FORMAT('%s, *', ?)
+                OR mapper GLOB FORMAT('*, %s & *', ?)
                 OR mapper GLOB FORMAT('*, %s, *', ?)) ${search.limit ? `LIMIT ${search.limit}` : ""}
-        `, [search.map, search.mapper, search.mapper, search.mapper, search.mapper, search.mapper]))
+        `, [search.map, search.mapper, search.mapper, search.mapper, search.mapper, search.mapper, search.mapper]))
     }, log),
 }
 
