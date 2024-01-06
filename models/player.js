@@ -1,6 +1,6 @@
 import { ddnet, master, points, dbQuery, redis } from "../lib/database.js"
 import Map from "./map.js"
-import { createIndex, handleErrors } from "../lib/misc.js"
+import { createIndex, handleErrors, escapeFTS } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
 
 const log = getLogger("Database  |", "yellow")
@@ -259,7 +259,7 @@ const Player = {
     search: handleErrors(async (query, limit) => {
         return await dbQuery(ddnet, `
             SELECT Name, Points FROM players WHERE Name MATCH FORMAT('*%s*', ?) ORDER BY Points DESC LIMIT ${limit};
-        `, [query], false, false)
+        `, [escapeFTS(query)], false, false)
     }, log),
 }
 
