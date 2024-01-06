@@ -70,7 +70,8 @@
 
 			if(!value.length) {
 				const resultDiv = document.getElementById('result-nav');
-				resultDiv.innerHTML = '';
+				if(resultDiv)
+					resultDiv.innerHTML = '';
 				return
 			}
 			if (cacheNav[value])
@@ -87,6 +88,9 @@
 
 		function showResultsNav(results) {
 			const resultDiv = document.getElementById('result-nav');
+			if(!resultDiv)
+				return
+
 			resultDiv.innerHTML = '';
 
 			let ul = document.createElement('ul');
@@ -126,6 +130,9 @@
 
 		inputNav.addEventListener('keydown', handleKeydownNav);
 		function handleKeydownNav(event) {
+			if(document.getElementById('playerListNav') === null)
+				return
+
 			const ul = document.getElementById('playerListNav');
 			const selectedNav = ul.querySelector('.selectedNav');
 

@@ -10,14 +10,14 @@
 <div class="center">
     <form class="form-search-home" action="/search" method="get">
         <h1>Search for a player or map...</h1>
-        <input class="input-search-home" id="typeahead-home" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ..." autofocus>
+        <input class="input-search-home" id="typeahead-nav" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ..." autofocus>
         <div class="result-home" id="result-home"></div>
     </form>
 </div>
 
 <script>
     let cacheHome = {}
-    const inputHome = document.getElementById('typeahead-home');
+    const inputHome = document.getElementById('typeahead-nav');
     inputHome.addEventListener('input', handleInputHome);
 
     function handleInputHome(event) {
@@ -25,7 +25,8 @@
 
         if(!value.length) {
             const resultDiv = document.getElementById('result-home');
-            resultDiv.innerHTML = '';
+            if(resultDiv)
+                resultDiv.innerHTML = '';
             return
         }
         if (cacheHome[value])
@@ -42,6 +43,9 @@
 
     function showResultsHome(results) {
         const resultDiv = document.getElementById('result-home');
+        if(!resultDiv)
+            return
+
         resultDiv.innerHTML = '';
 
         let ul = document.createElement('ul');
@@ -81,6 +85,9 @@
 
     inputHome.addEventListener('keydown', handleKeydownHome);
     function handleKeydownHome(event) {
+        if(document.getElementById('playerListHome') === null)
+            return
+
         const ul = document.getElementById('playerListHome');
         const selectedHome = ul.querySelector('.selectedHome');
 
