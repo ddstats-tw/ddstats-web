@@ -12,7 +12,6 @@
 {% endblock %}
 
 {% block main %}
-
 {% if not player %}
 <h1>404 - Player not found</h1>
 {% else %}
@@ -45,6 +44,11 @@
         <li>
             <a class="{{ "active" if page == "rank1s" }}" href="/player/{{ player | urlencode | safe }}/rank1s">Rank 1s</a>
         </li>
+        {% if isMapper %}
+        <li>
+            <a href="/mapper/{{ player | urlencode | safe }}">Mapper profile</a>
+        </li>
+        {% endif %}
     </ul>
 
     {% block player %}
