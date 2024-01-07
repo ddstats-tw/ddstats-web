@@ -30,7 +30,7 @@ const Player = {
     playerinfo: handleErrors(async player => {
         return await dbQuery(master, `
             SELECT * FROM record_playerinfo
-                WHERE name = ? ORDER BY date DESC LIMIT 1
+                WHERE name = ? GROUP BY skin_name, skin_color_body, skin_color_feet ORDER BY COUNT(*) DESC LIMIT 1
         `, [player])
     }, log),
     /**
