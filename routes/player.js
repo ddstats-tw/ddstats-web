@@ -28,9 +28,8 @@ async function players_overview_route(req, res) {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
 
-        res.render("pages/player/overview.njk", { page, player, clan, country, skin, stamp, points, rankings, rankedPointsGraph, pointsGraph, playtime, isMapper, "search": true })
+        res.render("pages/player/overview.njk", { page, player, clan, country, skin, points, rankings, rankedPointsGraph, pointsGraph, playtime, isMapper, "search": true })
     }
     else
     {
@@ -68,9 +67,8 @@ async function players_activity_route(req, res) {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
 
-        res.render("pages/player/activity.njk", { player, clan, country, skin, stamp, page, recentPlayerinfo, recentPlaytime, playtimeLocation, playtimeGametypes, 
+        res.render("pages/player/activity.njk", { player, clan, country, skin, page, recentPlayerinfo, recentPlaytime, playtimeLocation, playtimeGametypes, 
             playtimePerMonth, playtimeCategories, Months, mostPlayedMaps, isMapper, "search": true })
     } 
     else
@@ -97,8 +95,8 @@ routes.get("/player/:player/:type(activity)/mostplayed", async (req, res) => {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
-        res.render("pages/player/mostplayed.njk", { player, clan, country, skin, stamp, page, mostPlayedMaps, isMapper, "search": true })
+
+        res.render("pages/player/mostplayed.njk", { player, clan, country, skin, page, mostPlayedMaps, isMapper, "search": true })
     }
     else
     {
@@ -121,8 +119,8 @@ routes.get("/player/:player/:type(activity)/playerinfo", async (req, res) => {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
-        res.render("pages/player/playerinfo.njk", { player, clan, country, skin, stamp, page, recentPlayerinfo, isMapper, "search": true })
+
+        res.render("pages/player/playerinfo.njk", { player, clan, country, skin, page, recentPlayerinfo, isMapper, "search": true })
     }
     else
     {
@@ -145,8 +143,8 @@ routes.get("/player/:player/:type(activity)/playtime", async (req, res) => {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
-        res.render("pages/player/playtime.njk", { player, clan, country, skin, stamp, page, recentPlaytime, isMapper, "search": true })
+
+        res.render("pages/player/playtime.njk", { player, clan, country, skin, page, recentPlaytime, isMapper, "search": true })
     }
     else
     {
@@ -177,9 +175,8 @@ async function players_rank1s_route(req, res) {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
     
-        res.render("pages/player/rank1s.njk", { player, clan, country, skin, stamp, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s, isMapper, "search": true })
+        res.render("pages/player/rank1s.njk", { player, clan, country, skin, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s, isMapper, "search": true })
     }
     else
     {
@@ -226,9 +223,8 @@ async function players_json(req, res) {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
-    
-        return res.json({ player, clan, country, skin, stamp, points, rankings, isMapper, rankedPointsGraph, pointsGraph, playtime, recentPlayerinfo, recentPlaytime, playtimeCategories, playtimeGametypes, playtimeLocation, playtimePerMonth, mostPlayedMaps, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
+
+        return res.json({ player, clan, country, skin, points, rankings, isMapper, rankedPointsGraph, pointsGraph, playtime, recentPlayerinfo, recentPlaytime, playtimeCategories, playtimeGametypes, playtimeLocation, playtimePerMonth, mostPlayedMaps, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
     }
     else
     {

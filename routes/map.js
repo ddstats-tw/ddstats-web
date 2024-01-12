@@ -45,9 +45,8 @@ async function mapper_route(req, res) {
             color_body: playerinfo[0].skin_color_body,
             color_feet: playerinfo[0].skin_color_feet,
         }
-        const stamp = playerinfo[0].date
     
-        res.render("pages/map/mapper.njk", { maps, clan, country, skin, stamp, mapper, "search": true })
+        res.render("pages/map/mapper.njk", { maps, clan, country, skin, mapper, "search": true })
     }
     else
     {

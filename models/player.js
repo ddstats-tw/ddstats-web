@@ -29,7 +29,7 @@ const Player = {
      */
     playerinfo: handleErrors(async player => {
         return await dbQuery(master, `
-            SELECT * FROM record_playerinfo
+            SELECT * FROM record_snapshot
                 WHERE name = ? GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet ORDER BY COUNT(*) DESC LIMIT 1
         `, [player])
     }, log),
@@ -41,8 +41,8 @@ const Player = {
      */
     recentPlayerinfo: handleErrors(async (player, limit) => {
         return await dbQuery(master, `
-            SELECT * FROM record_playerinfo
-                WHERE name = ? GROUP BY skin_name, skin_color_body, skin_color_feet ORDER BY date DESC LIMIT ${limit}
+            SELECT * FROM record_snapshot
+                WHERE name = ? GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet ORDER BY date DESC LIMIT ${limit}
         `, [player])
     }, log),
     /**
@@ -52,8 +52,8 @@ const Player = {
      */
     playtime: handleErrors(async player => {
         return createIndex(await dbQuery(master, `
-            SELECT map, SUM(time) as Playtime FROM record_playtime
-                WHERE player = ? GROUP BY map            
+            SELECT map, SUM(time) as Playtime FROM record_snapshot
+                WHERE name = ? GROUP BY map            
         `, [player]), "map")
     }, log),
     /**
@@ -64,9 +64,9 @@ const Player = {
      */
     mostPlayedMaps: handleErrors(async (player, limit) => {
         return await dbQuery(master, `
-            SELECT p.map, SUM(time) as Playtime, maps.Server FROM record_playtime AS p
+            SELECT p.map, SUM(time) as Playtime, maps.Server FROM record_snapshot AS p
                 LEFT JOIN maps ON maps.map = p.map
-                WHERE player = ? GROUP BY p.map ORDER BY Playtime DESC LIMIT ${limit}           
+                WHERE name = ? GROUP BY p.map ORDER BY Playtime DESC LIMIT ${limit}           
         `, [player])
     }, log),
     /**
@@ -107,9 +107,9 @@ const Player = {
      */
     recentPlaytime: handleErrors(async (player, limit) => {
         return await dbQuery(master, `
-            SELECT date, p.map, player, SUM(time) as Playtime, maps.Server FROM record_playtime as p
+            SELECT date, p.map, name, SUM(time) as Playtime, maps.Server FROM record_snapshot as p
                 LEFT JOIN maps ON p.map = maps.map 
-                WHERE player = ? 
+                WHERE name = ? 
             GROUP BY date, p.map ORDER BY date DESC, time DESC LIMIT ${limit};
         `, [player])
     }, log),
@@ -120,9 +120,9 @@ const Player = {
      */
     playtimeCategories: handleErrors(async (player) => {
         return await dbQuery(master, `
-            SELECT Server as Category, SUM(time)/60/60 as Playtime FROM record_playtime 
-                JOIN maps ON record_playtime.map = maps.map 
-                WHERE player = ? 
+            SELECT Server as Category, SUM(time)/60/60 as Playtime FROM record_snapshot 
+                JOIN maps ON record_snapshot.map = maps.map 
+                WHERE name = ? 
             GROUP BY Category ORDER BY Category DESC
         `, [player])
     }, log),
@@ -133,8 +133,8 @@ const Player = {
      */
     playtimeGametypes: handleErrors(async (player) => {
         return await dbQuery(master, `
-            SELECT Gametype, SUM(time)/60/60 as Playtime FROM record_playtime 
-                WHERE player = ? 
+            SELECT Gametype, SUM(time)/60/60 as Playtime FROM record_snapshot 
+                WHERE name = ? 
             GROUP BY gametype ORDER BY Playtime DESC LIMIT 15
         `, [player])
     }, log),
@@ -145,8 +145,8 @@ const Player = {
      */
     playtimeLocation: handleErrors(async (player) => {
         return await dbQuery(master, `
-            SELECT Location, SUM(time)/60/60 as Playtime FROM record_playtime 
-                WHERE player = ? 
+            SELECT Location, SUM(time)/60/60 as Playtime FROM record_snapshot 
+                WHERE name = ? 
             GROUP BY Location ORDER BY Playtime DESC LIMIT 15
         `, [player])
     }, log),
@@ -157,8 +157,8 @@ const Player = {
      */
     playtimePerMonth: handleErrors(async (player) => {
         return await dbQuery(master, `
-            SELECT strftime('%Y', date) AS Year, strftime('%m', date) AS Month, SUM(time)/60/60 as Playtime FROM record_playtime 
-                WHERE player = ? AND date >= date('now','-12 month') 
+            SELECT strftime('%Y', date) AS Year, strftime('%m', date) AS Month, SUM(time)/60/60 as Playtime FROM record_snapshot 
+                WHERE name = ? AND date >= date('now','-12 month') 
             GROUP BY Year, Month ORDER BY year ASC, month ASC
         `, [player])
     }, log),
