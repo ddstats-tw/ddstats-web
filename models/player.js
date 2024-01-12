@@ -30,7 +30,7 @@ const Player = {
     playerinfo: handleErrors(async player => {
         return await dbQuery(master, `
             SELECT * FROM record_snapshot
-                WHERE name = ? GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet ORDER BY COUNT(*) DESC LIMIT 1
+                WHERE name = ? AND skin_name != '' GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet ORDER BY COUNT(*) DESC LIMIT 1
         `, [player])
     }, log),
     /**
@@ -42,7 +42,7 @@ const Player = {
     recentPlayerinfo: handleErrors(async (player, limit) => {
         return await dbQuery(master, `
             SELECT * FROM record_snapshot
-                WHERE name = ? GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet ORDER BY date DESC LIMIT ${limit}
+                WHERE name = ? AND skin_name != '' GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet ORDER BY date DESC LIMIT ${limit}
         `, [player])
     }, log),
     /**
