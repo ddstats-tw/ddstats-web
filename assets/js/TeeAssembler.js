@@ -57,7 +57,7 @@ const setContainer = (_this, container) => {
 
         ; (async () => {
             let style = document.createElement("style")
-            if (_this.container.getAttribute("data-bodycolor") !== null && _this.container.getAttribute("data-feetcolor") !== null) {
+            if (_this.container.getAttribute("data-bodycolor") && _this.container.getAttribute("data-feetcolor")) {
                 await _this.getTeeImage(_this.container.getAttribute("data-bodycolor"), _this.container.getAttribute("data-feetcolor"), _this.container.getAttribute("data-coloringmode"))
             }
             else {
