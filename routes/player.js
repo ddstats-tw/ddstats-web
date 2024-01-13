@@ -105,7 +105,7 @@ routes.get("/player/:player/:type(activity)/mostplayed", async (req, res) => {
 })
 routes.get("/player/:player/:type(activity)/playerinfo", async (req, res) => {
     const player = req.params.player
-    const recentPlayerinfo = await Player.recentPlayerinfo(player, 1000)
+    const recentPlayerinfo = await Player.recentPlayerinfo(player, 100)
     const page = req.params.type
 
     const isMapper = (await Map.search({ mapper: player })).length
