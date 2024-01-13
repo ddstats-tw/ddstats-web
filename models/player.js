@@ -1,5 +1,4 @@
 import { ddnet, master, points, dbQuery, redis } from "../lib/database.js"
-import Map from "./map.js"
 import { createIndex, handleErrors, escapeFTS } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
 
@@ -15,7 +14,7 @@ const Player = {
         return await dbQuery(ddnet, `
             SELECT rankings.map, rankings.name, rankings.time, rankings.map, rankings.server, 
                 rankings.rank, min(teamrankings.rank) as Teamrank, maps.Server as Category, maps.Points FROM rankings as rankings
-                JOIN maps AS maps 
+                JOIN maps AS maps
                     ON maps.map = rankings.map
                 LEFT JOIN teamrankings AS teamrankings 
                     ON rankings.map = teamrankings.map AND rankings.name = teamrankings.name 
@@ -41,8 +40,8 @@ const Player = {
      */
     recentPlayerinfo: handleErrors(async (player, limit) => {
         return await dbQuery(master, `
-            SELECT * FROM record_snapshot
-                WHERE name = ? AND skin_name != '' GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet HAVING COUNT(*) > 5 ORDER BY date DESC LIMIT ${limit}
+            SELECT MAX(date) as lastseen, name, clan, country, skin_name, skin_color_body, skin_color_feet, SUM(time) as timeplayed FROM record_snapshot
+                WHERE name = ? AND skin_name != '' GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet HAVING SUM(time) > 60*60 ORDER BY lastseen DESC LIMIT ${limit}
         `, [player])
     }, log),
     /**
@@ -53,7 +52,7 @@ const Player = {
     playtime: handleErrors(async player => {
         return createIndex(await dbQuery(master, `
             SELECT map, SUM(time) as Playtime FROM record_snapshot
-                WHERE name = ? GROUP BY map            
+                WHERE name = ? GROUP BY map
         `, [player]), "map")
     }, log),
     /**

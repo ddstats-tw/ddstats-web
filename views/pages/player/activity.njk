@@ -39,7 +39,7 @@
         <table class="transparent">
             <thead>
             <tr>
-                <th>Date</th>
+                <th>Last seen</th>
                 <th>Clan</th>
                 <th>Country</th>
                 <th>Skin</th>
@@ -48,11 +48,11 @@
             <tbody>
                 {% for activity in recentPlayerinfo %}
                 <tr>
-                    <td>{{ activity.date }}</td>
+                    <td>{{ activity.lastseen }}</td>
                     <td>{{ activity.clan }}</td>
                     <td>{{ utils.player_flag_medium(activity.country) }}</td>
                     <td>
-                        <div class="tee-medium">
+                        <div title="{{ activity.skin_name }}" class="tee-medium">
                             <button class="btn-copy" onClick="copyText('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
                                 <div class="tee" data-skinimage="https://ddstats.qwik.space/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
                             </button>
