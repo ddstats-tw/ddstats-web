@@ -14,9 +14,10 @@
         <li>
             <a class="{{ "active" if page == "timecps" }}" href="/map/{{ info.Map | urlencode | safe }}/timecps">Time CPS</a>
         </li>
+        {# TODO: Add Playtime view
         <li>
             <a class="{{ "active" if page == "playtime" }}" href="/map/{{ info.Map | urlencode | safe }}/playtime">Playtime</a>
-        </li>
+        </li>#}
     </ul>
 
     {% block map %}
