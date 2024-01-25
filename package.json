@@ -4,7 +4,7 @@
   "description": "A website showing various statistics related to DDNet.",
   "main": "./src/index.ts",
   "scripts": {
-    "dev": "tsx watch src"
+    "dev": "tsx watch --ignore *.log --ignore assets ."
   },
   "repository": {
     "type": "git",
