@@ -1,16 +1,15 @@
 // Javascript functions are used instead of nunjucks macros due to performance and readability.
-
-function ordinal(n) {
+function ordinal(n: number) {
     var s = ["th", "st", "nd", "rd"]
     var v = n%100
     return (s[(v-20)%10] || s[v] || s[0])
 }
 
-function plural(value, unit, plural = "s") {
+function plural(value: string | number, unit: string, plural = "s") {
     return value + " " + unit + (value === 1 ? "" : plural)
 }
 
-function timeFormat(seconds) {
+function timeFormat(seconds: number) {
     let remaining = seconds
     let years = Math.floor(remaining / 31536000)
     remaining %= 31536000
@@ -30,13 +29,13 @@ function timeFormat(seconds) {
     }
 }
 
-function fancyTime(inputSecs, removeDecimals = false) {
+function fancyTime(inputSecs: number, removeDecimals = false) {
     let seconds = Math.floor(inputSecs)
     let hourSecs = seconds % 3600
     let hours = (seconds - hourSecs) / 3600
     let minSecs = (seconds - hours * 3600) % 60
     let mins = (seconds - hours * 3600 - minSecs) / 60
-    let secsMillis = (inputSecs - hours * 3600 - mins * 60).toFixed(2)
+    let secsMillis = Number((inputSecs - hours * 3600 - mins * 60).toFixed(2))
     let secs = Math.floor(secsMillis)
     let millis = Math.round((secsMillis - secs) * 100)
 
@@ -57,14 +56,14 @@ function getCurrentDate() {
     return new Date().toISOString().split("T")[0]
 }
 
-function truncateString(string) {
+function truncateString(string: string) {
     if(string.length > 32) {
         return string.substring(0, 32) + "…"
     }
     return string
 }
 
-function mapCountryCode(code) {
+function mapCountryCode(code: string) {
     for (const country in codes) {
         if(country == code)
             return codes[country]
@@ -82,7 +81,7 @@ export default {
     mapCountryCode
 }
 
-const codes = {
+const codes: Record<string, string> = {
     "-1":"default",
     "901":"XEN",
     "902":"XNI",

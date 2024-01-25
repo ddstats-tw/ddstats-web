@@ -1,10 +1,10 @@
-import { Router } from "express"
+import { Router, Request, Response } from "express"
 import Map from "../models/map.js"
 import Player from "../models/player.js"
 
 const routes = Router()
 
-async function search_route(req, res) {
+async function search_route(req: Request, res: Response) {
     const query = req.query.q
     if(typeof query !== "string")
         return res.json({ error: "Arrays not allowed." })
@@ -16,7 +16,7 @@ async function search_route(req, res) {
 
 routes.get("/search", search_route)
 
-async function search_api_route(req, res) {
+async function search_api_route(req: Request, res: Response) {
     const query = req.query.q
     if(typeof query !== "string")
         return res.json({ error: "Arrays not allowed." })
@@ -28,7 +28,7 @@ async function search_api_route(req, res) {
 
 routes.get("/search/api", search_api_route)
 
-routes.get("/faq", (req, res) => { res.render("pages/faq.njk"), {"search": true }})
-routes.get("/status-WIP", (req, res) => { res.render("pages/status.njk"), { "search": true }})
+routes.get("/faq", (req: Request, res: Response) => { res.render("pages/faq.njk"), {"search": true }})
+routes.get("/status-WIP", (req: Request, res: Response) => { res.render("pages/status.njk"), { "search": true }})
 
 export default routes

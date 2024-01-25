@@ -1,11 +1,11 @@
-import { Router } from "express"
+import { Router, Request, Response } from "express"
 import { groupBy, Months } from "../lib/misc.js"
 import Player from "../models/player.js"
 import Map from "../models/map.js"
 
 const routes = Router()
 
-async function players_overview_route(req, res) {
+async function players_overview_route(req: Request, res: Response) {
     const player = req.params.player
     const rankings = groupBy(await Player.rankings(player), "Category")
     if(!Object.keys(rankings).length)
@@ -41,7 +41,7 @@ routes.get("/player/json", players_json)
 routes.get("/player/:player", players_overview_route)
 routes.get("/player/:player/:type(overview)", players_overview_route)
 
-async function players_activity_route(req, res) {
+async function players_activity_route(req: Request, res: Response) {
     const player = req.params.player
     const rankings = groupBy(await Player.rankings(player), "Category")
     if(!Object.keys(rankings).length)
@@ -79,7 +79,7 @@ async function players_activity_route(req, res) {
 }
 
 routes.get("/player/:player/:type(activity)", players_activity_route)
-routes.get("/player/:player/:type(activity)/mostplayed", async (req, res) => {
+routes.get("/player/:player/:type(activity)/mostplayed", async (req: Request, res: Response) => {
     const player = req.params.player
     const mostPlayedMaps = await Player.mostPlayedMaps(player, 10000)
     const page = req.params.type
@@ -103,7 +103,7 @@ routes.get("/player/:player/:type(activity)/mostplayed", async (req, res) => {
         res.render("pages/player/mostplayed.njk", { player, page, mostPlayedMaps, isMapper, "search": true })
     }
 })
-routes.get("/player/:player/:type(activity)/playerinfo", async (req, res) => {
+routes.get("/player/:player/:type(activity)/playerinfo", async (req: Request, res: Response) => {
     const player = req.params.player
     const recentPlayerinfo = await Player.recentPlayerinfo(player, 100)
     const page = req.params.type
@@ -127,7 +127,7 @@ routes.get("/player/:player/:type(activity)/playerinfo", async (req, res) => {
         res.render("pages/player/playerinfo.njk", { player, page, recentPlayerinfo, isMapper, "search": true })
     }
 })
-routes.get("/player/:player/:type(activity)/playtime", async (req, res) => {
+routes.get("/player/:player/:type(activity)/playtime", async (req: Request, res: Response) => {
     const player = req.params.player
     const recentPlaytime = await Player.recentPlaytime(player, 1000)
     const page = req.params.type
@@ -152,7 +152,7 @@ routes.get("/player/:player/:type(activity)/playtime", async (req, res) => {
     }
 })
 
-async function players_rank1s_route(req, res) {
+async function players_rank1s_route(req: Request, res: Response) {
     const player = req.params.player
     const rankings = groupBy(await Player.rankings(player), "Category")
     if(!Object.keys(rankings).length)
@@ -186,7 +186,7 @@ async function players_rank1s_route(req, res) {
 
 routes.get("/player/:player/:type(rank1s)", players_rank1s_route)
 
-async function players_json(req, res) {
+async function players_json(req: Request, res: Response) {
     const player = req.query.player
     const rankings = groupBy(await Player.rankings(player), "Category")
     if(!Object.keys(rankings).length)

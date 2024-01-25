@@ -1,8 +1,9 @@
 import { ddnet, master, dbQuery } from "../lib/database.js"
 import { handleErrors } from "../lib/misc.js"
 import getLogger from "../lib/logger.js"
+import colors from "colors"
 
-const log = getLogger("Database  |", "yellow")
+const log = getLogger("Database  |", colors.yellow)
 
 const Leaderboard = {
     /**
@@ -13,7 +14,7 @@ const Leaderboard = {
      * @param {integer} page - The page to fetch.
      * @returns {Promise<Object>}
      */
-    rank1s: handleErrors(async (type, category, sorting, page) => {
+    rank1s: handleErrors(async (type: string, category: string, sorting: 1 | 2 | 3 | 4 | 5, page: number) => {
         category = category == "Any" ? "%" : category
         const table = type == "rank1s" ? "rankings" : "teamrankings"
     
@@ -50,7 +51,7 @@ const Leaderboard = {
      * @param {string} category - Filter leaderboard by category. "Any" for no filtering.
      * @returns {Promise<Array>}
      */
-    worsttimes: handleErrors(category => {
+    worsttimes: handleErrors((category: string) => {
         category = category == "Any" ? "%" : category
 
         return dbQuery(ddnet, `
@@ -64,7 +65,7 @@ const Leaderboard = {
      * @param {string} category - Filter leaderboard by category. "Any" for no filtering.
      * @returns {Promise<Array>}
      */
-    mostplayed: handleErrors(category => {
+    mostplayed: handleErrors((category: string) => {
         category = category == "Any" ? "%" : category
 
         return dbQuery(master, `
@@ -74,7 +75,5 @@ const Leaderboard = {
         `, [category])
     }, log),
 }
-
-// SELECT RANK() OVER (ORDER BY seconds DESC) as '#', map, seconds/60/60/24/365 FROM maps_playtime ORDER BY seconds DESC LIMIT 10;
 
 export default Leaderboard

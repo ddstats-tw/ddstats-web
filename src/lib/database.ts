@@ -1,29 +1,29 @@
-import Database from "better-sqlite3"
+import Sqlite3 from "better-sqlite3"
 import getLogger from "./logger.js"
-import { createClient } from "redis"
+import { RedisClientType, createClient } from "redis"
 import crypto from "crypto"
+import colors from "colors"
 
-const log = getLogger("Database |", "yellow")
+import type { Database } from "better-sqlite3"
 
-/**
- * @type {Database.Database}
- */
-export let master = undefined
-export let points = undefined
-export let ddnet = undefined
+const log = getLogger("Database |", colors.yellow)
 
-export let redis = undefined
+export let master: Database
+export let points: Database
+export let ddnet: Database
+
+export let redis: RedisClientType = createClient()
 
 /**
  * Tunes and configures the sqlite3 database for best performance.
  * Source: https://phiresky.github.io/blog/2020/sqlite-performance-tuning/
  * @param {string} path - The path to the sqlite3 database.
- * @returns {Database.Database}
+ * @returns {Sqlite3.Database}
  */
-function dbOpen(path) {
+function dbOpen(path: string): Sqlite3.Database {
     try {
         /* add { verbose: log.write } to log SQL statements */
-        return new Database(path, {})
+        return new Sqlite3(path, {})
     }
     catch (err) {
         log.error(`Failed to open ${path}`)
@@ -34,9 +34,9 @@ function dbOpen(path) {
 /**
  * Tunes and configures the sqlite3 database for best performance.
  * Source: https://phiresky.github.io/blog/2020/sqlite-performance-tuning/
- * @param {Database.Database} database - The sqlite3 database instance.
+ * @param {Sqlite3.Database} database - The sqlite3 database instance.
  */
-function dbConfigure(database) {
+function dbConfigure(database: Database) {
     database.pragma("journal_mode = WAL")
     database.pragma("temp_store = memory")
     database.pragma("mmap_size = 30000000000")
@@ -47,13 +47,14 @@ function dbConfigure(database) {
 
 /**
  * Executes a given SQL query with values and returns the result.
- * @param {Database.Database} database - The sqlite3 database instance.
+ * @param {Sqlite3.Database} database - The sqlite3 database instance.
  * @param {string} query - The SQL query to be executed.
  * @param {Array} [values=[]] - The values to be used in the query (optional).
- * @param {boolean} - Return only the first item in the array
- * @returns {Promise<Array>} - An array of rows as a result of the query.
+ * @param {boolean} returnFirst - Return only the first item in the array
+ * @param {boolean} cache - Should the result be cached in Redis?
+ * @returns {Promise<any>} - An array of rows as a result of the query.
  */
-export async function dbQuery(database, query, values = [], returnFirst = false, cache = true) {
+export async function dbQuery(database: Database, query: string, values: Array<any> = [], returnFirst: boolean = false, cache: boolean = true): Promise<any> {
     try {
         let result
         if(cache) {
@@ -64,14 +65,14 @@ export async function dbQuery(database, query, values = [], returnFirst = false,
 
             const key = `cache:${hash}`
 
-            const cache = JSON.parse(await redis.get(key))
+            const cache = await redis.get(key)
 
             if(cache === null) {
                 result = database.prepare(query).all(values)
                 await redis.set(key, JSON.stringify(result))
             }
             else {
-                result = cache
+                result = JSON.parse(cache)
             }
         }
         else {
@@ -80,8 +81,9 @@ export async function dbQuery(database, query, values = [], returnFirst = false,
         if(returnFirst)
             return result[0]
         return result
-    } catch (error) { 
-        throw new Error(error) 
+    } catch (error: unknown) { 
+        if(typeof error === "string")
+            throw new Error(error) 
     }
 }
 
@@ -98,7 +100,6 @@ export function dbInit() {
 }
 
 export async function redisInit() {
-    redis = createClient()
     redis.on("error", err => log.error("Redis Client Error:", err.code))
     await redis.connect()
 }

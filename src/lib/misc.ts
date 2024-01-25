@@ -1,3 +1,5 @@
+import type { Logger } from "./logger"
+
 /**
  * Creates an index of objects in an array based on a given key.
  * @param {Array} array - The input array containing objects.
@@ -8,7 +10,7 @@
  * const index = createIndex(array, 'id');
  * console.log(index); // { '1': { id: 1, name: 'John' }, '2': { id: 2, name: 'Jane' } }
  */
-export function createIndex(array, key) {
+export function createIndex(array: any[], key: string): object {
     return array.reduce((acc, obj) => {
         acc[obj[key]] = obj
         return acc
@@ -25,7 +27,7 @@ export function createIndex(array, key) {
  * const grouped = groupBy(array, 'category');
  * console.log(grouped); // { A: [ { category: 'A', value: 1 }, { category: 'A', value: 3 } ], B: [ { category: 'B', value: 2 } ] }
  */
-export function groupBy(array, key) {
+export function groupBy(array: any[], key: string) {
     return array.reduce(function (r, a) {
         r[a[key]] = r[a[key]] || []
         r[a[key]].push(a)
@@ -38,36 +40,32 @@ export function groupBy(array, key) {
  * Logs the error and rethrows it when an error occurs.
  * 
  * @param {Function} fn - The function to wrap with error handling.
- * @param {LoggerFunction} logger
+ * @param {Logger} logger
  * @returns {Function} - The wrapped function with error handling.
- * @example
+ * @examples
  * const wrappedFunction = handleErrors((arg1, arg2) => {
  *   // Your function implementation here
  * });
  */
-export const handleErrors = (fn, logger) => {
-    return function (...args) {
+export const handleErrors = (fn: Function, logger: Logger): Function => {
+    return function (...args: any) {
         try {
             return fn(...args)
-        } catch (error) {
-            logger.error(error.message)
-            throw error
+        } catch (error: unknown) {
+            if(error instanceof Error)
+            {
+                logger.error(error.message)
+                throw error
+            }
         }
     }
 }
 
-export function splitMappers(mappers) {
-    if(Array.isArray(mappers)) {
-        for (const map in mappers) {
-            mappers[map].Mapper = mappers[map].Mapper.split(/, | & /)
-        }
-    }
-    else
-        mappers = mappers.split(/, | & /)
-    return mappers
+export function splitMappers(mappers: string) {
+    return mappers.split(/, | & /)
 }
 
-export function escapeFTS(query) {
+export function escapeFTS(query: string): string {
     // If query has unbalanced ", add one at end
     if ((query.match(/"/g) || []).length % 2 !== 0) {
         query += "\""
@@ -77,10 +75,10 @@ export function escapeFTS(query) {
     let bits = query.split(/\s+|(".*?")/).filter(Boolean)
 
     // Remove empty strings and double quotes
-    bits = bits.filter(b => b && b !== "\"\"")
+    bits = bits.filter((b: string) => b && b !== "\"\"")
 
     // Rejoin the bits with quotes, unless they already start with a quote
-    return bits.map(bit => bit.startsWith("\"") ? bit : `"*${bit}*"`).join(" ")
+    return bits.map((bit: string) => bit.startsWith("\"") ? bit : `"*${bit}*"`).join(" ")
 }
 
 export const Months = {

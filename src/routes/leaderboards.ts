@@ -1,19 +1,19 @@
-import { Router } from "express"
+import { Router, Request, Response } from "express"
 import Leaderboard from "../models/leaderboard.js"
 import Map from "../models/map.js"
 
 const routes = Router()
 
-routes.get("/leaderboards/", (req, res) => {
+routes.get("/leaderboards/", (req: Request, res: Response) => {
     res.render("pages/leaderboards.njk", { "search": true })
 })
 
-async function rank1s_route(req, res) {
+async function rank1s_route(req: Request, res: Response) {
     const valid = [1, 2, 3, 4, 5]
     const sorting = valid.includes(Number(req.params.sort)) ? req.params.sort : 1
     const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
     const type = req.params.type
-    const page = isNaN(req.params.page) ? 1 : Number(req.params.page)
+    const page = isNaN(Number(req.params.page)) ? 1 : Number(req.params.page)
 
     const leaderboard = await Leaderboard.rank1s(type, category, sorting, page)
 
@@ -25,7 +25,7 @@ routes.get("/leaderboard/:type(teamrank1s|rank1s)/category/:category/sortby/:sor
 routes.get("/leaderboard/:type(teamrank1s|rank1s)/category/:category/sortby/:sort/page/:page", rank1s_route)
 
 
-async function worsttimes_route(req, res) {
+async function worsttimes_route(req: Request, res: Response) {
     const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
 
     const leaderboard = await Leaderboard.worsttimes(category)
@@ -36,7 +36,7 @@ routes.get("/leaderboard/worsttimes/", worsttimes_route)
 routes.get("/leaderboard/worsttimes/category/:category", worsttimes_route)
 
 
-async function mostplayed_route(req, res) {
+async function mostplayed_route(req: Request, res: Response) {
     const category = Map.categories.includes(req.params.category) ? req.params.category : "Any"
 
     const leaderboard = await Leaderboard.mostplayed(category)

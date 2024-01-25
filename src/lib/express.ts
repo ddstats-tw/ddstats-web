@@ -3,12 +3,13 @@ import njk from "nunjucks"
 import express from "express"
 import macros from "./macros.js"
 import router from "../routes/router.js"
+import { Express } from "express-serve-static-core"
 
 /**
  * This function sets up express and nunjucks.
- * @param {express.Application} expressApp
+ * @param {Express} server
  */
-export default function setupExpress(server) {
+export default function setupExpress(server: Express) {
     let nunjucks = njk.configure(
         "views",
         {
@@ -18,7 +19,7 @@ export default function setupExpress(server) {
             express: server,
         }
     )
-    
+
     nunjucks.addGlobal("ordinal", macros.ordinal)
     nunjucks.addGlobal("time_format", macros.timeFormat)
     nunjucks.addGlobal("plural", macros.plural)
@@ -26,7 +27,6 @@ export default function setupExpress(server) {
     nunjucks.addGlobal("current_date", macros.getCurrentDate)
     nunjucks.addGlobal("truncate_string", macros.truncateString)
     nunjucks.addGlobal("mapCountryCode", macros.mapCountryCode)
-
 
     server.disable("x-powered-by")
 
