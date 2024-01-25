@@ -35,23 +35,8 @@ async function mapper_route(req: Request, res: Response) {
     const mapper = req.params.mapper
     const maps = await Map.search({ mapper: mapper })
 
-    const playerinfo = await Player.playerinfo(mapper)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
-    
-        res.render("pages/map/mapper.njk", { maps, clan, country, skin, mapper, "search": true })
-    }
-    else
-    {
-        res.render("pages/map/mapper.njk", { maps, mapper, "search": true })
-    }
+    const playerinfo = await Player.playerInfo(mapper)
+    res.render("pages/map/mapper.njk", { maps, playerinfo, mapper, "search": true })
 }
 
 routes.get("/mapper/:mapper/", mapper_route)

@@ -18,23 +18,8 @@ async function players_overview_route(req: Request, res: Response) {
     const page = req.params.type ?? "overview"
     
     const isMapper = (await Map.search({ mapper: player })).length
-    const playerinfo = await Player.playerinfo(player)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
-
-        res.render("pages/player/overview.njk", { page, player, clan, country, skin, points, rankings, rankedPointsGraph, pointsGraph, playtime, isMapper, "search": true })
-    }
-    else
-    {
-        res.render("pages/player/overview.njk", { page, player, points, rankings, rankedPointsGraph, pointsGraph, playtime, isMapper, "search": true })
-    }
+    const playerinfo = await Player.playerInfo(player)
+    res.render("pages/player/overview.njk", { page, player, playerinfo, points, rankings, rankedPointsGraph, pointsGraph, playtime, isMapper, "search": true })
 }
 
 routes.get("/player/json", players_json)
@@ -57,25 +42,10 @@ async function players_activity_route(req: Request, res: Response) {
 
     const isMapper = (await Map.search({ mapper: player })).length
     const recentPlayerinfo = await Player.recentPlayerinfo(player, 5)
-    const playerinfo = await Player.playerinfo(player)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
+    const playerinfo = await Player.playerInfo(player)
 
-        res.render("pages/player/activity.njk", { player, clan, country, skin, page, recentPlayerinfo, recentPlaytime, playtimeLocation, playtimeGametypes, 
-            playtimePerMonth, playtimeCategories, Months, mostPlayedMaps, isMapper, "search": true })
-    } 
-    else
-    {
-        res.render("pages/player/activity.njk", { player, page, recentPlaytime, playtimeLocation, playtimeGametypes, 
-            playtimePerMonth, playtimeCategories, Months, mostPlayedMaps, isMapper, "search": true })
-    }
+    res.render("pages/player/activity.njk", { player, playerinfo, page, recentPlayerinfo, recentPlaytime, playtimeLocation, playtimeGametypes, 
+        playtimePerMonth, playtimeCategories, Months, mostPlayedMaps, isMapper, "search": true })
 }
 
 routes.get("/player/:player/:type(activity)", players_activity_route)
@@ -85,71 +55,29 @@ routes.get("/player/:player/:type(activity)/mostplayed", async (req: Request, re
     const page = req.params.type
 
     const isMapper = (await Map.search({ mapper: player })).length
-    const playerinfo = await Player.playerinfo(player)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
-
-        res.render("pages/player/mostplayed.njk", { player, clan, country, skin, page, mostPlayedMaps, isMapper, "search": true })
-    }
-    else
-    {
-        res.render("pages/player/mostplayed.njk", { player, page, mostPlayedMaps, isMapper, "search": true })
-    }
+    const playerinfo = await Player.playerInfo(player)
+    res.render("pages/player/mostplayed.njk", { player, playerinfo, page, mostPlayedMaps, isMapper, "search": true })
 })
+
 routes.get("/player/:player/:type(activity)/playerinfo", async (req: Request, res: Response) => {
     const player = req.params.player
     const recentPlayerinfo = await Player.recentPlayerinfo(player, 100)
     const page = req.params.type
 
     const isMapper = (await Map.search({ mapper: player })).length
-    const playerinfo = await Player.playerinfo(player)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
+    const playerinfo = await Player.playerInfo(player)
 
-        res.render("pages/player/playerinfo.njk", { player, clan, country, skin, page, recentPlayerinfo, isMapper, "search": true })
-    }
-    else
-    {
-        res.render("pages/player/playerinfo.njk", { player, page, recentPlayerinfo, isMapper, "search": true })
-    }
+    res.render("pages/player/playerinfo.njk", { player, playerinfo, page, recentPlayerinfo, isMapper, "search": true })
 })
+
 routes.get("/player/:player/:type(activity)/playtime", async (req: Request, res: Response) => {
     const player = req.params.player
     const recentPlaytime = await Player.recentPlaytime(player, 1000)
     const page = req.params.type
 
     const isMapper = (await Map.search({ mapper: player })).length
-    const playerinfo = await Player.playerinfo(player)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
-
-        res.render("pages/player/playtime.njk", { player, clan, country, skin, page, recentPlaytime, isMapper, "search": true })
-    }
-    else
-    {
-        res.render("pages/player/playtime.njk", { player, page, recentPlaytime, isMapper, "search": true })
-    }
+    const playerinfo = await Player.playerInfo(player)
+    res.render("pages/player/playtime.njk", { player, playerinfo, page, recentPlaytime, isMapper, "search": true })
 })
 
 async function players_rank1s_route(req: Request, res: Response) {
@@ -165,24 +93,19 @@ async function players_rank1s_route(req: Request, res: Response) {
     const page = req.params.type
     
     const isMapper = (await Map.search({ mapper: player })).length
-    const playerinfo = await Player.playerinfo(player)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
-    
-        res.render("pages/player/rank1s.njk", { player, clan, country, skin, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s, isMapper, "search": true })
-    }
-    else
-    {
-        res.render("pages/player/rank1s.njk", { player, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s, isMapper, "search": true })
-    }
+    const playerinfo = await Player.playerInfo(player)
+    res.render("pages/player/rank1s.njk", { player, playerinfo, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s, isMapper, "search": true })
 }
+
+routes.get("/player/:player/:type(rank1s)/partners", async (req: Request, res: Response) => {
+    const player = req.params.player
+    const page = req.params.type
+
+    const isMapper = (await Map.search({ mapper: player })).length
+    const playerinfo = await Player.playerInfo(player)
+    const rank1sPartners = await Player.rank1sPartners(player, 999)
+    res.render("pages/player/partners.njk", { rank1sPartners, page, player, playerinfo, isMapper, "search": true })
+})
 
 routes.get("/player/:player/:type(rank1s)", players_rank1s_route)
 
@@ -213,23 +136,8 @@ async function players_json(req: Request, res: Response) {
 
     const isMapper = (await Map.search({ mapper: player })).length
     const recentPlayerinfo = await Player.recentPlayerinfo(player, 5)
-    const playerinfo = await Player.playerinfo(player)
-    if(playerinfo[0])
-    {
-        const clan = playerinfo[0].clan
-        const country = playerinfo[0].country
-        const skin = {
-            name: playerinfo[0].skin_name,
-            color_body: playerinfo[0].skin_color_body,
-            color_feet: playerinfo[0].skin_color_feet,
-        }
-
-        return res.json({ player, clan, country, skin, points, rankings, isMapper, rankedPointsGraph, pointsGraph, playtime, recentPlayerinfo, recentPlaytime, playtimeCategories, playtimeGametypes, playtimeLocation, playtimePerMonth, mostPlayedMaps, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
-    }
-    else
-    {
-        return res.json({ player, points, rankings, isMapper, rankedPointsGraph, pointsGraph, playtime, recentPlayerinfo, recentPlaytime, playtimeCategories, playtimeGametypes, playtimeLocation, playtimePerMonth, mostPlayedMaps, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
-    }
+    const playerinfo = await Player.playerInfo(player)
+    return res.json({ player, playerinfo, points, rankings, isMapper, rankedPointsGraph, pointsGraph, playtime, recentPlayerinfo, recentPlaytime, playtimeCategories, playtimeGametypes, playtimeLocation, playtimePerMonth, mostPlayedMaps, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s })
 }
 
 export default routes

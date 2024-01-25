@@ -6,7 +6,6 @@
 <div class="container">
     <div class="box">
         <h2 style="float: left">Recent Top10s</h2>
-        <a class="show-more" href="/player/{{ player | urlencode | safe }}/playtime">Show more</a>
 
         <table class="transparent">
             <thead>
@@ -32,8 +31,9 @@
 
     <div class="box">
         <h2 style="float: left">Favourite partners</h2>
+        {% if rank1sPartners | length >= 10 %}
         <a class="show-more" href="/player/{{ player | urlencode | safe }}/rank1s/partners">Show more</a>
-
+        {% endif %}
         <table class="transparent">
             <thead>
             <tr>

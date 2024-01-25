@@ -27,11 +27,11 @@ const Player = {
      * @param {string} player
      * @returns {Promise<Array>}
      */
-    playerinfo: handleErrors(async (player: string) => {
+    playerInfo: handleErrors(async (player: string) => {
         return await dbQuery(master, `
             SELECT * FROM record_snapshot
                 WHERE name = ? AND skin_name != '' GROUP BY clan, country, skin_name, skin_color_body, skin_color_feet ORDER BY COUNT(*) DESC LIMIT 1
-        `, [player])
+        `, [player], true)
     }, log),
     /**
      * Get recent playerinfo of a player
