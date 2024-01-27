@@ -6,7 +6,7 @@ import miscRoutes from "./misc.js"
 
 const routes = Router()
 
-routes.get("/", (req: Request, res: Response) => {
+routes.get("/", (_req: Request, res: Response) => {
     res.render("pages/home.njk", { "search": false })
 })
 
@@ -15,7 +15,7 @@ routes.use("/", playerRoutes)
 routes.use("/", mapRoutes)
 routes.use("/", miscRoutes)
 
-routes.get('*', (req, res) => {
+routes.get('*', (_req: Request, res: Response) => {
     res.status(404).render("pages/404.njk", { "search": true })
 });
 
