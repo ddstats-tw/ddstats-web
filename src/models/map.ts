@@ -44,8 +44,8 @@ const Map = {
      */
     rankings: handleErrors(async (map: string, top: number) => {
         return await dbQuery(ddnet, `
-            SELECT * FROM rankings WHERE map = ? AND rank <= ?;
-        `, [map, top])
+            SELECT * FROM rankings WHERE map = ? AND rank <= ? ORDER BY rank LIMIT ?;
+        `, [map, top, top])
     }, log),
     /**
      * Get teamrankings of a map.
@@ -55,7 +55,7 @@ const Map = {
      */
     teamrankings: handleErrors(async (map: string, top: number) => {
         return groupBy(await dbQuery(ddnet, `
-            SELECT * FROM teamrankings WHERE map = ? AND rank <= ?;
+            SELECT * FROM teamrankings WHERE map = ? AND rank <= ? ORDER BY rank;
         `, [map, top]), "ID")
     }, log),
     /**

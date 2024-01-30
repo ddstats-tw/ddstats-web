@@ -48,9 +48,18 @@
 
 <div class="container">
     <div class="box">
+        <h3>
+            <a href="https://github.com/ddnet/ddnet-maps/raw/master/types/{{ info.Server | lower }}/maps/{{ info.Map | urlencode }}.map">Download Map</a> -
+            <a href="https://ddstats.qwik.space/map-inspect/?map={{ info.Map | urlencode }}">Preview Map</a>
+        </h3>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
         {% if rankings | length %}
         <h2 style="float: left">Rankings</h2>
-        <a class="show-more" href="/map/{{ map | urlencode | safe }}/rankings">Show more</a>
+        <!-- <a class="show-more" href="/map/{{ map | urlencode | safe }}/rankings">Show more</a> -->
 
         <table class="transparent">
             <thead>
@@ -86,7 +95,7 @@
     {% if teamrankings | length %}
     <div class="box">
         <h2 style="float: left">Teamrankings</h2>
-        <a class="show-more" href="/map/{{ map | urlencode | safe }}/teamrankings">Show more</a>
+        <!-- <a class="show-more" href="/map/{{ map | urlencode | safe }}/teamrankings">Show more</a> -->
 
         <table class="transparent">
             <thead>
@@ -132,15 +141,6 @@
         </table>
     </div>
     {% endif %}
-</div>
-
-<div class="container">
-    <div class="box">
-        <h3>
-            <a href="https://github.com/ddnet/ddnet-maps/raw/master/types/{{ info.Server | lower }}/maps/{{ info.Map | urlencode }}.map">Download Map</a> -
-            <a href="https://ddstats.qwik.space/map-inspect/?map={{ info.Map | urlencode }}">Preview Map</a>
-        </h3>
-    </div>
 </div>
 
 {% endblock %}

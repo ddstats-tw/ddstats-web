@@ -7,8 +7,8 @@ const routes = Router()
 async function maps_overview_route(req: Request, res: Response) {
     const map = req.params.map
     const info = await Map.info(map)
-    const rankings = await Map.rankings(map, 20)
-    const teamrankings = await Map.teamrankings(map, 20)
+    const rankings = await Map.rankings(map, 100)
+    const teamrankings = await Map.teamrankings(map, 100)
     const page = req.params.type ?? "overview"
 
     res.render("pages/map/overview.njk", { map, page, info, rankings, teamrankings, "search": true })
