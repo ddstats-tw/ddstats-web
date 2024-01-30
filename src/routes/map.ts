@@ -22,7 +22,7 @@ routes.get("/map/:map/:type(overview)", maps_overview_route)
 async function maps_timecps_route(req: Request, res: Response) {
     const map = req.params.map
     const info = await Map.info(map)
-    const timecps = await Map.timecps(map, 20)
+    const timecps = await Map.timecps(map, 100)
     const page = req.params.type ?? "overview"
 
     res.render("pages/map/timecps.njk", { map, page, info, timecps, "search": true })

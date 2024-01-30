@@ -682,3 +682,16 @@ li {
         max-width: 95%;
     }
 }
+
+.timecps.small {
+    min-width: 3rem;
+}
+
+.timecps.mid {
+    min-width: 5rem;
+    text-align: center;
+}
+
+.timecps.big {
+    min-width: 9rem;
+}

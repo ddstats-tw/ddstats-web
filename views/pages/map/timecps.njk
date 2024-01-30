@@ -5,38 +5,27 @@
 
 <div class="container">
     <div class="box">
-        <a class="show-more" href="/map/{{ map | urlencode | safe }}/rankings">Show more</a>
-
         <table class="transparent">
             <thead>
             <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>CP1</th>
-                <th>CP2</th>
-                <th>CP3</th>
-                <th>CP4</th>
-                <th>CP5</th>
-                <th>CP6</th>
-                <th>CP7</th>
-                <th>CP8</th>
-                <th>Time ↓</th>
+                <th class="timecps small">Rank</th>
+                <th class="timecps big">Player</th>
+                <th class="timecps mid">Time</th>
+                {% for i in range(1, 26) %}
+                <th class="timecps mid">CP{{ i }}</th>
+                {% endfor %}
             </tr>
             </thead>
             <tbody>
                 {% for rank in timecps %}
                 <tr>
-                    <td>{{ loop.index }}</td>
-                    <td><a href="/player/{{ rank.Name | urlencode }}">{{ rank.Name }}</a></td>
-                    <td>{{ fancy_time(rank.cp1) }}</td>
-                    <td>{{ fancy_time(rank.cp2) }}</td>
-                    <td>{{ fancy_time(rank.cp3) }}</td>
-                    <td>{{ fancy_time(rank.cp4) }}</td>
-                    <td>{{ fancy_time(rank.cp5) }}</td>
-                    <td>{{ fancy_time(rank.cp6) }}</td>
-                    <td>{{ fancy_time(rank.cp7) }}</td>
-                    <td>{{ fancy_time(rank.cp8) }}</td>
-                    <td>{{ fancy_time(rank.Time) }}</td>
+                    <td class="timecps small">{{ loop.index }}</td>
+                    <td class="timecps big"><pre><a href="/player/{{ rank.Name | urlencode }}">{{ rank.Name }}</a></pre></td>
+                    <td class="timecps mid">{{ fancy_time(rank.Time) }}</td>
+                    {% for i in range(1, 26) %}
+                    {% set cp = "cp" + i %}
+                    <td class="timecps mid">{{ fancy_time(rank[cp]) if rank[cp] != 0 else "-"}}</td>
+                    {% endfor %}
                 </tr>
                 {% endfor %}
             </tbody>
