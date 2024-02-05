@@ -13,7 +13,7 @@ const Player = {
      */
     rankings: handleErrors(async (player: string) => {
         return await dbQuery(ddnet, `
-            SELECT rankings.map, rankings.name, rankings.time, rankings.map, rankings.server, 
+            SELECT rankings.map, rankings.name, rankings.time, rankings.map, rankings.server, rankings.betterthan,
                 rankings.rank, min(teamrankings.rank) as Teamrank, maps.Server as Category, maps.Points FROM rankings as rankings
                 JOIN maps AS maps
                     ON maps.map = rankings.map
