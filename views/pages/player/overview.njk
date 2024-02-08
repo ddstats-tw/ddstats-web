@@ -22,186 +22,119 @@
         return value;
     }
 
-  const ctx = document.getElementById('pointsChart');
-  const data = [
-    {% if rankedPointsGraph | length %}
-    { x: "{{ pointsGraph[0].date }}", y: 0, y2: 0 },
-    {% for row in rankedPointsGraph %}
-    { x: "{{ row.date }}", y: {{ row.rankpoints }}, y2: {{ row.teampoints }} },
-    {% endfor %}
-    { x: "{{ current_date() }}", y: {{ (rankedPointsGraph | last).rankpoints }}, y2: {{ (rankedPointsGraph | last).teampoints }} }
-    {% endif %}
-  ];
+    const ctx = document.getElementById('pointsChart');
+    const data = [
+        {% if rankedPointsGraph | length %}
+        { x: "{{ pointsGraph[0].date }}", y: 0, y2: 0 },
+        {% for row in rankedPointsGraph %}
+        { x: "{{ row.date }}", y: {{ row.rankpoints }}, y2: {{ row.teampoints }} },
+        {% endfor %}
+        { x: "{{ current_date() }}", y: {{ (rankedPointsGraph | last).rankpoints }}, y2: {{ (rankedPointsGraph | last).teampoints }} }
+        {% endif %}
+    ];
 
-  const data2 = [
-    {% for row in pointsGraph %}
-    { x: "{{ row.date }}", y: {{ row.points }} },
-    {% endfor %}
-    { x: "{{ current_date() }}", y: {{ (pointsGraph | last).points }} }
-  ];
+    const data2 = [
+        {% for row in pointsGraph %}
+        { x: "{{ row.date }}", y: {{ row.points }} },
+        {% endfor %}
+        { x: "{{ current_date() }}", y: {{ (pointsGraph | last).points }} }
+    ];
 
-  Chart.defaults.color = "#E0E0FF"
-  Chart.defaults.font.family = "'Roboto Regular', sans-serif"
-  Chart.defaults.font.size = 12
+    Chart.defaults.color = "#E0E0FF"
+    Chart.defaults.font.family = "'Roboto Regular', sans-serif"
+    Chart.defaults.font.size = 12
 
-  new Chart(
-    ctx,
-    {
-      type: 'line',
-      data: {
-            datasets: [{
-                label: 'Rank Points',
-                data: data,
-                fill: false,
-                borderColor: '#4C9CEF',
-                tension: 0,
-                pointRadius: 0
-            },
-            {
-                label: 'Team Points',
-                data: data,
-                fill: false,
-                borderColor: '#EF5255',
-                tension: 0,
-                pointRadius: 0,
-                parsing: {
-                    yAxisKey: 'y2'
-                }
-            },
-            {
-                label: 'Points',
-                data: data2,
-                fill: false,
-                borderColor: '#EFB1F1',
-                tension: 0,
-                pointRadius: 0,
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            spanGaps: true,
-            animation: false,
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
+    new Chart(
+        ctx,
+        {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Rank Points',
+                    data: data,
+                    fill: false,
+                    borderColor: '#4C9CEF',
+                    tension: 0,
+                    pointRadius: 0
                 },
-                title: {
-                    display: true,
-                    align: 'start',
-                    text: "Points graph",
-                    padding: {
-                        top: 0,
-                        bottom: 0
-                    },
-                    font: {
-                        weight: 'bold',
-                        size: 23,
-                    },
-                }
+                {
+                    label: 'Team Points',
+                    data: data,
+                    fill: false,
+                    borderColor: '#EF5255',
+                    tension: 0,
+                    pointRadius: 0,
+                    parsing: {
+                        yAxisKey: 'y2'
+                    }
+                },
+                {
+                    label: 'Points',
+                    data: data2,
+                    fill: false,
+                    borderColor: '#EFB1F1',
+                    tension: 0,
+                    pointRadius: 0,
+                }]
             },
-            hover: {
-                mode: 'nearest',
-                intersect: false
-            },
-            scales: {
-                x: {
-                    grid: {
-                        color: "#30304F"
+            options: {
+                maintainAspectRatio: false,
+                spanGaps: true,
+                animation: false,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
                     },
-                    ticks: {
+                    title: {
+                        display: true,
+                        align: 'start',
+                        text: "Points graph",
+                        padding: {
+                            top: 0,
+                            bottom: 0
+                        },
                         font: {
                             weight: 'bold',
-                            size: 20,
-                        }
-                    },
-                    type: 'time',
-                    time: {
-                        unit: 'year'
-                    },
+                            size: 23,
+                        },
+                    }
                 },
-                y: {
-                    suggestedMax: 250,
-                    grid: {
-                        color: "#30304F"
+                hover: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: "#30304F"
+                        },
+                        ticks: {
+                            font: {
+                                weight: 'bold',
+                                size: 20,
+                            }
+                        },
+                        type: 'time',
+                        time: {
+                            unit: 'year'
+                        },
                     },
-                    ticks: {
-                        font: {
-                            size: 17,
+                    y: {
+                        suggestedMax: 250,
+                        grid: {
+                            color: "#30304F"
+                        },
+                        ticks: {
+                            font: {
+                                size: 17,
+                            }
                         }
                     }
                 }
             }
         }
-    }
-  );
+    );
 </script>
 
-{% set categories = ["Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
-{% for category in categories %}
-
-<div class="container">
-    <div class="box">
-        <h2>{{ category }}</h2>
-        {% if rankings[category ] %}
-        <div class="points">
-            <table class="transparent">
-                <thead>
-                <tr>
-                    <th>Points</th>
-                    <th>Rank Points</th>
-                    <th>Team Points</th>
-                    <th>Team Rank1s</th>
-                    <th>Rank 1s</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ utils.points(points, "points", category) }}</td>
-                        <td>{{ utils.points(points, "rankpoints", category) }}</td>
-                        <td>{{ utils.points(points, "teampoints", category) }}</td>
-                        <td>Unranked</td>
-                        <td>Unranked</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <table class="sortable n-last">
-            <thead>
-                <tr>
-                    <th id="default-sort" class="wide dir-u">Map</th>
-                    <th>Time</th>
-                    <th>Team Rank</th>
-                    <th>Rank</th>
-                    <th>Better than</th>
-                    <th>Playtime</th>
-                    <th>Points</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for rank in rankings[category] %}
-                <tr>
-                    <td><a href="/map/{{ rank.Map | urlencode | safe }}">{{ rank.Map }}</a></td>
-                    <td data-sort="{{ rank.Time }}">{{ fancy_time(rank.Time) }}</td>
-                    {% if rank.Teamrank %}
-                    <td data-sort="{{ rank.Teamrank }}">{{ rank.Teamrank }}<sup>{{ ordinal(rank.Teamrank) }}</sup></td>
-                    {% else %}
-                        <td></td>
-                    {% endif %}
-                    <td data-sort="{{ rank.Rank }}">{{ rank.Rank }}<sup>{{ ordinal(rank.Rank) }}</sup></td>
-                    <td data-sort="{{ rank.BetterThan }}">{{ rank.BetterThan }}%</td>
-                    <td data-sort="{{ playtime[rank.Map].Playtime if playtime[rank.Map].Playtime else 0 }}">
-                        {{ time_format(playtime[rank.Map].Playtime) if playtime[rank.Map].Playtime else "Unplayed" }}
-                    </td>
-                    <td>{{ rank.Points }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>{{ player }} has not finished any {{ category }} maps and is unranked within the category.</p>
-        {% endif %}
-    </div>
-</div>
-    {% endfor %}
 {% endblock %}

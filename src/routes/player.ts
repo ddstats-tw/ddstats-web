@@ -13,18 +13,33 @@ async function players_overview_route(req: Request, res: Response) {
 
     const rankedPointsGraph = await Player.rankedpointsGraph(player)
     const pointsGraph = await Player.pointsGraph(player)
-    const playtime = await Player.playtime(player)
     const points = await Player.points(player)
     const page = req.params.type ?? "overview"
     
     const isMapper = (await Map.search({ mapper: player })).length
     const playerinfo = await Player.playerInfo(player)
-    res.render("pages/player/overview.njk", { page, player, playerinfo, points, rankings, rankedPointsGraph, pointsGraph, playtime, isMapper, "search": true })
+    res.render("pages/player/overview.njk", { page, player, playerinfo, points, rankedPointsGraph, pointsGraph, isMapper, "search": true })
 }
 
 routes.get("/player/json", players_json)
 routes.get("/player/:player", players_overview_route)
 routes.get("/player/:player/:type(overview)", players_overview_route)
+
+async function players_finishes_route(req: Request, res: Response) {
+    const player = req.params.player
+    const rankings = groupBy(await Player.rankings(player), "Category")
+    if(!Object.keys(rankings).length)
+        return res.render("pages/player/base.njk", { "search": true })
+
+    const playtime = await Player.playtime(player)
+    const page = req.params.type ?? "overview"
+
+    const isMapper = (await Map.search({ mapper: player })).length
+    const playerinfo = await Player.playerInfo(player)
+    res.render("pages/player/finishes.njk", { page, player, playerinfo, rankings, playtime, isMapper, "search": true })
+}
+
+routes.get("/player/:player/:type(finishes)", players_finishes_route)
 
 async function players_activity_route(req: Request, res: Response) {
     const player = req.params.player

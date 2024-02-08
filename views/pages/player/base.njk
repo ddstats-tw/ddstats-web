@@ -38,6 +38,9 @@
             <a class="{{ "active" if page == "overview" }}" href="/player/{{ player | urlencode | safe }}">Overview</a>
         </li>
         <li>
+            <a class="{{ "active" if page == "finishes" }}" href="/player/{{ player | urlencode | safe }}/finishes">Finishes</a>
+        </li>
+        <li>
             <a class="{{ "active" if page == "activity" }}" href="/player/{{ player | urlencode | safe }}/activity">Activity</a>
         </li>
         <li>
