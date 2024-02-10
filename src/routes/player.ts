@@ -95,6 +95,10 @@ routes.get("/player/:player/:type(activity)/playtime", async (req: Request, res:
     res.render("pages/player/playtime.njk", { player, playerinfo, page, recentPlaytime, isMapper, "search": true })
 })
 
+routes.get("/player/:player/:type(playtime)/*", async (req: Request, res: Response) => {
+    res.redirect(`/player/${req.params.player}/activity`)
+})
+
 async function players_rank1s_route(req: Request, res: Response) {
     const player = req.params.player
     const rankings = groupBy(await Player.rankings(player), "Category")
