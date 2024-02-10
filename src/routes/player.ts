@@ -59,7 +59,7 @@ async function players_activity_route(req: Request, res: Response) {
     const recentPlayerinfo = await Player.recentPlayerinfo(player, 5)
     const playerinfo = await Player.playerInfo(player)
 
-    res.render("pages/player/activity.njk", { player, playerinfo, page, recentPlayerinfo, recentPlaytime, playtimeLocation, playtimeGametypes, 
+    res.render("pages/player/activity/base.njk", { player, playerinfo, page, recentPlayerinfo, recentPlaytime, playtimeLocation, playtimeGametypes, 
         playtimePerMonth, playtimeCategories, Months, mostPlayedMaps, isMapper, "search": true })
 }
 
@@ -71,7 +71,7 @@ routes.get("/player/:player/:type(activity)/mostplayed", async (req: Request, re
 
     const isMapper = (await Map.search({ mapper: player })).length
     const playerinfo = await Player.playerInfo(player)
-    res.render("pages/player/mostplayed.njk", { player, playerinfo, page, mostPlayedMaps, isMapper, "search": true })
+    res.render("pages/player/activity/mostplayed.njk", { player, playerinfo, page, mostPlayedMaps, isMapper, "search": true })
 })
 
 routes.get("/player/:player/:type(activity)/playerinfo", async (req: Request, res: Response) => {
@@ -82,7 +82,7 @@ routes.get("/player/:player/:type(activity)/playerinfo", async (req: Request, re
     const isMapper = (await Map.search({ mapper: player })).length
     const playerinfo = await Player.playerInfo(player)
 
-    res.render("pages/player/playerinfo.njk", { player, playerinfo, page, recentPlayerinfo, isMapper, "search": true })
+    res.render("pages/player/activity/playerinfo.njk", { player, playerinfo, page, recentPlayerinfo, isMapper, "search": true })
 })
 
 routes.get("/player/:player/:type(activity)/playtime", async (req: Request, res: Response) => {
@@ -92,7 +92,7 @@ routes.get("/player/:player/:type(activity)/playtime", async (req: Request, res:
 
     const isMapper = (await Map.search({ mapper: player })).length
     const playerinfo = await Player.playerInfo(player)
-    res.render("pages/player/playtime.njk", { player, playerinfo, page, recentPlaytime, isMapper, "search": true })
+    res.render("pages/player/activity/playtime.njk", { player, playerinfo, page, recentPlaytime, isMapper, "search": true })
 })
 
 routes.get("/player/:player/:type(playtime)/*", async (req: Request, res: Response) => {
@@ -113,7 +113,7 @@ async function players_rank1s_route(req: Request, res: Response) {
     
     const isMapper = (await Map.search({ mapper: player })).length
     const playerinfo = await Player.playerInfo(player)
-    res.render("pages/player/rank1s.njk", { player, playerinfo, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s, isMapper, "search": true })
+    res.render("pages/player/rank1s/base.njk", { player, playerinfo, page, allTop10s, AmountOfTop10Placements, rank1sPartners, recentTop10s, isMapper, "search": true })
 }
 
 routes.get("/player/:player/:type(rank1s)/partners", async (req: Request, res: Response) => {
@@ -123,7 +123,7 @@ routes.get("/player/:player/:type(rank1s)/partners", async (req: Request, res: R
     const isMapper = (await Map.search({ mapper: player })).length
     const playerinfo = await Player.playerInfo(player)
     const rank1sPartners = await Player.rank1sPartners(player, 999)
-    res.render("pages/player/partners.njk", { rank1sPartners, page, player, playerinfo, isMapper, "search": true })
+    res.render("pages/player/rank1s/partners.njk", { rank1sPartners, page, player, playerinfo, isMapper, "search": true })
 })
 
 routes.get("/player/:player/:type(rank1s)", players_rank1s_route)
