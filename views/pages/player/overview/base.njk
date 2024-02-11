@@ -10,6 +10,56 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Last finishes</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/overview/finishes">Show more</a>
+        <table class="transparent">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Server</th>
+                    <th></th>
+                    <th>Map</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for finish in lastFinishes %}
+                <tr>
+                    <td>{{ finish.Timestamp }}</td>
+                    <td><img height="20rem" src="https://ddnet.org/countryflags/{{ finish.Flag }}.png"</td>
+                    <td>{{ finish.Server }}</td>
+                    <td><a href="/map/{{ finish.Map | urlencode | safe }}">{{ finish.Map }}</a></td>
+                    <td>{{ fancy_time(finish.Time) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box">
+        <h2 style="float: left">Favourite partners</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}/overview/partners">Show more</a>
+        <table class="transparent">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Finishes together</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in teamPartners %}
+                <tr>
+                    <td><a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a></td>
+                    <td>{{ player.Amount }} ranks</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <script>
     function formatNumber(value) {
         if (value >= 1000000000 || value <= -1000000000) {

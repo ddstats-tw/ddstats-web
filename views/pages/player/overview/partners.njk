@@ -1,0 +1,28 @@
+{% extends "pages/player/base.njk" %}
+{% import "components/utils.njk" as utils %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Favourite partners</h2>
+        <a class="show-more" href="/player/{{ player | urlencode | safe }}">Go back</a>
+        <table class="transparent">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Finishes together</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in teamPartners %}
+                <tr>
+                    <td><a href="/player/{{ player.Name | urlencode }}">{{ player.Name }}</a></td>
+                    <td>{{ player.Amount }} ranks</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

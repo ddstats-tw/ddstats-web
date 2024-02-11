@@ -100,6 +100,33 @@ const Player = {
         return points
     }, log),
     /**
+     * Get last finishes of a player.
+     * @param {string} player
+     * @param {integer} limit - amount of entries to return.
+     * @returns {Promise<Array>}
+     */
+    lastFinishes: handleErrors(async (player: string, limit: number) => {
+        return await dbQuery(ddnet, `
+            SELECT race.Timestamp, race.Map, race.Time, race.Server as Flag, maps.Server as Server FROM race
+                LEFT JOIN maps ON race.Map = maps.Map
+                WHERE Name = ?
+            ORDER BY race.Timestamp DESC LIMIT ?;
+        `, [player, limit])
+    }, log),
+    /**
+     * Get favorite team partners of a player.
+     * @param {string} player
+     * @param {integer} limit - amount of entries to return.
+     * @returns {Promise<Array>}
+     */
+    teamPartners: handleErrors(async (player: string, limit: number) => {
+        return await dbQuery(ddnet, `
+            SELECT r.Name, COUNT(r.Name) AS Amount FROM (SELECT Name, ID FROM teamrace WHERE Name = ?) AS l 
+                INNER JOIN (select ID, Name from teamrace) AS r ON l.ID = r.ID and l.Name != r.Name
+            GROUP BY r.Name ORDER BY COUNT(r.Name) DESC LIMIT ?;
+        `, [player, limit])
+    }, log),
+    /**
      * Get recent playtime of a player
      * @param {string} player
      * @param {integer} limit - amount of entries to return.

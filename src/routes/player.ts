@@ -11,6 +11,8 @@ async function players_overview_route(req: Request, res: Response) {
     if(!Object.keys(rankings).length)
         return res.render("pages/player/base.njk", { "search": true })
 
+    const lastFinishes = await Player.lastFinishes(player, 10)
+    const teamPartners = await Player.teamPartners(player, 10)
     const rankedPointsGraph = await Player.rankedpointsGraph(player)
     const pointsGraph = await Player.pointsGraph(player)
     const points = await Player.points(player)
@@ -18,12 +20,30 @@ async function players_overview_route(req: Request, res: Response) {
     
     const isMapper = (await Map.search({ mapper: player })).length
     const playerinfo = await Player.playerInfo(player)
-    res.render("pages/player/overview.njk", { page, player, playerinfo, points, rankedPointsGraph, pointsGraph, isMapper, "search": true })
+    res.render("pages/player/overview/base.njk", { page, player, playerinfo, lastFinishes, teamPartners, points, rankedPointsGraph, pointsGraph, isMapper, "search": true })
 }
 
 routes.get("/player/json", players_json)
 routes.get("/player/:player", players_overview_route)
 routes.get("/player/:player/:type(overview)", players_overview_route)
+routes.get("/player/:player/:type(overview)/finishes", async (req: Request, res: Response) => {
+    const player = req.params.player
+    const lastFinishes = await Player.lastFinishes(player, 100)
+    const page = req.params.type
+
+    const isMapper = (await Map.search({ mapper: player })).length
+    const playerinfo = await Player.playerInfo(player)
+    res.render("pages/player/overview/finishes.njk", { player, playerinfo, page, lastFinishes, isMapper, "search": true })
+})
+routes.get("/player/:player/:type(overview)/partners", async (req: Request, res: Response) => {
+    const player = req.params.player
+    const teamPartners = await Player.teamPartners(player, 100)
+    const page = req.params.type
+
+    const isMapper = (await Map.search({ mapper: player })).length
+    const playerinfo = await Player.playerInfo(player)
+    res.render("pages/player/overview/partners.njk", { player, playerinfo, page, teamPartners, isMapper, "search": true })
+})
 
 async function players_finishes_route(req: Request, res: Response) {
     const player = req.params.player
