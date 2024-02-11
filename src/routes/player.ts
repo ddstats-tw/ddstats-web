@@ -37,7 +37,7 @@ routes.get("/player/:player/:type(overview)/finishes", async (req: Request, res:
 })
 routes.get("/player/:player/:type(overview)/partners", async (req: Request, res: Response) => {
     const player = req.params.player
-    const teamPartners = await Player.teamPartners(player, 100)
+    const teamPartners = await Player.teamPartners(player, 10000)
     const page = req.params.type
 
     const isMapper = (await Map.search({ mapper: player })).length
