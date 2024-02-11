@@ -28,7 +28,7 @@
                 {% for finish in lastFinishes %}
                 <tr>
                     <td>{{ finish.Timestamp }}</td>
-                    <td><img height="20rem" src="https://ddnet.org/countryflags/{{ finish.Flag }}.png"</td>
+                    <td><img height="17rem" src="https://ddnet.org/countryflags/{{ finish.Flag }}.png"</td>
                     <td>{{ finish.Server }}</td>
                     <td><a href="/map/{{ finish.Map | urlencode | safe }}">{{ finish.Map }}</a></td>
                     <td>{{ fancy_time(finish.Time) }}</td>
