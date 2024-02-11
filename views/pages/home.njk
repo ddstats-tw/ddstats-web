@@ -108,13 +108,17 @@
                 ul.firstChild.classList.remove('selectedHome')
             }
         } else if (event.key === "Enter") {
-            if(ul.firstChild == ul.lastChild) {
+            if(ul.firstChild && ul.firstChild == ul.lastChild) {
                 event.preventDefault();
                 window.location.href = ul.firstChild.firstChild.firstChild.getAttribute('href')
             }
             if(selectedHome) {
                 event.preventDefault();
                 window.location.href = selectedHome.firstChild.firstChild.getAttribute('href');
+            }
+            if(ul.childElementCount === 0) {
+                event.preventDefault();
+                window.location.href = '/player/' + inputHome.value;
             }
         }
     }

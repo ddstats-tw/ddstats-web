@@ -153,13 +153,17 @@
 					ul.firstChild.classList.remove('selectedNav')
 				}
 			} else if (event.key === "Enter") {
-				if(ul.firstChild == ul.lastChild) {
+				if(ul.firstChild && ul.firstChild == ul.lastChild) {
 					event.preventDefault();
 					window.location.href = ul.firstChild.firstChild.firstChild.getAttribute('href')
 				}
 				if(selectedNav) {
 					event.preventDefault();
 					window.location.href = selectedNav.firstChild.firstChild.getAttribute('href');
+				}
+				if(ul.childElementCount === 0) {
+					event.preventDefault();
+					window.location.href = '/player/' + inputNav.value;
 				}
 			}
 		}
