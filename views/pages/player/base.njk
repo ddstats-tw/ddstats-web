@@ -19,13 +19,13 @@
     <div class="playerinfo">
         <div class="playerinfo-border">
             <div>
-                <h1>{{ utils.player_flag_medium(playerinfo.country) }}</h1>
+                <h1 title="{{ mapCountryCode(playerinfo.country) }}">{{ utils.player_flag_medium(playerinfo.country) }}</h1>
             </div>
             <div class="playerinfo-mid">
                 <h1>{{ player }}</h1>
                 <h1>{{ playerinfo.clan }}</h1>
             </div>
-            <div class="tee-large">
+            <div title="{{ playerinfo.skin_name }}" class="tee-large">
                 <div class="tee" data-skinimage="https://ddstats.qwik.space/skins/{{ playerinfo.skin_name | urlencode }}.png" data-bodycolor="{{ playerinfo.skin_color_body }}" data-feetcolor="{{ playerinfo.skin_color_feet }}" data-coloringmode="code"></div>
             </div>
         </div>

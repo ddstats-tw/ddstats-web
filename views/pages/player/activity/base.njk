@@ -50,7 +50,7 @@
                 <tr>
                     <td>{{ activity.lastseen }}</td>
                     <td>{{ activity.clan }}</td>
-                    <td>{{ utils.player_flag_medium(activity.country) }}</td>
+                    <td title="{{ mapCountryCode(activity.country) }}">{{ utils.player_flag_medium(activity.country) }}</td>
                     <td>
                         <div title="{{ activity.skin_name }}" class="tee-medium">
                             <button class="btn-copy" onClick="copyText('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
