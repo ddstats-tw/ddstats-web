@@ -671,8 +671,12 @@ li {
     color: #3DDF89;
 }
 
-@media screen and (max-width:900px) {
-    .container {
+.left-bigger {
+    grid-template-columns: 0.6fr 0.4fr;
+}
+
+@media screen and (max-width:1000px) {
+    .container, .left-bigger {
         grid-template-columns: 1fr;
     }
 }

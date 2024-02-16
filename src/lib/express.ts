@@ -4,6 +4,8 @@ import express from "express"
 import macros from "./macros.js"
 import router from "../routes/router.js"
 import { Express } from "express-serve-static-core"
+import fs from 'fs'
+import crypto from 'crypto'
 
 /**
  * This function sets up express and nunjucks.
@@ -27,6 +29,13 @@ export default function setupExpress(server: Express) {
     nunjucks.addGlobal("current_date", macros.getCurrentDate)
     nunjucks.addGlobal("truncate_string", macros.truncateString)
     nunjucks.addGlobal("mapCountryCode", macros.mapCountryCode)
+    nunjucks.addGlobal("hash", "123")
+
+    // Generate a hash of the css file
+    const fileBuffer = fs.readFileSync("./assets/css/main.css");
+    const hashSum = crypto.createHash("sha256");
+    hashSum.update(fileBuffer);
+    nunjucks.addGlobal("css_hash", hashSum.digest('hex').slice(0, 6))
 
     server.disable("x-powered-by")
 
