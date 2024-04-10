@@ -23,7 +23,7 @@ const Leaderboard = {
                 JOIN maps ON rankings.map = maps.map 
                     WHERE rank = ${sorting} AND maps.server LIKE ?
         `, [category])
-    
+
         // TODO: remove INDEXED BY
         const data = await dbQuery(ddnet, `
             SELECT  RANK() OVER (ORDER BY COUNT(CASE WHEN rank = ${sorting} THEN 1 END) DESC) AS rank, Name,
@@ -33,7 +33,7 @@ const Leaderboard = {
                     COUNT(CASE WHEN rank = 4 THEN 1 END) AS rank4s,
                     COUNT(CASE WHEN rank = 5 THEN 1 END) AS rank5s
             FROM ${table} as rankings INDEXED BY idx_${table}_rank_top5 JOIN maps ON rankings.map = maps.map 
-                WHERE rank <= 5 AND maps.server LIKE ?
+            WHERE rank <= 5 AND maps.server LIKE ? ${category === "Fun" ? "" : "AND maps.server != 'Fun'"}
                 GROUP BY name HAVING COUNT(CASE WHEN rank = ${sorting} THEN 1 END) > 0 
                     LIMIT ${(page-1)*50}, 100
         `, [category])
