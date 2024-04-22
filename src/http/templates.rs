@@ -1,6 +1,8 @@
 use askama::Template;
 use axum::Extension;
 
+use crate::models::player::Player;
+
 use super::WebContext;
 
 #[derive(Template)]
@@ -8,12 +10,7 @@ use super::WebContext;
 pub struct LandingTemplate;
 
 pub async fn landing(ext: Extension<WebContext>) -> LandingTemplate {
-    println!(
-        "{:?}",
-        sqlx::query!("SELECT COUNT(*) FROM maps")
-            .fetch_one(&ext.db)
-            .await
-    );
+    println!("{:?}", Player::search(&ext.db, "test", 20).await);
 
     LandingTemplate
 }

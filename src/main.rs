@@ -3,6 +3,7 @@ use std::env;
 use sqlx::postgres::PgPoolOptions;
 
 mod http;
+mod models;
 
 #[tokio::main]
 async fn main() {
