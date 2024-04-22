@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block head %}
+	<title>DDStats</title>
+{% endblock %}
+
+{% block main %}
+
+<div class="center">
+    <form class="form-search-home" action="/search" method="get">
+        <h1>Search for a player or map...</h1>
+        <input class="input-search-home" id="typeahead-nav" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ..." autofocus>
+        <div class="result-home" id="result-home"></div>
+    </form>
+</div>
+{% endblock %}

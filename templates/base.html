@@ -1,0 +1,51 @@
+<!--
+  ____  ____  ____  _        _       
+ |  _ \|  _ \/ ___|| |_ __ _| |_ ___ 
+ | | | | | | \___ \| __/ _` | __/ __|
+ | |_| | |_| |___) | || (_| | |_\__ \
+ |____/|____/|____/ \__\__,_|\__|___/
+                                     
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/static/css/main.css?v=123">
+		<link rel="icon" type="image/png" href="/static/media/favicon-96x96.png">
+		<link rel='stylesheet' href='/static/css/Tee.css'>
+		{% block head %}
+			<title>DDStats</title>
+		{% endblock %}
+	</head>
+
+	<body>
+		<nav id="nav" class="topnav">
+			<h2 class="link"><a href="/">DDStats</a></h2>
+			<div class="search-nav">
+				<form class="form-search-nav" action="/search" method="get">
+					<input class="input-search-nav" id="typeahead-nav" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ...">
+					<div class="result-nav" id="result-nav"></div>
+				</form>
+			</div>
+			<p class="link"><a href="/leaderboards/">Leaderboards</a></p>
+		</nav>
+
+		<main>
+		{% block main %}
+			<p>Main default content. Hello world!</p>
+		{% endblock %}
+		</main>
+		<footer>
+			<p>
+				DDStats
+			</p>
+			<p>
+				<a href="https://github.com/ddstats-tw/">Source Code</a> •
+				<a href="/faq">FAQ</a>
+			</p>
+		</footer>
+	</body>
+</html>

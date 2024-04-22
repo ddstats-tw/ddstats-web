@@ -1,0 +1,3 @@
+{
+    "[rust]": { "editor.formatOnSave": true }
+}
