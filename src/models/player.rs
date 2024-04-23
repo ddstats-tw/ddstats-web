@@ -39,7 +39,12 @@ pub struct RaceFinish {
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Profile {
     pub name: String,
-    pub points: i64,
+    pub points: i32,
+    pub clan: Option<String>,
+    pub country: Option<i32>,
+    pub skin_name: Option<String>,
+    pub skin_color_body: Option<i32>,
+    pub skin_color_feet: Option<i32>,
 }
 
 pub struct Player;
@@ -56,7 +61,7 @@ impl Player {
             .await
     }
 
-    /// Search for a player
+    /// Search for players matching `query` and return `n` results
     pub async fn search(
         db: &Pool<Postgres>,
         query: &str,
