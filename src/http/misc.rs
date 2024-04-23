@@ -1,11 +1,8 @@
-use axum::{routing::get, Extension, Router};
-use sqlx::{Pool, Postgres};
+use axum::{routing::get, Router};
+
 use tower_http::services::ServeDir;
 
-use super::{
-    templates::{faq, landing, not_found, search, search_api},
-    WebContext,
-};
+use super::templates::{faq, landing, not_found, search, search_api};
 
 pub fn router() -> Router {
     Router::new()

@@ -1,10 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{
-    self,
-    postgres::{PgQueryResult, PgRow},
-    types::chrono::NaiveDateTime,
-    Pool, Postgres,
-};
+use sqlx::{self, types::chrono::NaiveDateTime, Pool, Postgres};
 use std::fmt::Debug;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

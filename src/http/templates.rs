@@ -1,7 +1,6 @@
 use askama::Template;
-use axum::{extract::Query, response::Html, Extension};
+use axum::{extract::Query, Extension};
 use serde::Deserialize;
-use sqlx::query;
 
 use crate::models::map::Map;
 use crate::models::player::{Player, Profile};
@@ -12,9 +11,7 @@ use super::WebContext;
 #[template(path = "landing.html")]
 pub struct LandingTemplate;
 
-pub async fn landing(ext: Extension<WebContext>) -> LandingTemplate {
-    println!("{:?}", Player::search(&ext.db, "test", 20).await);
-
+pub async fn landing() -> LandingTemplate {
     LandingTemplate
 }
 
