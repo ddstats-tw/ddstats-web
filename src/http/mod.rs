@@ -1,5 +1,6 @@
 use axum::{Extension, Router};
 use sqlx::{PgPool, Pool, Postgres};
+use std::net::SocketAddr;
 use tower_http::trace::TraceLayer;
 mod misc;
 mod templates;
@@ -12,9 +13,13 @@ struct WebContext {
 pub async fn serve(db: Pool<Postgres>) {
     let app = router(db);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:12345")
-        .await
+    let port = std::env::var("PORT")
+        .unwrap_or_else(|_| "12345".to_string())
+        .parse()
         .unwrap();
+    let addr = SocketAddr::from(([127, 0, 0, 1], port));
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    tracing::info!("listening on http://{}", addr);
     axum::serve(listener, app).await.unwrap();
 }
 
