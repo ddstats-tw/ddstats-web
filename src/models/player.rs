@@ -47,6 +47,12 @@ pub struct Profile {
     pub skin_color_feet: Option<i32>,
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RanksTogether {
+    pub name: String,
+    pub ranks_together: i64,
+}
+
 pub struct Player;
 
 impl Player {
@@ -70,5 +76,28 @@ impl Player {
         sqlx::query_file_as!(Profile, "sql/player/search.sql", query, n)
             .fetch_all(db)
             .await
+    }
+
+    /// Get profile of `player`
+    pub async fn get_profile(db: &Pool<Postgres>, player: &str) -> Result<Profile, sqlx::Error> {
+        sqlx::query_file_as!(Profile, "sql/player/profile_by_name.sql", player)
+            .fetch_one(db)
+            .await
+    }
+
+    /// Get the `n` favourite teammates of a `player`.
+    pub async fn favourite_teammates(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: i64,
+    ) -> Result<Vec<RanksTogether>, sqlx::Error> {
+        sqlx::query_file_as!(
+            RanksTogether,
+            "sql/player/favourite_teammates.sql",
+            player,
+            n,
+        )
+        .fetch_all(db)
+        .await
     }
 }
