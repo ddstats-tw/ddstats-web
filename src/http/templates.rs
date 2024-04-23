@@ -42,8 +42,8 @@ pub struct SearchTemplate {
 }
 
 pub async fn search(query: Query<SearchQuery>, ext: Extension<WebContext>) -> SearchTemplate {
-    let maps = Map::search(&ext.db, &query.q, 20).await.unwrap();
-    let players = Player::search(&ext.db, &query.q, 30).await.unwrap();
+    let maps = Map::search(&ext.db, &query.q, Some(20)).await.unwrap();
+    let players = Player::search(&ext.db, &query.q, Some(30)).await.unwrap();
     SearchTemplate {
         query: query.q.clone(),
         maps,
@@ -63,9 +63,9 @@ pub async fn search_api(
     query: Query<SearchQuery>,
     ext: Extension<WebContext>,
 ) -> SearchApiTemplate {
-    let maps = Map::search(&ext.db, &query.q, 5).await.unwrap();
+    let maps = Map::search(&ext.db, &query.q, Some(5)).await.unwrap();
     let players = match !query.q.is_empty() {
-        true => Player::search(&ext.db, &query.q, 5).await.unwrap(),
+        true => Player::search(&ext.db, &query.q, Some(5)).await.unwrap(),
         false => Vec::new(),
     };
     SearchApiTemplate {

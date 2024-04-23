@@ -60,7 +60,7 @@ impl Player {
     pub async fn recent_finishes(
         db: &Pool<Postgres>,
         player: &str,
-        n: i64,
+        n: Option<i64>,
     ) -> Result<Vec<RaceFinish>, sqlx::Error> {
         sqlx::query_file_as!(RaceFinish, "sql/player/recent_finishes.sql", player, n,)
             .fetch_all(db)
@@ -71,7 +71,7 @@ impl Player {
     pub async fn search(
         db: &Pool<Postgres>,
         query: &str,
-        n: i64,
+        n: Option<i64>,
     ) -> Result<Vec<Profile>, sqlx::Error> {
         sqlx::query_file_as!(Profile, "sql/player/search.sql", query, n)
             .fetch_all(db)
@@ -89,7 +89,7 @@ impl Player {
     pub async fn favourite_teammates(
         db: &Pool<Postgres>,
         player: &str,
-        n: i64,
+        n: Option<i64>,
     ) -> Result<Vec<RanksTogether>, sqlx::Error> {
         sqlx::query_file_as!(
             RanksTogether,

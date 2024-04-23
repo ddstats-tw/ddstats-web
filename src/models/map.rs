@@ -14,7 +14,11 @@ pub struct Map {
 
 impl Map {
     /// Search for a Map
-    pub async fn search(db: &Pool<Postgres>, query: &str, n: i64) -> Result<Vec<Map>, sqlx::Error> {
+    pub async fn search(
+        db: &Pool<Postgres>,
+        query: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<Map>, sqlx::Error> {
         sqlx::query_file_as!(Map, "sql/map/search.sql", query, n)
             .fetch_all(db)
             .await
