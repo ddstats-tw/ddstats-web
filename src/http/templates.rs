@@ -51,7 +51,10 @@ pub async fn search_api(
     ext: Extension<WebContext>,
 ) -> SearchApiTemplate {
     let maps = Map::search(&ext.db, &query.q, 5).await.unwrap();
-    let players = Player::search(&ext.db, &query.q, 5).await.unwrap();
+    let players = match !query.q.is_empty() {
+        true => Player::search(&ext.db, &query.q, 5).await.unwrap(),
+        false => Vec::new(),
+    };
     SearchApiTemplate {
         query: query.q.clone(),
         maps,
