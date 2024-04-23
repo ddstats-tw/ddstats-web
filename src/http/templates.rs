@@ -7,6 +7,19 @@ use crate::models::player::{Player, Profile};
 
 use super::WebContext;
 
+mod filters {
+    use regex::Regex;
+
+    pub fn map_thumbnail<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
+        let mut s = s.to_string();
+        let re1 = Regex::new(r"[À-ž]").unwrap();
+        let re2 = Regex::new(r"[^a-zA-Z0-9]").unwrap();
+        s = re1.replace_all(&s, "__").to_string();
+        s = re2.replace_all(&s, "_").to_string();
+        Ok(s)
+    }
+}
+
 #[derive(Template)]
 #[template(path = "landing.html")]
 pub struct LandingTemplate;

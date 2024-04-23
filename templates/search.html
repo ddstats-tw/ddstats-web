@@ -17,7 +17,7 @@
     <div class="box">  
         <div class="center"><h2>{{ map.server }} - {{ map.map }}</h2></div>
         <a href="/map/{{ map.map|urlencode_strict }}">
-            <img class="center" src="https://ddnet.org/ranks/maps/{{ map.map }}.png">
+            <img class="center" src="https://ddnet.org/ranks/maps/{{ map.map|map_thumbnail }}.png">
         </a>
     </div>
     {% endfor %}
