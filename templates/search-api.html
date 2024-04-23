@@ -1,0 +1,20 @@
+{% if query.len() > 0 %}
+<ul>
+    {% for map in maps %}
+    <a href="/map/{{ map.map|urlencode_strict }}">
+        <li>
+            {{ map.map }}
+            <span class="right">{{ map.server }}</span>
+        </li>
+    </a>
+    {% endfor %}
+    {% for player in players %}
+    <a href="/player/{{ player.name|urlencode_strict }}">
+        <li>
+            {{ player.name }}
+            <span class="right">{{ player.points }} points</span>
+        </li>
+    </a>
+    {% endfor %}
+</ul>
+{% endif %}

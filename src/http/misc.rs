@@ -3,7 +3,7 @@ use sqlx::{Pool, Postgres};
 use tower_http::services::ServeDir;
 
 use super::{
-    templates::{faq, landing, not_found},
+    templates::{faq, landing, not_found, search, search_api},
     WebContext,
 };
 
@@ -13,4 +13,6 @@ pub fn router() -> Router {
         .fallback(not_found)
         .route("/", get(landing))
         .route("/faq", get(faq))
+        .route("/search", get(search))
+        .route("/search/api", get(search_api))
 }
