@@ -32,6 +32,7 @@ async fn main() {
         // If you're deploying your application with multiple replicas, then the total
         // across all replicas should not exceed the Postgres connection limit.
         .max_connections(50)
+        .min_connections(25)
         .connect(&db_url)
         .await
         .expect("could not connect to database_url");
