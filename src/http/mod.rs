@@ -17,7 +17,7 @@ pub async fn serve(db: Pool<Postgres>) {
         .unwrap_or_else(|_| "12345".to_string())
         .parse()
         .unwrap();
-    let addr = SocketAddr::from(([127, 0, 0, 1], port));
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     tracing::info!("listening on http://{}", addr);
     axum::serve(listener, app).await.unwrap();
