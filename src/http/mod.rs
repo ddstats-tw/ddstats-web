@@ -1,19 +1,22 @@
-use axum::{Extension, Router};
+use axum::{middleware, Router};
 use sqlx::{PgPool, Pool, Postgres};
 use std::net::SocketAddr;
 use tera::Tera;
 use tower_http::trace::TraceLayer;
+
+use crate::error::error_middleware;
 mod misc;
 mod templates;
 
 #[derive(Clone)]
-struct WebContext {
-    db: PgPool,
-    template: Tera,
+pub struct AppState {
+    pub db: PgPool,
+    pub template: Tera,
 }
 
 pub async fn serve(db: Pool<Postgres>, template: Tera) {
-    let app = router(db, template);
+    let state = AppState { db, template };
+    let app = router(state);
 
     let port = std::env::var("PORT")
         .unwrap_or_else(|_| "12345".to_string())
@@ -25,9 +28,13 @@ pub async fn serve(db: Pool<Postgres>, template: Tera) {
     axum::serve(listener, app).await.unwrap();
 }
 
-fn router(db: Pool<Postgres>, template: Tera) -> Router {
+fn router(state: AppState) -> Router {
     Router::new()
         .merge(misc::router())
-        .layer(Extension(WebContext { db, template }))
         .layer(TraceLayer::new_for_http())
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            error_middleware,
+        ))
+        .with_state(state)
 }

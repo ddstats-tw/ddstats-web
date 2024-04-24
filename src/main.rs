@@ -4,6 +4,7 @@ use regex::Regex;
 use sqlx::postgres::PgPoolOptions;
 use tera::{to_value, try_get_value, Error, Tera, Value};
 
+mod error;
 mod http;
 mod models;
 

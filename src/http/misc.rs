@@ -2,9 +2,12 @@ use axum::{routing::get, Router};
 
 use tower_http::services::ServeDir;
 
-use super::templates::{faq, landing, not_found, search, search_api};
+use super::{
+    templates::{faq, landing, not_found, search, search_api},
+    AppState,
+};
 
-pub fn router() -> Router {
+pub fn router() -> Router<AppState> {
     Router::new()
         .nest_service("/static", ServeDir::new("static"))
         .fallback(not_found)
