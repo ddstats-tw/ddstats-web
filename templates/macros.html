@@ -1,6 +1,6 @@
 {% macro stars (stars, max) %}
-{% for i in 0..stars %}★{% endfor %}
-{% for i in 0..max - stars %}☆{% endfor %}
+{% for i in range(start=0, end=stars) %}★{% endfor %}
+{% for i in range(start=0, end=max-stars) %}☆{% endfor %}
 {% endmacro %}
 
 {# {% macro diff (diff1, diff2) %}

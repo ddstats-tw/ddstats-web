@@ -11,7 +11,7 @@
 </form>
 
 <h2>Maps</h2>
-{% if maps.len() > 0 %}
+{% if maps %}
 <div class="container">
     {% for map in maps %}
     <div class="box">  
@@ -27,7 +27,7 @@
 {% endif %}
 
 <h2>Players</h2>
-{% if players.len() > 0 %}
+{% if players %}
 {% for player in players %}
 <div class="container">
     <a href="/player/{{ player.name|urlencode_strict }}">

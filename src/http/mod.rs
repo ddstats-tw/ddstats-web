@@ -1,6 +1,7 @@
 use axum::{Extension, Router};
 use sqlx::{PgPool, Pool, Postgres};
 use std::net::SocketAddr;
+use tera::Tera;
 use tower_http::trace::TraceLayer;
 mod misc;
 mod templates;
@@ -8,10 +9,11 @@ mod templates;
 #[derive(Clone)]
 struct WebContext {
     db: PgPool,
+    template: Tera,
 }
 
-pub async fn serve(db: Pool<Postgres>) {
-    let app = router(db);
+pub async fn serve(db: Pool<Postgres>, template: Tera) {
+    let app = router(db, template);
 
     let port = std::env::var("PORT")
         .unwrap_or_else(|_| "12345".to_string())
@@ -23,9 +25,9 @@ pub async fn serve(db: Pool<Postgres>) {
     axum::serve(listener, app).await.unwrap();
 }
 
-fn router(db: Pool<Postgres>) -> Router {
+fn router(db: Pool<Postgres>, template: Tera) -> Router {
     Router::new()
         .merge(misc::router())
-        .route_layer(Extension(WebContext { db }))
-        .route_layer(TraceLayer::new_for_http())
+        .layer(Extension(WebContext { db, template }))
+        .layer(TraceLayer::new_for_http())
 }
