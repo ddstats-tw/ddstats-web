@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::{self, types::chrono::NaiveDateTime, Pool, Postgres};
 use std::fmt::Debug;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, sqlx::Type)]
 pub struct Map {
     pub map: String,
     pub server: String,

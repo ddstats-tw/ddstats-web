@@ -1,21 +1,11 @@
-use std::{collections::HashMap, env};
-
-use regex::Regex;
+use http::macros::{code_to_country, fancy_time, map_thumbnail};
 use sqlx::postgres::PgPoolOptions;
-use tera::{to_value, try_get_value, Error, Tera, Value};
+use std::env;
+use tera::Tera;
 
 mod error;
 mod http;
 mod models;
-
-pub fn map_thumbnail(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
-    let mut s = try_get_value!("map_thumbnail", "value", String, value);
-    let re1 = Regex::new(r"[À-ž]").unwrap();
-    let re2 = Regex::new(r"[^a-zA-Z0-9]").unwrap();
-    s = re1.replace_all(&s, "__").to_string();
-    s = re2.replace_all(&s, "_").to_string();
-    Ok(to_value(s).unwrap())
-}
 
 #[tokio::main]
 async fn main() {
@@ -45,6 +35,8 @@ async fn main() {
         }
     };
     template.register_filter("map_thumbnail", map_thumbnail);
+    template.register_filter("fancy_time", fancy_time);
+    template.register_filter("code_to_country", code_to_country);
 
     // build our application with a route
     http::serve(db, template).await;

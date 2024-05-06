@@ -1,8 +1,8 @@
-SELECT map,
+SELECT maps AS "map!: Map",
     name, 
     time, 
-    timestamp,
-    server,
+    race.timestamp,
+    race.server,
     cp1,
     cp2,
     cp3,
@@ -30,6 +30,8 @@ SELECT map,
     cp25
 FROM 
     race
+JOIN maps ON
+    race.map = maps.map
 WHERE
     name = $1
 ORDER BY 

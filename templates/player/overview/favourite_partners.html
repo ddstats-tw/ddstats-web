@@ -1,0 +1,27 @@
+{% extends "player/base.html" %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Favourite partners</h2>
+        <a class="show-more" href="/player/{{ name | urlencode | safe }}">Go back</a>
+        <table class="transparent">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Finishes together</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for teammate in favourite_teammates %}
+                <tr>
+                    <td><a href="/player/{{ teammate.name | urlencode }}">{{ teammate.name }}</a></td>
+                    <td>{{ teammate.ranks_together }} ranks</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

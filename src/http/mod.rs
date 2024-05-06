@@ -7,6 +7,7 @@ use tower_http::trace::TraceLayer;
 use crate::error::error_middleware;
 mod misc;
 mod templates;
+pub mod macros;
 
 #[derive(Clone)]
 pub struct AppState {

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block head %}
+    <script src="/static/js/chart-umd.js"></script>
+    <script src="/static/js/chart-date-fns.js"></script>
+    <script src="/static/js/sortable.js" defer></script>
+    {% if profile %}
+    <title>{{ name }} | {{ page | capitalize }} | Player Profile | DDStats</title>
+    {% else %}
+    <title>Player not found | Player Profile | DDStats</title>
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+{% if not profile %}
+<h1>404 - Player not found</h1>
+{% else %}
+    
+    <div class="profile">
+        <div class="profile-border">
+            {% if profile.skin_name %}
+            <div>
+                <h1 title="{{ profile.country | code_to_country }}">
+                    <img 
+                        height="28px" 
+                        src="https://ddnet.org/status/countryflags/{{ profile.country | code_to_country }}.png" 
+                        alt="flag_{{ profile.country | code_to_country }}">
+                    </h1>
+            </div>
+            <div class="profile-mid">
+                <h1>{{ name }}</h1>
+                <h1>{{ profile.clan }}</h1>
+            </div>
+            <div title="{{ profile.skin_name }}" class="tee-large">
+                <div class="tee" 
+                    data-skinimage="https://ddstats.qwik.space/skins/{{ profile.skin_name | urlencode }}.png" 
+                    data-bodycolor="{{ profile.skin_color_body }}" 
+                    data-feetcolor="{{ profile.skin_color_feet }}" 
+                    data-coloringmode="code">
+                </div>
+            </div>
+            {% else %}
+            <div class="profile-mid">
+                <h1>{{ name }}</h1>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <ul class="buttons">
+        <li>
+            <a class="{% if page == "overview" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}">Overview</a>
+        </li>
+        <li>
+            <a class="{% if page == "finishes" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}/finishes">Finishes</a>
+        </li>
+        <li>
+            <a class="{% if page == "activity" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}/activity">Activity</a>
+        </li>
+        <li>
+            <a class="{% if page == "rank1s" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}/rank1s">Rank 1s</a>
+        </li>
+        {% if is_mapper %}
+        <li>
+            <a href="/mapper/{{ name | urlencode | safe }}">Mapper profile</a>
+        </li>
+        {% endif %}
+    </ul>
+
+    {% block player %}
+
+    {% endblock %}
+    <script src="/static/js/color.js"></script>
+    <script src="/static/js/TeeAssembler.js"></script>
+    {# NOTE: The look at cursor works weirdly if it isn't placed at the bottom for some reason #}
+    <script>
+        const tee = teeArray[0]
+        if(tee) {
+            tee.lookAtCursor()
+        }
+    </script>
+{% endif %}
+{% endblock %}

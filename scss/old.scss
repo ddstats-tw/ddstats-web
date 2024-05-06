@@ -26,7 +26,7 @@ a:hover {
     text-decoration: underline;
 }
 
-.playerinfo {
+.profile {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -34,7 +34,7 @@ a:hover {
     margin-bottom: 1em;
 }
 
-.playerinfo-border {
+.profile-border {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,17 +46,17 @@ a:hover {
     /* transition: border .3s, background-color .5s, border-radius .5s */
 }
 
-.playerinfo-border>div {
+.profile-border>div {
     padding: 2em;
 }
 
-.playerinfo-border:hover {
+.profile-border:hover {
     background-color: palette.$grey4;
     /* border-radius: 0rem 0rem 1rem 1rem;
     border: .2rem solid palette.$primary; */
 }
 
-.playerinfo-mid {
+.profile-mid {
     display: flex;
     flex-direction: column;
     justify-content: center;

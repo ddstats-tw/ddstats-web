@@ -1,11 +1,15 @@
-SELECT UNNEST(players) AS "name!",
-    COUNT(*) AS "ranks_together!"
-FROM
-    teamrankings
+SELECT * FROM (
+    SELECT UNNEST(players) AS "name!",
+        COUNT(*) AS "ranks_together!"
+    FROM
+        teamrankings
+    WHERE
+        players @> (ARRAY[$1])::VARCHAR(16)[]
+    GROUP BY
+        "name!"
+    ORDER BY
+        "ranks_together!" DESC
+)
 WHERE
-    $1 = ANY(players)
-GROUP BY
-    "name!"
-ORDER BY
-    "ranks_together!" DESC
-LIMIT $2 OFFSET 1
+    "name!" != $1
+LIMIT $2

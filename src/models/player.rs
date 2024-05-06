@@ -2,9 +2,11 @@ use serde::{Deserialize, Serialize};
 use sqlx::{self, types::chrono::NaiveDateTime, Pool, Postgres};
 use std::fmt::Debug;
 
+use super::map::Map;
+
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct RaceFinish {
-    pub map: String,
+    pub map: Map,
     pub name: String,
     pub time: f64,
     pub timestamp: NaiveDateTime,
