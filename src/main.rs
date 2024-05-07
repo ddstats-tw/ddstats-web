@@ -1,4 +1,4 @@
-use http::macros::{code_to_country, fancy_time, map_thumbnail};
+use http::macros::{code_to_country, fancy_time, map_thumbnail, ordinal, time_format};
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 use tera::Tera;
@@ -37,6 +37,8 @@ async fn main() {
     template.register_filter("map_thumbnail", map_thumbnail);
     template.register_filter("fancy_time", fancy_time);
     template.register_filter("code_to_country", code_to_country);
+    template.register_filter("ordinal", ordinal);
+    template.register_filter("time_format", time_format);
 
     // build our application with a route
     http::serve(db, template).await;

@@ -305,3 +305,52 @@ pub fn code_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Valu
 
     Ok(to_value(country_string).unwrap())
 }
+
+pub fn ordinal(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
+    let n = value.as_i64().unwrap();
+
+    let s = ["th", "st", "nd", "rd"];
+    let v = n % 100;
+    Ok(to_value(match (v - 20) % 10 {
+        1 => s[0],
+        2 => s[1],
+        3 => s[2],
+        _ => match v % 10 {
+            1 => s[0],
+            2 => s[1],
+            3 => s[2],
+            _ => s[3],
+        },
+    })
+    .unwrap())
+}
+
+pub fn time_format(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
+    let seconds = value.as_u64().unwrap();
+
+    let mut remaining = seconds;
+    let years = remaining / 31536000;
+    remaining %= 31536000;
+    let hours = remaining / 3600;
+    remaining %= 3600;
+    let minutes = remaining / 60;
+    remaining %= 60;
+
+    if years > 0 {
+        Ok(to_value(plural(years, "year")).unwrap())
+    } else if hours > 0 {
+        Ok(to_value(plural(hours, "hour")).unwrap())
+    } else if minutes > 0 {
+        Ok(to_value(plural(minutes, "minute")).unwrap())
+    } else {
+        Ok(to_value(plural(remaining, "second")).unwrap())
+    }
+}
+
+fn plural(n: u64, unit: &str) -> String {
+    if n == 1 {
+        format!("{} {}", n, unit)
+    } else {
+        format!("{} {}s", n, unit)
+    }
+}

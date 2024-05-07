@@ -4,7 +4,7 @@ use tower_http::services::ServeDir;
 
 use super::{
     templates::{
-        faq, landing, not_found, player_overview, player_overview_finishes,
+        faq, landing, not_found, player_finishes, player_overview, player_overview_finishes,
         player_overview_partners, search, search_api,
     },
     AppState,
@@ -28,4 +28,5 @@ pub fn router() -> Router<AppState> {
             "/player/:name/overview/partners",
             get(player_overview_partners),
         )
+        .route("/player/:name/finishes", get(player_finishes))
 }

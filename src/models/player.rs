@@ -39,6 +39,18 @@ pub struct RaceFinish {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct Finish {
+    pub map: Map,
+    pub name: String,
+    pub time: f64,
+    pub timestamp: NaiveDateTime,
+    pub server: String,
+    pub rank: i32,
+    pub teamrank: Option<i32>,
+    pub seconds_played: Option<i64>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Profile {
     pub name: String,
     pub points: i32,
@@ -101,5 +113,12 @@ impl Player {
         )
         .fetch_all(db)
         .await
+    }
+
+    /// Get all finishes of a `player`.
+    pub async fn finishes(db: &Pool<Postgres>, player: &str) -> Result<Vec<Finish>, sqlx::Error> {
+        sqlx::query_file_as!(Finish, "sql/player/finishes.sql", player,)
+            .fetch_all(db)
+            .await
     }
 }

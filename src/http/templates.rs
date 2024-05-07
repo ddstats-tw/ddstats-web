@@ -1,3 +1,6 @@
+use std::collections::HashMap;
+use std::hash::Hash;
+
 use axum::extract::Path;
 use axum::extract::Query;
 use axum::extract::State;
@@ -7,6 +10,7 @@ use serde::Deserialize;
 use super::AppState;
 use crate::error::Error;
 use crate::models::map::Map;
+use crate::models::player::Finish;
 use crate::models::player::Player;
 use tera::Context;
 
@@ -122,4 +126,42 @@ pub async fn player_overview_finishes(
         "player/overview/recent_finishes.html",
         &context,
     )?))
+}
+
+pub async fn player_finishes(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let profile = Player::get_profile(&state.db, &name).await?;
+    let finishes = create_index_by_field::<Finish, String>(
+        Player::finishes(&state.db, &name).await?,
+        |finish| finish.map.server.clone(),
+    );
+
+    let mut context = Context::new();
+    context.insert("name", &name);
+    context.insert("profile", &profile);
+    context.insert("finishes", &finishes);
+    context.insert("is_mapper", &false);
+    context.insert("page", &"finishes");
+
+    Ok(Html(
+        state
+            .template
+            .render("player/finishes/finishes.html", &context)?,
+    ))
+}
+
+fn create_index_by_field<T, K>(array: Vec<T>, key_selector: fn(&T) -> K) -> HashMap<K, Vec<T>>
+where
+    T: Clone,
+    K: Clone + Eq + Hash,
+{
+    let mut index = HashMap::new();
+    for item in array {
+        let key = key_selector(&item);
+        let entry = index.entry(key.clone()).or_insert_with(Vec::new);
+        entry.push(item);
+    }
+    index
 }
