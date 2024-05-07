@@ -1,7 +1,6 @@
-use http::macros::{code_to_country, fancy_time, map_thumbnail, ordinal, time_format};
+use http::tera::init_tera;
 use sqlx::postgres::PgPoolOptions;
 use std::env;
-use tera::Tera;
 
 mod error;
 mod http;
@@ -27,19 +26,8 @@ async fn main() {
         .await
         .expect("could not connect to database_url");
 
-    let mut template = match Tera::new("templates/**/*.html") {
-        Ok(t) => t,
-        Err(e) => {
-            println!("Parsing error(s): {}", e);
-            ::std::process::exit(1);
-        }
-    };
-    template.register_filter("map_thumbnail", map_thumbnail);
-    template.register_filter("fancy_time", fancy_time);
-    template.register_filter("code_to_country", code_to_country);
-    template.register_filter("ordinal", ordinal);
-    template.register_filter("time_format", time_format);
+    let tera = init_tera();
 
     // build our application with a route
-    http::serve(db, template).await;
+    http::serve(db, tera).await;
 }

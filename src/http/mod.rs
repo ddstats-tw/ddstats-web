@@ -1,13 +1,14 @@
+use ::tera::Tera;
 use axum::{middleware, Router};
 use sqlx::{PgPool, Pool, Postgres};
 use std::net::SocketAddr;
-use tera::Tera;
 use tower_http::trace::TraceLayer;
 
 use crate::error::error_middleware;
+pub mod filters;
 mod misc;
 mod templates;
-pub mod macros;
+pub mod tera;
 
 #[derive(Clone)]
 pub struct AppState {
