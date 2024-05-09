@@ -9,6 +9,28 @@
     <div class="box">
         <h2>{{ category }}</h2>
         {% if finishes[category] %}
+        <div class="points">
+            <table class="transparent">
+                <thead>
+                <tr>
+                    <th>Points</th>
+                    <th>Rank Points</th>
+                    <th>Team Points</th>
+                    <th>Team Rank1s</th>
+                    <th>Rank 1s</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ macros::points(data=points.points, category=category) }}</td>
+                        <td>{{ macros::points(data=points.rank_points, category=category) }}</td>
+                        <td>{{ macros::points(data=points.team_points, category=category) }}</td>
+                        <td>Unranked</td>
+                        <td>Unranked</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <table class="sortable n-last">
             <thead>
                 <tr>

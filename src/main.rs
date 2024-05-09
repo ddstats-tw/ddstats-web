@@ -1,10 +1,12 @@
 use http::tera::init_tera;
+use points::parse_points;
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 
 mod error;
 mod http;
 mod models;
+pub mod points;
 
 #[tokio::main]
 async fn main() {
@@ -27,7 +29,8 @@ async fn main() {
         .expect("could not connect to database_url");
 
     let tera = init_tera();
+    let points = parse_points();
 
     // build our application with a route
-    http::serve(db, tera).await;
+    http::serve(db, tera, points).await;
 }

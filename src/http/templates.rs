@@ -137,11 +137,13 @@ pub async fn player_finishes(
         Player::finishes(&state.db, &name).await?,
         |finish| finish.map.server.clone(),
     );
+    let points = Player::points(&state.points, &name);
 
     let mut context = Context::new();
     context.insert("name", &name);
     context.insert("profile", &profile);
     context.insert("finishes", &finishes);
+    context.insert("points", &points);
     context.insert("is_mapper", &false);
     context.insert("page", &"finishes");
 

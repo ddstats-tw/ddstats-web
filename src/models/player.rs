@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 use sqlx::{self, types::chrono::NaiveDateTime, Pool, Postgres};
-use std::fmt::Debug;
+use std::{collections::HashMap, fmt::Debug};
+use strum::IntoEnumIterator;
+
+use crate::points::{Category, Leaderboard, LeaderboardRank};
 
 use super::map::Map;
 
@@ -95,6 +98,16 @@ pub struct MostPlayedMaps {
     pub map: Option<Map>,
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct Points {
+    pub weekly_points: Option<LeaderboardRank>,
+    pub monthly_points: Option<LeaderboardRank>,
+    pub yearly_points: Option<LeaderboardRank>,
+    pub points: HashMap<Category, Option<LeaderboardRank>>,
+    pub rank_points: HashMap<Category, Option<LeaderboardRank>>,
+    pub team_points: HashMap<Category, Option<LeaderboardRank>>,
+}
+
 pub struct Player;
 
 impl Player {
@@ -186,5 +199,51 @@ impl Player {
         sqlx::query_file_as!(MostPlayedMaps, "sql/player/most_played_maps.sql", player, n)
             .fetch_all(db)
             .await
+    }
+
+    /// Get points of a `player`.
+    pub fn points(players_msgpack: &Leaderboard, player: &str) -> Points {
+        let mut points: HashMap<Category, Option<LeaderboardRank>> = HashMap::new();
+        let mut rank_points: HashMap<Category, Option<LeaderboardRank>> = HashMap::new();
+        let mut team_points: HashMap<Category, Option<LeaderboardRank>> = HashMap::new();
+
+        for category in Category::iter() {
+            points.insert(
+                category,
+                players_msgpack
+                    .points
+                    .get(&category)
+                    .unwrap()
+                    .get(player)
+                    .cloned(),
+            );
+            rank_points.insert(
+                category,
+                players_msgpack
+                    .rank_points
+                    .get(&category)
+                    .unwrap()
+                    .get(player)
+                    .cloned(),
+            );
+            team_points.insert(
+                category,
+                players_msgpack
+                    .team_points
+                    .get(&category)
+                    .unwrap()
+                    .get(player)
+                    .cloned(),
+            );
+        }
+
+        Points {
+            weekly_points: players_msgpack.weekly_points.get(player).cloned(),
+            monthly_points: players_msgpack.monthly_points.get(player).cloned(),
+            yearly_points: players_msgpack.yearly_points.get(player).cloned(),
+            points,
+            rank_points,
+            team_points,
+        }
     }
 }

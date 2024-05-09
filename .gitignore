@@ -2,3 +2,4 @@
 .env
 /static/css/main.css
 Cargo.lock
+players.msgpack

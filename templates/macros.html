@@ -11,17 +11,17 @@
 {% else %}
 <td><span style="color: #3DDF89;">-00:00.00</span></td>
 {% endif %}
-{% endmacro %}
+{% endmacro %} #}
 
-{% macro points (data, type, category) %}
-{% if data[type][category].rank %}
-{{ data[type][category].rank }}<sup>{{ ordinal(data[type][category].rank) }}</sup> with {{ data[type][category].points }} points
+{% macro points (data, category) %}
+{% if data[category] %}
+{{ data[category].rank }}<sup>{{ data[category].rank | ordinal }}</sup> with {{ data[category].points }} points
 {% else %}
 Unranked
 {% endif %}
 {% endmacro %}
 
-{% macro joinArray(array, link) %}
+{# {% macro joinArray(array, link) %}
   {% for item in array %}
     <a href="{{ link.replace('%s', item | urlencode ) }}">{{- item -}}</a>
     {{- ', ' if not loop.last and loop.revindex != 2 -}}
