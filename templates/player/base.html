@@ -77,6 +77,11 @@
         if(tee) {
             tee.lookAtCursor()
         }
+        function copySkin(skin, body, feet) {
+            navigator.clipboard.writeText(`player_skin ${skin}; player_color_body ${body}; player_color_feet ${feet}; player_use_custom_color 1`);
+            alert("Copied skin to clipboard");
+        }
+</script>
     </script>
 {% endif %}
 {% endblock %}

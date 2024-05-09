@@ -152,6 +152,93 @@ pub async fn player_finishes(
     ))
 }
 
+pub async fn player_activity(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let profile = Player::get_profile(&state.db, &name).await?;
+    let recent_activity = Player::recent_activity(&state.db, &name, Some(11)).await?;
+    let recent_player_info = Player::recent_player_info(&state.db, &name, Some(5)).await?;
+    let most_played_maps = Player::most_played_maps(&state.db, &name, Some(11)).await?;
+
+    let mut context = Context::new();
+    context.insert("name", &name);
+    context.insert("profile", &profile);
+    context.insert("recent_activity", &recent_activity);
+    context.insert("recent_player_info", &recent_player_info);
+    context.insert("most_played_maps", &most_played_maps);
+    context.insert("is_mapper", &false);
+    context.insert("page", &"activity");
+
+    Ok(Html(
+        state
+            .template
+            .render("player/activity/activity.html", &context)?,
+    ))
+}
+
+pub async fn player_activity_playtime(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let profile = Player::get_profile(&state.db, &name).await?;
+    let recent_activity = Player::recent_activity(&state.db, &name, Some(1000)).await?;
+
+    let mut context = Context::new();
+    context.insert("name", &name);
+    context.insert("profile", &profile);
+    context.insert("recent_activity", &recent_activity);
+    context.insert("is_mapper", &false);
+    context.insert("page", &"activity");
+
+    Ok(Html(
+        state
+            .template
+            .render("player/activity/playtime.html", &context)?,
+    ))
+}
+
+pub async fn player_activity_player_info(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let profile = Player::get_profile(&state.db, &name).await?;
+    let recent_player_info = Player::recent_player_info(&state.db, &name, Some(100)).await?;
+
+    let mut context = Context::new();
+    context.insert("name", &name);
+    context.insert("profile", &profile);
+    context.insert("recent_player_info", &recent_player_info);
+    context.insert("is_mapper", &false);
+    context.insert("page", &"activity");
+
+    Ok(Html(
+        state
+            .template
+            .render("player/activity/player_info.html", &context)?,
+    ))
+}
+
+pub async fn player_activity_most_played_maps(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let profile = Player::get_profile(&state.db, &name).await?;
+    let most_played_maps = Player::most_played_maps(&state.db, &name, None).await?;
+
+    let mut context = Context::new();
+    context.insert("name", &name);
+    context.insert("profile", &profile);
+    context.insert("most_played_maps", &most_played_maps);
+    context.insert("is_mapper", &false);
+    context.insert("page", &"activity");
+
+    Ok(Html(state.template.render(
+        "player/activity/most_played_maps.html",
+        &context,
+    )?))
+}
+
 fn create_index_by_field<T, K>(array: Vec<T>, key_selector: fn(&T) -> K) -> HashMap<K, Vec<T>>
 where
     T: Clone,

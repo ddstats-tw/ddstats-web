@@ -67,6 +67,34 @@ pub struct RanksTogether {
     pub ranks_together: i64,
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RecentActivity {
+    pub name: String,
+    pub date: String, /* TODO: This shouldn't be as string */
+    pub map_name: String,
+    pub map: Option<Map>,
+    pub seconds_played: i64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RecentPlayerInfo {
+    pub name: String,
+    pub clan: String,
+    pub country: i32,
+    pub skin_name: String,
+    pub skin_color_body: Option<i32>,
+    pub skin_color_feet: Option<i32>,
+    pub last_seen: String, /* TODO: This shouldn't be as string */
+    pub seconds_played: i64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct MostPlayedMaps {
+    pub map_name: String,
+    pub seconds_played: i64,
+    pub map: Option<Map>,
+}
+
 pub struct Player;
 
 impl Player {
@@ -118,6 +146,44 @@ impl Player {
     /// Get all finishes of a `player`.
     pub async fn finishes(db: &Pool<Postgres>, player: &str) -> Result<Vec<Finish>, sqlx::Error> {
         sqlx::query_file_as!(Finish, "sql/player/finishes.sql", player,)
+            .fetch_all(db)
+            .await
+    }
+
+    /// Get the `n` recent playtime of a `player`.
+    pub async fn recent_activity(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<RecentActivity>, sqlx::Error> {
+        sqlx::query_file_as!(RecentActivity, "sql/player/recent_activity.sql", player, n)
+            .fetch_all(db)
+            .await
+    }
+
+    /// Get the `n` recent playtime of a `player`.
+    pub async fn recent_player_info(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<RecentPlayerInfo>, sqlx::Error> {
+        sqlx::query_file_as!(
+            RecentPlayerInfo,
+            "sql/player/recent_player_info.sql",
+            player,
+            n
+        )
+        .fetch_all(db)
+        .await
+    }
+
+    /// Get the `n` most played maps of a `player`.
+    pub async fn most_played_maps(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<MostPlayedMaps>, sqlx::Error> {
+        sqlx::query_file_as!(MostPlayedMaps, "sql/player/most_played_maps.sql", player, n)
             .fetch_all(db)
             .await
     }

@@ -1,0 +1,35 @@
+{% extends "player/base.html" %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Recent playtime</h2>
+        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity">Go back</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Map</th>
+                <th>Playtime</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for activity in recent_activity %}
+                <tr>
+                    <td>{{ activity.date }}</td>
+                    {% if activity.map %}
+                    <td><a href="/map/{{ activity.map_name | urlencode | safe }}">{{ activity.map_name }}</a></td>
+                    {% else %}
+                    {# truncate_string #}
+                    <td>{{ activity.map_name }}</td>
+                    {% endif %}
+                    <td>{{ activity.seconds_played | time_format }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

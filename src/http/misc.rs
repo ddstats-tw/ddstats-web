@@ -2,13 +2,7 @@ use axum::{routing::get, Router};
 
 use tower_http::services::ServeDir;
 
-use super::{
-    templates::{
-        faq, landing, not_found, player_finishes, player_overview, player_overview_finishes,
-        player_overview_partners, search, search_api,
-    },
-    AppState,
-};
+use super::{templates::*, AppState};
 
 pub fn router() -> Router<AppState> {
     Router::new()
@@ -29,4 +23,17 @@ pub fn router() -> Router<AppState> {
             get(player_overview_partners),
         )
         .route("/player/:name/finishes", get(player_finishes))
+        .route("/player/:name/activity", get(player_activity))
+        .route(
+            "/player/:name/activity/playtime",
+            get(player_activity_playtime),
+        )
+        .route(
+            "/player/:name/activity/playerinfo",
+            get(player_activity_player_info),
+        )
+        .route(
+            "/player/:name/activity/mostplayed",
+            get(player_activity_most_played_maps),
+        )
 }

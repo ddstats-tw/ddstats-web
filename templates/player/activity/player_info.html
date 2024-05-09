@@ -1,0 +1,50 @@
+{% extends "player/base.html" %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Recent player info</h2>
+        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity">Go back</a>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Last seen</th>
+                <th>Clan</th>
+                <th>Country</th>
+                <th>Skin</th>
+                <th>Time played</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for activity in recent_player_info %}
+                <tr>
+                    <td>{{ activity.last_seen }}</td>
+                    <td>{{ activity.clan }}</td>
+                    <td title="{{ activity.country | code_to_country }}">
+                        <img 
+                            height="28px" 
+                            src="https://ddnet.org/status/countryflags/{{ activity.country | code_to_country }}.png" 
+                            alt="flag_{{ activity.country | code_to_country }}">
+                    </td>
+                    <td>
+                        <div title="{{ activity.skin_name }}" class="tee-medium">
+                            <button class="btn-copy" onClick="copySkin('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
+                                <div class="tee" data-skinimage="https://ddstats.qwik.space/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
+                            </button>
+                        </div>
+                    </td>
+                    <td>{{ activity.seconds_played | time_format }}</td>
+                    <td>
+                        <button class="btn-copy-ex" onClick="copySkin('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">Copy</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
