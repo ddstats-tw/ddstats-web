@@ -1,12 +1,15 @@
 use tera::Tera;
 
-use super::filters::*;
+use self::filters::*;
+
+mod country_codes;
+mod filters;
 
 pub fn init_tera() -> Tera {
     let mut tera = match Tera::new("templates/**/*.html") {
         Ok(t) => t,
         Err(e) => {
-            println!("Parsing error(s): {}", e);
+            tracing::error!("failed to initalize tera: {}", e);
             ::std::process::exit(1);
         }
     };

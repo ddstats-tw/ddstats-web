@@ -48,7 +48,7 @@ pub struct LeaderboardRank {
 
 #[derive(Deserialize, Debug)]
 struct ServerRanks {
-    total_points: u64,
+    _total_points: u64,
     points_ranks: Vec<Rank>,
     teampoints_ranks: Vec<Rank>,
     rankpoints_ranks: Vec<Rank>,
@@ -124,12 +124,12 @@ pub fn parse_points() -> Leaderboard {
     skip_msgpack(&mut data); // Categories
     skip_msgpack(&mut data); // Maps
     skip_msgpack(&mut data); // Total Points
-    let _points_leaderboard = read_leaderboard(&mut data); // Points rankings
+    let points_leaderboard = read_leaderboard(&mut data); // Points rankings
     let weekly_points = read_leaderboard(&mut data); // Weekly points rankings
     let monthly_points = read_leaderboard(&mut data); // Monthly points rankings
     let yearly_points = read_leaderboard(&mut data); // Yearly points rankings
-    let _teampoints_leaderboard = read_leaderboard(&mut data); // Team points rankings
-    let _rankpoints_leaderboard = read_leaderboard(&mut data); // Rank points rankings
+    let teampoints_leaderboard = read_leaderboard(&mut data); // Team points rankings
+    let rankpoints_leaderboard = read_leaderboard(&mut data); // Rank points rankings
 
     let server_ranks = read_server_leaderboard(&mut data);
 
@@ -153,9 +153,9 @@ pub fn parse_points() -> Leaderboard {
     }
 
     // Total
-    points.insert(Category::Total, _points_leaderboard);
-    rank_points.insert(Category::Total, _rankpoints_leaderboard);
-    team_points.insert(Category::Total, _teampoints_leaderboard);
+    points.insert(Category::Total, points_leaderboard);
+    rank_points.insert(Category::Total, rankpoints_leaderboard);
+    team_points.insert(Category::Total, teampoints_leaderboard);
     // add totalpoints
 
     let leaderboard = Leaderboard {
@@ -168,7 +168,7 @@ pub fn parse_points() -> Leaderboard {
     };
 
     let elapsed = now.elapsed();
-    println!("Parsed leaderboards in {:.2?}", elapsed);
+    tracing::info!("parsed players.msgpack in {:.2?}", elapsed);
 
     leaderboard
 }

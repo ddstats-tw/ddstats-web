@@ -1,14 +1,13 @@
+use self::{error::error_middleware, routes::misc::not_found};
+use crate::points::Leaderboard;
 use ::tera::Tera;
 use axum::{middleware, Router};
 use sqlx::{PgPool, Pool, Postgres};
 use std::{net::SocketAddr, sync::Arc};
-use tower_http::trace::TraceLayer;
+use tower_http::{services::ServeDir, trace::TraceLayer};
 
-use crate::{error::error_middleware, points::Leaderboard};
-pub mod filters;
-mod misc;
-mod templates;
-pub mod tera;
+mod error;
+mod routes;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -37,11 +36,14 @@ pub async fn serve(db: Pool<Postgres>, template: Tera, points: Leaderboard) {
 
 fn router(state: AppState) -> Router {
     Router::new()
-        .merge(misc::router())
+        .nest("/", routes::misc::router())
+        .nest("/player", routes::player::router())
+        .nest_service("/static", ServeDir::new("static"))
         .layer(TraceLayer::new_for_http())
         .layer(middleware::from_fn_with_state(
             state.clone(),
             error_middleware,
         ))
+        .fallback(not_found)
         .with_state(state)
 }
