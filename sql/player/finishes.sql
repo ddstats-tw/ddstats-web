@@ -5,14 +5,14 @@ SELECT DISTINCT ON (rankings.map)
     rankings.time,
     rankings.server,
     rankings.rank,
-    "teamrank?",
+    "team_rank?",
     seconds_played
 FROM 
     rankings
 JOIN maps ON
     maps.map = rankings.map
 LEFT JOIN (
-    SELECT map, min(teamrankings.rank) AS "teamrank?"
+    SELECT map, min(teamrankings.rank) AS "team_rank?"
     FROM 
         teamrankings
     WHERE

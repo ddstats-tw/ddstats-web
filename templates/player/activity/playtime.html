@@ -22,8 +22,7 @@
                     {% if activity.map %}
                     <td><a href="/map/{{ activity.map_name | urlencode | safe }}">{{ activity.map_name }}</a></td>
                     {% else %}
-                    {# truncate_string #}
-                    <td>{{ activity.map_name }}</td>
+                    <td>{{ activity.map_name | truncate(length=32) }}</td>
                     {% endif %}
                     <td>{{ activity.seconds_played | time_format }}</td>
                 </tr>

@@ -47,8 +47,8 @@
                 <tr>
                     <td><a href="/map/{{ finish.map.map | urlencode | safe }}">{{ finish.map.map }}</a></td>
                     <td data-sort="{{ finish.time }}">{{ finish.time | fancy_time }}</td>
-                    {% if finish.teamrank %}
-                    <td data-sort="{{ finish.teamrank }}">{{ finish.teamrank }}<sup>{{ finish.teamrank | ordinal }}</sup></td>
+                    {% if finish.team_rank %}
+                    <td data-sort="{{ finish.team_rank }}">{{ finish.team_rank }}<sup>{{ finish.team_rank | ordinal }}</sup></td>
                     {% else %}
                         <td></td>
                     {% endif %}

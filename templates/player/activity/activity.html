@@ -22,8 +22,7 @@
                     {% if activity.map %}
                     <td><a href="/map/{{ activity.map_name | urlencode | safe }}">{{ activity.map_name }}</a></td>
                     {% else %}
-                    {# truncate_string #}
-                    <td>{{ activity.map_name }}</td>
+                    <td>{{ activity.map_name | truncate(length=32) }}</td>
                     {% endif %}
                     <td>{{ activity.seconds_played | time_format }}</td>
                 </tr>
@@ -73,6 +72,9 @@
 <div class="container">
     <div class="box">
         <h1>Most played gamemodes</h1>
+        <div class="graph doughnut">
+            <canvas id="mostPlayedGametypes"></canvas>
+        </div>
     </div>
 
     <div class="box">
@@ -92,8 +94,7 @@
                     {% if most_played.map %}
                     <td><a href="/map/{{ most_played.map.map | urlencode | safe }}">{{ most_played.map.map }}</a></td>
                     {% else %}
-                    {# truncate_string #}
-                    <td>{{ most_played.map_name }}</td>
+                    <td>{{ most_played.map_name | truncate(length=32) }}</td>
                     {% endif %}
                     <td>{{ most_played.seconds_played | time_format }}</td>
                 </tr>
@@ -102,5 +103,46 @@
         </table>
     </div>
 </div>
+
+<div class="container">
+    <div class="box">
+        <h2>Most played categories</h2>
+        <div class="graph doughnut">
+            <canvas id="mostPlayedCategories"></canvas>
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>Most played Locations</h2>
+        <div class="graph doughnut">
+            <canvas id="mostPlayedLocations"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <h2>Playtime each month</h2>
+        <div class="graph-wide center">
+            <canvas id="playtimePerMonth"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ctx_gametypes = document.getElementById('mostPlayedGametypes'); {# rename these ids #}
+    const ctx_categories = document.getElementById('mostPlayedCategories');
+    const ctx_locations = document.getElementById('mostPlayedLocations');
+    const ctx_monthly_playtime = document.getElementById('playtimePerMonth');
+
+    Chart.defaults.color = "#E0E0FF"
+    Chart.defaults.font.family = "'Roboto Regular', sans-serif"
+    Chart.defaults.font.size = 12
+
+    {{ macros::doughnut_chart(ctx="ctx_gametypes", data=most_played_gametypes) }}
+    {{ macros::doughnut_chart(ctx="ctx_categories", data=most_played_categories) }}
+    {{ macros::doughnut_chart(ctx="ctx_locations", data=most_played_locations) }}
+    {{ macros::bar_chart(ctx="ctx_monthly_playtime", data=playtime_per_month) }}
+</script>
 
 {% endblock %}

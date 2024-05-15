@@ -49,8 +49,28 @@ pub struct Finish {
     pub timestamp: NaiveDateTime,
     pub server: String,
     pub rank: i32,
-    pub teamrank: Option<i32>,
+    pub team_rank: Option<i32>,
     pub seconds_played: Option<i64>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TopRank {
+    pub map: Map,
+    pub name: String,
+    pub time: f64,
+    pub rank: i32,
+    pub team_rank: Option<i32>,
+    pub team_time: Option<f64>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RecentRank {
+    pub rank_type: String, // "rank" or "teamrank"
+    pub map: String,
+    pub time: f64,
+    pub rank: i32,
+    pub timestamp: NaiveDateTime,
+    pub server: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -108,6 +128,19 @@ pub struct Points {
     pub team_points: HashMap<Category, Option<LeaderboardRank>>,
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct MostPlayedChart {
+    pub key: String,
+    pub seconds_played: i64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct PlaytimePerMonth {
+    pub year_month: String,
+    pub month: String,
+    pub seconds_played: i64,
+}
+
 pub struct Player;
 
 impl Player {
@@ -156,9 +189,46 @@ impl Player {
         .await
     }
 
+    /// Get the `n` favourite rank1s teammates of a `player`.
+    pub async fn favourite_rank1s_teammates(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<RanksTogether>, sqlx::Error> {
+        sqlx::query_file_as!(
+            RanksTogether,
+            "sql/player/favourite_rank1s_teammates.sql",
+            player,
+            n,
+        )
+        .fetch_all(db)
+        .await
+    }
+
     /// Get all finishes of a `player`.
     pub async fn finishes(db: &Pool<Postgres>, player: &str) -> Result<Vec<Finish>, sqlx::Error> {
         sqlx::query_file_as!(Finish, "sql/player/finishes.sql", player,)
+            .fetch_all(db)
+            .await
+    }
+
+    /// Get all top 10s of a `player`.
+    pub async fn all_top_10s(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<Vec<TopRank>, sqlx::Error> {
+        sqlx::query_file_as!(TopRank, "sql/player/all_top_10s.sql", player,)
+            .fetch_all(db)
+            .await
+    }
+
+    /// Get `n` recent top 10s of a `player`.
+    pub async fn recent_top_10s(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<RecentRank>, sqlx::Error> {
+        sqlx::query_file_as!(RecentRank, "sql/player/recent_top_10s.sql", player, n)
             .fetch_all(db)
             .await
     }
@@ -199,6 +269,70 @@ impl Player {
         sqlx::query_file_as!(MostPlayedMaps, "sql/player/most_played_maps.sql", player, n)
             .fetch_all(db)
             .await
+    }
+
+    /// Get the `n` most played gametypes of a `player`.
+    pub async fn most_played_gametypes(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<MostPlayedChart>, sqlx::Error> {
+        sqlx::query_file_as!(
+            MostPlayedChart,
+            "sql/player/most_played_gametypes.sql",
+            player,
+            n
+        )
+        .fetch_all(db)
+        .await
+    }
+
+    /// Get the `n` most played categories of a `player`.
+    pub async fn most_played_categories(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<MostPlayedChart>, sqlx::Error> {
+        sqlx::query_file_as!(
+            MostPlayedChart,
+            "sql/player/most_played_categories.sql",
+            player,
+            n
+        )
+        .fetch_all(db)
+        .await
+    }
+
+    /// Get the `n` most played categories of a `player`.
+    pub async fn most_played_locations(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<MostPlayedChart>, sqlx::Error> {
+        sqlx::query_file_as!(
+            MostPlayedChart,
+            "sql/player/most_played_locations.sql",
+            player,
+            n
+        )
+        .fetch_all(db)
+        .await
+    }
+
+    /// Get the `n` most played categories of a `player`.
+    pub async fn playtime_per_month(
+        db: &Pool<Postgres>,
+        player: &str,
+        n: Option<i64>,
+    ) -> Result<Vec<PlaytimePerMonth>, sqlx::Error> {
+        sqlx::query_file_as!(
+            PlaytimePerMonth,
+            "sql/player/playtime_per_month.sql",
+            player,
+            n
+        )
+        .fetch_all(db)
+        .await
     }
 
     /// Get points of a `player`.

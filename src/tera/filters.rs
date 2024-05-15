@@ -48,21 +48,17 @@ pub fn code_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Valu
 }
 
 pub fn ordinal(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
-    let n = value.as_i64().unwrap_or(0);
+    let s = value.as_i64().unwrap_or(0).to_string();
 
-    let s = ["th", "st", "nd", "rd"];
-    let v = n % 100;
-    Ok(to_value(match (v - 20) % 10 {
-        1 => s[0],
-        2 => s[1],
-        3 => s[2],
-        _ => match v % 10 {
-            1 => s[0],
-            2 => s[1],
-            3 => s[2],
-            _ => s[3],
-        },
-    })?)
+    if s.ends_with('1') && !s.ends_with("11") {
+        Ok(to_value("st")?)
+    } else if s.ends_with('2') && !s.ends_with("12") {
+        Ok(to_value("nd")?)
+    } else if s.ends_with('3') && !s.ends_with("13") {
+        Ok(to_value("rd")?)
+    } else {
+        Ok(to_value("th")?)
+    }
 }
 
 pub fn time_format(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {

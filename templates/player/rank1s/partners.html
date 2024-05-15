@@ -4,17 +4,18 @@
 
 <div class="container">
     <div class="box">
-        <h2 style="float: left">Favourite partners</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}">Go back</a>
+        <h2 style="float: left">Favourite partners for rank1s</h2>
+        <a class="show-more" href="/player/{{ name | urlencode | safe }}/rank1s">Go back</a>
+
         <table class="transparent">
             <thead>
-                <tr>
-                    <th>Player</th>
-                    <th>Finishes together</th>
-                </tr>
+            <tr>
+                <th>Player</th>
+                <th>Rank1s together</th>
+            </tr>
             </thead>
             <tbody>
-                {% for teammate in favourite_teammates %}
+                {% for teammate in favourite_rank1s_teammates %}
                 <tr>
                     <td><a href="/player/{{ teammate.name | urlencode }}">{{ teammate.name }}</a></td>
                     <td>{{ teammate.ranks_together }} rank{{ teammate.ranks_together | pluralize }}</td>

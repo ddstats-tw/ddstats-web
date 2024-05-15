@@ -43,7 +43,7 @@
                 {% for teammate in favourite_teammates %}
                 <tr>
                     <td><a href="/player/{{ teammate.name | urlencode }}">{{ teammate.name }}</a></td>
-                    <td>{{ teammate.ranks_together }} ranks</td>
+                    <td>{{ teammate.ranks_together }} rank{{ teammate.ranks_together | pluralize }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -50,12 +50,6 @@ a:hover {
     padding: 2em;
 }
 
-.profile-border:hover {
-    background-color: palette.$grey4;
-    /* border-radius: 0rem 0rem 1rem 1rem;
-    border: .2rem solid palette.$primary; */
-}
-
 .profile-mid {
     display: flex;
     flex-direction: column;
@@ -540,7 +534,6 @@ li {
 }
 
 @media screen and (max-width:1000px) {
-
     .container,
     .left-bigger {
         grid-template-columns: 1fr;

@@ -21,6 +21,97 @@ Unranked
 {% endif %}
 {% endmacro %}
 
+{% macro doughnut_chart(ctx, data) %}
+new Chart(
+  {{ ctx }},
+  {
+  type: 'doughnut',
+  data: {
+      labels: [
+          {% for row in data %}
+          '{{ row.key }}',
+          {% endfor %}
+      ],
+      datasets: [{
+          label: '',
+          data: [
+              {% for row in data %}
+              {
+                label: '{{ row.seconds_played | time_format }}',
+                value: '{{ row.seconds_played }}'
+              },
+              {% endfor %}
+          ],
+          backgroundColor: chart_colors,
+          hoverOffset: 4
+      }]
+  },
+  options: {
+      plugins: {
+          legend: {
+              display: true,
+              position: 'left'
+          },
+          tooltip: {
+            callbacks: {
+                label: function(context) {
+                    const index = context.dataIndex;
+                    let label = context.dataset.data[index].label || '';
+                    return label;
+                }
+            }
+          }
+      }
+  }
+})
+{% endmacro %}
+
+{% macro bar_chart(ctx, data) %}
+new Chart(
+  {{ ctx }},
+  {
+  type: 'bar',
+  data: {
+      datasets: [{
+          label: '',
+          data: [
+              {% for row in data | reverse %}
+              {
+                x: '{{ row.month }}',
+                y: '{{ row.seconds_played / 60 / 60 }}',
+                label: '{{ row.seconds_played | time_format }}'
+              },
+              {% endfor %}
+          ],
+          backgroundColor: '#4C9CEF',
+          hoverOffset: 4
+      }]
+  },
+  options: {
+    scales: {
+      y: {
+        suggestedMax: 100
+      }
+    },
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: false
+        },
+        tooltip: {
+          callbacks: {
+              label: function(context) {
+                  const index = context.dataIndex;
+                  let label = context.dataset.data[index].label || '';
+                  return label;
+              }
+          }
+        }
+    }
+  }
+})
+{% endmacro %}
+
 {# {% macro joinArray(array, link) %}
   {% for item in array %}
     <a href="{{ link.replace('%s', item | urlencode ) }}">{{- item -}}</a>

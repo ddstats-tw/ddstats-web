@@ -3,6 +3,7 @@
     <script src="/static/js/chart-umd.js"></script>
     <script src="/static/js/chart-date-fns.js"></script>
     <script src="/static/js/sortable.js" defer></script>
+    <script src="/static/js/ddstats.js"></script>
     {% if profile %}
     <title>{{ name }} | {{ page | capitalize }} | Player Profile | DDStats</title>
     {% else %}
@@ -14,7 +15,6 @@
 {% if not profile %}
 <h1>404 - Player not found</h1>
 {% else %}
-    
     <div class="profile">
         <div class="profile-border">
             {% if profile.skin_name %}
@@ -82,6 +82,5 @@
             alert("Copied skin to clipboard");
         }
 </script>
-    </script>
 {% endif %}
 {% endblock %}

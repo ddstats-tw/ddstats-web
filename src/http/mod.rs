@@ -37,7 +37,7 @@ pub async fn serve(db: Pool<Postgres>, template: Tera, points: Leaderboard) {
 fn router(state: AppState) -> Router {
     Router::new()
         .nest("/", routes::misc::router())
-        .nest("/player", routes::player::router())
+        .nest("/player/:name", routes::player::router())
         .nest_service("/static", ServeDir::new("static"))
         .layer(TraceLayer::new_for_http())
         .layer(middleware::from_fn_with_state(
