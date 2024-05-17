@@ -38,6 +38,7 @@ fn router(state: AppState) -> Router {
     Router::new()
         .nest("/", routes::misc::router())
         .nest("/player/:name", routes::player::router())
+        .nest("/map/:name", routes::map::router())
         .nest_service("/static", ServeDir::new("static"))
         .layer(TraceLayer::new_for_http())
         .layer(middleware::from_fn_with_state(

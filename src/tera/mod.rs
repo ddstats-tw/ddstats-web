@@ -18,6 +18,7 @@ pub fn init_tera() -> Tera {
     tera.register_filter("code_to_country", code_to_country);
     tera.register_filter("ordinal", ordinal);
     tera.register_filter("time_format", time_format);
+    tera.register_filter("mapper_array", mapper_array);
 
     tera
 }

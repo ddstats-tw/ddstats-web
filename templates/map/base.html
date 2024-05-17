@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% if info %}
+    <title>{{ info.map.map }} | {{ page | capitalize }} | DDStats</title>
+    {% else %}
+    <title>Map not found | DDStats</title>
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    {% if info %}
+    <h1>{{ info.map.map }}</h1>
+    <ul class="buttons">
+        <li>
+            <a class="{% if page == "overview" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}">Overview</a>
+        </li>
+        <li>
+            <a class="{% if page == "timecps" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}/timecps">Time CPS</a>
+        </li>
+        <li>
+            <a class="{% if page == "playtime" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}/playtime">Playtime</a>
+        </li>
+    </ul>
+
+    {% block map %}
+
+    {% endblock %}
+    {% else %}
+    <h1>404 - Map not found</h1>
+    {% endif %}
+{% endblock %}

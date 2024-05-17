@@ -90,3 +90,9 @@ fn plural(n: u64, unit: &str) -> String {
         format!("{} {}s", n, unit)
     }
 }
+
+pub fn mapper_array(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
+    let v = value.as_str().unwrap();
+    let r: Vec<_> = v.split([',', '&']).map(|s| s.trim()).collect();
+    Ok(to_value(r)?)
+}
