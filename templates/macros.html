@@ -3,15 +3,15 @@
 {% for i in range(start=0, end=max-stars) %}☆{% endfor %}
 {% endmacro %}
 
-{# {% macro diff (diff1, diff2) %}
+{% macro diff (diff1, diff2) %}
 {% if diff1 - diff2 < 0 %}
-<td><span style="color: #EF5255;">+{{ fancy_time(diff2 - diff1) }}</span></td>
-{% elseif diff1 - diff2 > 0 %}
-<td><span style="color: #3DDF89;">-{{ fancy_time(diff1 - diff2) }}</span></td>
+<td><span style="color: #EF5255;">+{{ (diff2 - diff1) | fancy_time }}</span></td>
+{% elif diff1 - diff2 > 0 %}
+<td><span style="color: #3DDF89;">-{{ (diff1 - diff2) | fancy_time }}</span></td>
 {% else %}
 <td><span style="color: #3DDF89;">-00:00.00</span></td>
 {% endif %}
-{% endmacro %} #}
+{% endmacro %}
 
 {% macro points (data, category) %}
 {% if data[category] %}
@@ -112,22 +112,18 @@ new Chart(
 })
 {% endmacro %}
 
-{# {% macro joinArray(array, link) %}
+{% macro join_array(array, link) %}
   {% for item in array %}
-    <a href="{{ link.replace('%s', item | urlencode ) }}">{{- item -}}</a>
-    {{- ', ' if not loop.last and loop.revindex != 2 -}}
-    {{- ' & ' if loop.revindex == 2 -}}
+    <a href="{{ link | replace(from='%s', to=item | urlencode ) }}">{{ item }}</a>
+    {%- if not loop.last and array | length - loop.index0 != 2 -%}, {%- endif -%}
+    {% if array | length - loop.index0 == 2 %} & {% endif %}
   {% endfor %}
 {% endmacro %}
 
-{% macro server_flag(server) %}
-<img height="14px" src="https://ddnet.org/countryflags/{{ "UNK" if server == "" else server }}.png">
+{% macro server_flag(height, server) %}
+<img height="{{ height }}px" src="https://ddnet.org/countryflags/{% if server == "" %}UNK{% else %}{{ server }}{% endif %}.png" alt="server_flag_{{ server }}">
 {% endmacro %}
 
-{% macro player_flag_medium(code) %}
-<img height="28px" src="https://ddnet.org/status/countryflags/{{ mapCountryCode(code) }}.png" alt="flag_{{ mapCountryCode(code) }}">
+{% macro player_flag(height, code) %}
+<img height="{{ height }}px" src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png" alt="player_flag_{{ code | code_to_country }}">
 {% endmacro %}
-
-{% macro player_flag_small(code) %}
-<img height="14px" src="https://ddnet.org/status/countryflags/{{ mapCountryCode(code) }}.png" alt="flag_{{ mapCountryCode(code) }}">
-{% endmacro %} #}
