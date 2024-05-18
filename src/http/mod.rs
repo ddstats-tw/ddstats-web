@@ -4,14 +4,15 @@ use self::{
 };
 use crate::points::Leaderboard;
 use ::tera::Tera;
-use axum::{middleware, response::Html, Router};
+use axum::{extract::Request, middleware, response::Html, Router, ServiceExt};
 use sqlx::{PgPool, Pool, Postgres};
 use std::{
     net::SocketAddr,
     sync::{Arc, RwLock},
 };
 use tera::Context;
-use tower_http::{services::ServeDir, trace::TraceLayer};
+use tower::Layer;
+use tower_http::{normalize_path::NormalizePathLayer, services::ServeDir, trace::TraceLayer};
 
 mod error;
 mod routes;
@@ -30,7 +31,7 @@ pub async fn serve(db: Pool<Postgres>, template: Arc<RwLock<Tera>>, points: Lead
         points: Arc::new(points),
     };
 
-    let app = router(state);
+    let app = NormalizePathLayer::trim_trailing_slash().layer(router(state));
 
     let port = std::env::var("PORT")
         .unwrap_or_else(|_| "12345".to_string())
@@ -39,7 +40,9 @@ pub async fn serve(db: Pool<Postgres>, template: Arc<RwLock<Tera>>, points: Lead
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     tracing::info!("listening on http://{}", addr);
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, ServiceExt::<Request>::into_make_service(app))
+        .await
+        .unwrap();
 }
 
 pub fn render(

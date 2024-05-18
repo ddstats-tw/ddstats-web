@@ -9,7 +9,7 @@ edition = "2021"
 axum = "0.7"
 serde = "1.0"
 tokio = { version = "1.0", features = ["full"] }
-tower-http = { version = "0.5.2", features = ["fs", "trace"] }
+tower-http = { version = "0.5.2", features = ["fs", "trace", "normalize-path"] }
 sqlx = { version = "0.7", features = [ "runtime-tokio-rustls", "postgres", "chrono", "macros" ] }
 chrono = { version = "0.4", features = ["serde"] }
 dotenvy = "0.15"
@@ -26,6 +26,7 @@ serde_tuple = "0.5.0"
 strum = "0.26"
 strum_macros = "0.26"
 notify = "4"
+tower = "0.4.13"
 
 [profile.release]
 debug = false
