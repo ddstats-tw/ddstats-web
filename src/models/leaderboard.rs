@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::{self, Pool, Postgres};
 use std::fmt::Debug;
 
-#[derive(Debug, Clone, Deserialize, Serialize, sqlx::Type)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct MostRank1s {
     pub rank: i64,
     pub name: String,
