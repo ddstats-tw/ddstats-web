@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block head %}
+	<title>Leaderboards | DDStats</title>
+{% endblock %}
+
+{% block main %}
+
+<h1>Leaderboards</h1>
+<div class="leaderboards">
+    <div class="leaderboard">
+        <h2><a href="/leaderboard/rank1s">Rank 1s</a></h2>
+        <p>
+            Who has the most rank 1s?
+        </p>
+    </div>
+    <div class="leaderboard">
+        <h2><a href="/leaderboard/worsttimes">Worst times</a></h2>
+        <p>
+            Who has the worst time?
+        </p>
+    </div>
+    {# TODO
+    <div class="leaderboard">
+        <h2><a href="/leaderboard/points">Points</a></h2>
+        <p>
+            Who has the most points?
+        </p>
+    </div>
+    <div class="leaderboard">
+        <h2><a href="/leaderboard/finishes">Most finishes</a></h2>
+        <p>
+            Who has finished the most maps?
+        </p>
+    </div>
+    #}
+    <div class="leaderboard">
+        <h2><a href="/leaderboard/mostplayed">Most played maps</a></h2>
+        <p>
+            What are the most played maps?
+        </p>
+    </div>
+</div>
+{% endblock %}

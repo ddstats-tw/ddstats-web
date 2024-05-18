@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block head %}
+	<title>Leaderboard | Rank1s | DDStats</title>
+{% endblock %}
+
+{% block main %}
+<h1>Leaderboard for most rank 1s</h1>
+
+{# Move this to a different file, merge with the other #}
+{% set categories = ["Total", "Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", 
+                     "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
+
+<ul class="buttons">
+    {% for category in categories %}
+    <li>
+        <a class="{% if current_category == category %}active{% endif %}" 
+           href="/leaderboard/{{ type }}/category/{{ category }}/sortby/{{ sorting }}">{{ category }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<h3 class="center">Type</h3>
+<ul class="buttons">
+    <li><a class="{% if type == "teamrank1s" %}active{% endif %}" href="/leaderboard/teamrank1s/category/{{ current_category }}/sortby/{{ sorting }}">Team rank1s</a></li>
+    <li><a class="{% if type == "rank1s" %}active{% endif %}" href="/leaderboard/rank1s/category/{{ current_category }}/sortby/{{ sorting }}">Rank 1s</a></li>
+</ul>
+
+<div class="leaderboard">
+    <table>
+        <tbody>
+            <tr>
+                <th>#</th>
+                <th class="wide">Player</th>
+                <th><a class="gold" href="/leaderboard/{{ type }}/category/{{ current_category }}/sortby/1">I{% if sorting == 1 %}↓{% endif %}</a></th>
+                <th><a class="silver" href="/leaderboard/{{ type }}/category/{{ current_category }}/sortby/2">II{% if sorting == 2 %}↓{% endif %}</a></th>
+                <th><a class="bronze" href="/leaderboard/{{ type }}/category/{{ current_category }}/sortby/3">III{% if sorting == 3 %}↓{% endif %}</a></th>
+                <th><a class="platinum" href="/leaderboard/{{ type }}/category/{{ current_category }}/sortby/4">IV{% if sorting == 4 %}↓{% endif %}</a></th>
+                <th><a class="platinum" href="/leaderboard/{{ type }}/category/{{ current_category }}/sortby/5">V{% if sorting == 5 %}↓{% endif %}</a></th>
+            </tr>
+            {% for player in leaderboard %}
+            <tr>
+                <td class="rank">{{ player.rank }}</td>
+                <td class="wide"><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
+                <td class="gold">{{ player.rank1s }}</td>
+                <td class="Silver">{{ player.rank2s }}</td>
+                <td class="bronze">{{ player.rank3s }}</td>
+                <td class="platinum">{{ player.rank4s }}</td>
+                <td class="platinum">{{ player.rank5s }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{# {% set url = ["/leaderboard/", type, "/category/", category, "/sortby/", sorting, "/page"] | join %}
+<div class="pages">
+    {{ utils.pager(leaderboard.page.page, leaderboard.page.total, url) }}
+</div> #}
+{% endblock %}

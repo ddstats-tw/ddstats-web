@@ -50,7 +50,7 @@ pub struct Finish {
     pub server: String,
     pub rank: i32,
     pub team_rank: Option<i32>,
-    pub seconds_played: Option<i64>,
+    pub seconds_played: Option<i32>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

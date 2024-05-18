@@ -6,7 +6,7 @@ SELECT DISTINCT ON (rankings.map)
     rankings.server,
     rankings.rank,
     "team_rank?",
-    seconds_played
+    seconds_played AS "seconds_played?"
 FROM 
     rankings
 JOIN maps ON
@@ -21,17 +21,14 @@ LEFT JOIN (
         map
 ) AS teamrankings ON teamrankings.map = rankings.map
 LEFT JOIN (
-    SELECT map, SUM(time) AS seconds_played 
+    SELECT map, seconds_played
     FROM
-        playtime
+        playtime_maps
     WHERE
-        name = $1 AND
-        map IN (SELECT map FROM maps)
-    GROUP BY
-        map
+        name = $1
 ) AS playtime ON 
     rankings.map = playtime.map
-WHERE 
+WHERE
     rankings.name = $1
 ORDER BY
     rankings.map,
