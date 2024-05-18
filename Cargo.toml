@@ -23,8 +23,9 @@ msgpack_simple  = "1"
 indexmap = "2"
 strum = "0.26"
 strum_macros = "0.26"
-notify = "4"
+notify = "6.1.1"
 tower = "0.4"
+notify-debouncer-mini = "0.4.1"
 
 [profile.release]
 debug = false

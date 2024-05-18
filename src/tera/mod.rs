@@ -34,26 +34,31 @@ pub fn init_tera() -> Arc<RwLock<Tera>> {
 
 #[cfg(debug_assertions)]
 fn autoreload_templates(tera: Arc<RwLock<Tera>>, path: impl AsRef<std::path::Path>) {
-    use notify::{watcher, RecursiveMode, Watcher};
+    use notify::{PollWatcher, RecursiveMode};
+    use notify_debouncer_mini::new_debouncer_opt;
     use std::sync::mpsc::channel;
     use std::thread;
     use std::time::Duration;
 
     let (tx, rx) = channel();
-    let mut watcher = watcher(tx, Duration::from_secs(2)).unwrap();
-    watcher.watch(path, RecursiveMode::Recursive).unwrap();
+    let notify_config = notify::Config::default().with_poll_interval(Duration::from_secs(2));
+    let debouncer_config = notify_debouncer_mini::Config::default()
+        .with_timeout(Duration::from_secs(2))
+        .with_notify_config(notify_config);
+    let mut debouncer = new_debouncer_opt::<_, PollWatcher>(debouncer_config, tx).unwrap();
+    debouncer
+        .watcher()
+        .watch(path.as_ref(), RecursiveMode::Recursive)
+        .unwrap();
 
     thread::spawn(move || {
         while rx.recv().is_ok() {
             tracing::info!("Reloading Tera templates");
             let mut tera = tera.write().unwrap();
-            match tera.full_reload() {
-                Ok(_) => {}
-                Err(e) => {
-                    tracing::error!("Failed to reload Tera templates: {}", e);
-                }
+            if let Err(e) = tera.full_reload() {
+                tracing::error!("Failed to reload Tera templates: {}", e);
             };
         }
-        watcher
+        debouncer
     });
 }
