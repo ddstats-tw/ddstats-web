@@ -5,8 +5,14 @@ use crate::models::player::Finish;
 use crate::models::player::Player;
 use crate::utils::create_index_by_field;
 use axum::extract::Path;
+use axum::extract::Request;
 use axum::extract::State;
+use axum::http::StatusCode;
+use axum::middleware;
+use axum::middleware::Next;
 use axum::response::Html;
+use axum::response::IntoResponse;
+use axum::response::Response;
 use axum::{routing::get, Router};
 use sqlx::Pool;
 use sqlx::Postgres;
@@ -180,7 +186,26 @@ pub async fn player_rank1s_partners(
     render(state.template, "player/rank1s/partners.html", &context)
 }
 
-pub fn router() -> Router<AppState> {
+pub async fn player_middleware(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+    // you can add more extractors here but the last
+    // extractor must implement `FromRequest` which
+    // `Request` does
+    request: Request,
+    next: Next,
+) -> Response {
+    match Player::get_profile(&state.db, &name).await.is_ok() {
+        true => next.run(request).await,
+        false => (
+            StatusCode::NOT_FOUND,
+            render(state.template, "player/404.html", &Context::new()).unwrap(),
+        )
+            .into_response(),
+    }
+}
+
+pub fn router(state: AppState) -> Router<AppState> {
     Router::new()
         // Overview
         .route("/", get(player_overview))
@@ -200,4 +225,8 @@ pub fn router() -> Router<AppState> {
         // Rank 1s
         .route("/rank1s", get(player_rank1s))
         .route("/rank1s/partners", get(player_rank1s_partners))
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            player_middleware,
+        ))
 }
