@@ -40,7 +40,7 @@ fn autoreload_templates(tera: Arc<RwLock<Tera>>, path: impl AsRef<std::path::Pat
     use std::time::Duration;
 
     let (tx, rx) = channel();
-    let mut watcher = watcher(tx, Duration::from_secs(30)).unwrap();
+    let mut watcher = watcher(tx, Duration::from_secs(2)).unwrap();
     watcher.watch(path, RecursiveMode::Recursive).unwrap();
 
     thread::spawn(move || {
