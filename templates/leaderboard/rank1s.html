@@ -11,7 +11,7 @@
 {% set categories = ["Total", "Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", 
                      "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
 
-<ul class="buttons">
+<ul class="buttons space-inbetween-small">
     {% for category in categories %}
     <li>
         <a class="{% if current_category == category %}active{% endif %}" 
