@@ -1,4 +1,5 @@
 use crate::http::error::Error;
+use crate::http::render;
 use crate::http::AppState;
 use crate::models::map::Map;
 use axum::extract::Path;
@@ -10,7 +11,7 @@ use sqlx::Postgres;
 use tera::Context;
 
 pub async fn map_context(db: &Pool<Postgres>, name: &str, page: &str) -> Result<Context, Error> {
-    let info = Map::info(db, &name).await?;
+    let info = Map::info(db, name).await?;
     let mut context = Context::new();
     context.insert("info", &info);
     context.insert("page", &page);
@@ -29,7 +30,7 @@ pub async fn map_overview(
     context.insert("rankings", &rankings);
     context.insert("team_rankings", &team_rankings);
 
-    Ok(Html(state.template.render("map/overview.html", &context)?))
+    render(state.template, "map/overview.html", &context)
 }
 
 pub async fn map_time_cps(
@@ -41,7 +42,7 @@ pub async fn map_time_cps(
     let mut context = map_context(&state.db, &name, "timecps").await?;
     context.insert("time_cps", &time_cps);
 
-    Ok(Html(state.template.render("map/time_cps.html", &context)?))
+    render(state.template, "map/time_cps.html", &context)
 }
 
 pub async fn map_playtime(
@@ -53,7 +54,7 @@ pub async fn map_playtime(
     let mut context = map_context(&state.db, &name, "playtime").await?;
     context.insert("playtime", &playtime);
 
-    Ok(Html(state.template.render("map/playtime.html", &context)?))
+    render(state.template, "map/playtime.html", &context)
 }
 
 pub fn router() -> Router<AppState> {

@@ -1,4 +1,5 @@
 use crate::http::error::Error;
+use crate::http::render;
 use crate::http::AppState;
 use crate::models::map::Map;
 use crate::models::player::Player;
@@ -15,9 +16,7 @@ pub struct SearchQuery {
 }
 
 pub async fn landing(State(state): State<AppState>) -> Result<Html<String>, Error> {
-    Ok(Html(
-        state.template.render("landing.html", &Context::new())?,
-    ))
+    render(state.template, "landing.html", &Context::new())
 }
 
 pub async fn search(
@@ -32,7 +31,7 @@ pub async fn search(
     context.insert("maps", &maps);
     context.insert("players", &players);
 
-    Ok(Html(state.template.render("search.html", &context)?))
+    render(state.template, "search.html", &context)
 }
 
 pub async fn search_api(
@@ -49,15 +48,15 @@ pub async fn search_api(
     context.insert("maps", &maps);
     context.insert("players", &players);
 
-    Ok(Html(state.template.render("search-api.html", &context)?))
+    render(state.template, "search-api.html", &context)
 }
 
 pub async fn faq(State(state): State<AppState>) -> Result<Html<String>, Error> {
-    Ok(Html(state.template.render("faq.html", &Context::new())?))
+    render(state.template, "faq.html", &Context::new())
 }
 
 pub async fn not_found(State(state): State<AppState>) -> Result<Html<String>, Error> {
-    Ok(Html(state.template.render("404.html", &Context::new())?))
+    render(state.template, "404.html", &Context::new())
 }
 
 pub fn router() -> Router<AppState> {

@@ -3,10 +3,12 @@ use std::fmt::Display;
 use axum::extract::{Request, State};
 use axum::http::StatusCode;
 use axum::middleware::Next;
-use axum::response::{Html, IntoResponse, Response};
+use axum::response::{IntoResponse, Response};
 use tera::Context;
 
 use crate::http::AppState;
+
+use super::render;
 
 #[derive(Debug)]
 pub enum Error {
@@ -29,12 +31,7 @@ pub async fn error_middleware(
     if status != 200 {
         return (
             status,
-            Html(
-                state
-                    .template
-                    .render("error.html", &Context::new())
-                    .unwrap(),
-            ),
+            render(state.template, "error.html.html", &Context::new()).unwrap(),
         )
             .into_response();
     }

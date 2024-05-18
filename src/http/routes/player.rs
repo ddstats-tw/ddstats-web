@@ -1,4 +1,5 @@
 use crate::http::error::Error;
+use crate::http::render;
 use crate::http::AppState;
 use crate::models::player::Finish;
 use crate::models::player::Player;
@@ -33,11 +34,7 @@ pub async fn player_overview(
     context.insert("recent_finishes", &recent_finishes);
     context.insert("favourite_teammates", &favourite_teammates);
 
-    Ok(Html(
-        state
-            .template
-            .render("player/overview/overview.html", &context)?,
-    ))
+    render(state.template, "player/overview/overview.html", &context)
 }
 
 pub async fn player_overview_partners(
@@ -49,10 +46,11 @@ pub async fn player_overview_partners(
     let mut context = player_context(&state.db, &name, "overview").await?;
     context.insert("favourite_teammates", &favourite_teammates);
 
-    Ok(Html(state.template.render(
+    render(
+        state.template,
         "player/overview/favourite_partners.html",
         &context,
-    )?))
+    )
 }
 
 pub async fn player_overview_finishes(
@@ -64,10 +62,11 @@ pub async fn player_overview_finishes(
     let mut context = player_context(&state.db, &name, "overview").await?;
     context.insert("recent_finishes", &recent_finishes);
 
-    Ok(Html(state.template.render(
+    render(
+        state.template,
         "player/overview/recent_finishes.html",
         &context,
-    )?))
+    )
 }
 
 pub async fn player_finishes(
@@ -84,11 +83,7 @@ pub async fn player_finishes(
     context.insert("points", &points);
     context.insert("finishes", &finishes);
 
-    Ok(Html(
-        state
-            .template
-            .render("player/finishes/finishes.html", &context)?,
-    ))
+    render(state.template, "player/finishes/finishes.html", &context)
 }
 
 pub async fn player_activity(
@@ -112,11 +107,7 @@ pub async fn player_activity(
     context.insert("most_played_locations", &most_played_locations);
     context.insert("playtime_per_month", &playtime_per_month);
 
-    Ok(Html(
-        state
-            .template
-            .render("player/activity/activity.html", &context)?,
-    ))
+    render(state.template, "player/activity/activity.html", &context)
 }
 
 pub async fn player_activity_playtime(
@@ -128,11 +119,7 @@ pub async fn player_activity_playtime(
     let mut context = player_context(&state.db, &name, "activity").await?;
     context.insert("recent_activity", &recent_activity);
 
-    Ok(Html(
-        state
-            .template
-            .render("player/activity/playtime.html", &context)?,
-    ))
+    render(state.template, "player/activity/playtime.html", &context)
 }
 
 pub async fn player_activity_player_info(
@@ -144,11 +131,7 @@ pub async fn player_activity_player_info(
     let mut context = player_context(&state.db, &name, "activity").await?;
     context.insert("recent_player_info", &recent_player_info);
 
-    Ok(Html(
-        state
-            .template
-            .render("player/activity/player_info.html", &context)?,
-    ))
+    render(state.template, "player/activity/player_info.html", &context)
 }
 
 pub async fn player_activity_most_played_maps(
@@ -160,10 +143,11 @@ pub async fn player_activity_most_played_maps(
     let mut context = player_context(&state.db, &name, "activity").await?;
     context.insert("most_played_maps", &most_played_maps);
 
-    Ok(Html(state.template.render(
+    render(
+        state.template,
         "player/activity/most_played_maps.html",
         &context,
-    )?))
+    )
 }
 
 pub async fn player_rank1s(
@@ -180,11 +164,7 @@ pub async fn player_rank1s(
     context.insert("all_top_10s", &all_top_10s);
     context.insert("recent_top_10s", &recent_top_10s);
 
-    Ok(Html(
-        state
-            .template
-            .render("player/rank1s/rank1s.html", &context)?,
-    ))
+    render(state.template, "player/rank1s/rank1s.html", &context)
 }
 
 pub async fn player_rank1s_partners(
@@ -197,11 +177,7 @@ pub async fn player_rank1s_partners(
     let mut context = player_context(&state.db, &name, "rank1s").await?;
     context.insert("favourite_rank1s_teammates", &favourite_rank1s_teammates);
 
-    Ok(Html(
-        state
-            .template
-            .render("player/rank1s/partners.html", &context)?,
-    ))
+    render(state.template, "player/rank1s/partners.html", &context)
 }
 
 pub fn router() -> Router<AppState> {

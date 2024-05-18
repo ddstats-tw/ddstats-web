@@ -20,5 +20,5 @@ async fn main() {
     let tera = init_tera();
     let points = parse_points();
 
-    http::serve(db, tera, points).await;
+    http::serve(db, tera.clone(), points).await;
 }

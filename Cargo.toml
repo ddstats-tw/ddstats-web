@@ -25,6 +25,7 @@ indexmap = "2"
 serde_tuple = "0.5.0"
 strum = "0.26"
 strum_macros = "0.26"
+notify = "4"
 
 [profile.release]
 debug = false
