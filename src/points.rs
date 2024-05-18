@@ -2,6 +2,7 @@ use indexmap::IndexMap;
 use msgpack_simple::parser;
 use rmp_serde::Deserializer;
 use serde::{Deserialize, Serialize};
+use std::env;
 use std::time::Instant;
 use std::{collections::HashMap, fs::File, io::Read};
 
@@ -114,6 +115,22 @@ fn read_server_leaderboard(buf: &mut [u8]) -> HashMap<String, ServerRanks> {
 }
 
 pub fn parse_points() -> Leaderboard {
+    let parse_points: bool = env::var("PARSE_POINTS")
+        .unwrap_or("false".to_string())
+        .parse()
+        .unwrap();
+
+    if !parse_points {
+        return Leaderboard {
+            weekly_points: IndexMap::new(),
+            monthly_points: IndexMap::new(),
+            yearly_points: IndexMap::new(),
+            points: HashMap::new(),
+            rank_points: HashMap::new(),
+            team_points: HashMap::new(),
+        };
+    }
+
     let players_msgpack = "players.msgpack";
     let mut file = File::open(players_msgpack).expect("Unable to open file");
     let mut data = Vec::new();

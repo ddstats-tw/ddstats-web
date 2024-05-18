@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use sqlx::{self, types::chrono::NaiveDateTime, Pool, Postgres};
-use std::{collections::HashMap, fmt::Debug};
+use std::{collections::HashMap, env, fmt::Debug};
 use strum::IntoEnumIterator;
 
 use crate::points::{Category, Leaderboard, LeaderboardRank};
@@ -341,34 +341,41 @@ impl Player {
         let mut rank_points: HashMap<Category, Option<LeaderboardRank>> = HashMap::new();
         let mut team_points: HashMap<Category, Option<LeaderboardRank>> = HashMap::new();
 
-        for category in Category::iter() {
-            points.insert(
-                category,
-                players_msgpack
-                    .points
-                    .get(&category)
-                    .unwrap()
-                    .get(player)
-                    .cloned(),
-            );
-            rank_points.insert(
-                category,
-                players_msgpack
-                    .rank_points
-                    .get(&category)
-                    .unwrap()
-                    .get(player)
-                    .cloned(),
-            );
-            team_points.insert(
-                category,
-                players_msgpack
-                    .team_points
-                    .get(&category)
-                    .unwrap()
-                    .get(player)
-                    .cloned(),
-            );
+        let parse_points = env::var("PARSE_POINTS")
+            .unwrap_or("false".to_string())
+            .parse()
+            .unwrap();
+
+        if parse_points {
+            for category in Category::iter() {
+                points.insert(
+                    category,
+                    players_msgpack
+                        .points
+                        .get(&category)
+                        .unwrap()
+                        .get(player)
+                        .cloned(),
+                );
+                rank_points.insert(
+                    category,
+                    players_msgpack
+                        .rank_points
+                        .get(&category)
+                        .unwrap()
+                        .get(player)
+                        .cloned(),
+                );
+                team_points.insert(
+                    category,
+                    players_msgpack
+                        .team_points
+                        .get(&category)
+                        .unwrap()
+                        .get(player)
+                        .cloned(),
+                );
+            }
         }
 
         Points {
