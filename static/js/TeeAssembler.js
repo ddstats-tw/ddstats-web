@@ -1,3 +1,111 @@
+/* Copyright (c) 2022–2024 Aleksandar Blažić and contributors
+    - https://github.com/AlexIsTheGuy/TeeAssembler-2.0
+*/
+
+// color.js
+class Color {
+    constructor(r, g, b, a = 255) {
+        this.r = r
+        this.g = g
+        this.b = b
+        this.a = a
+    }
+}
+
+const HSLToRGB = (hue, saturation, lightness) => {
+    if (hue == undefined) {
+        return [0, 0, 0]
+    }
+
+    let chroma = (1 - Math.abs(((2 * lightness) / 100) - 1)) * (saturation / 100)
+    let huePrime = hue / 60
+    let secondComponent = chroma * (1 - Math.abs((huePrime % 2) - 1))
+
+    huePrime = Math.floor(huePrime)
+
+    const colorMapping = {
+        0: { red: chroma, green: secondComponent, blue: 0 },
+        1: { red: secondComponent, green: chroma, blue: 0 },
+        2: { red: 0, green: chroma, blue: secondComponent },
+        3: { red: 0, green: secondComponent, blue: chroma },
+        4: { red: secondComponent, green: 0, blue: chroma },
+        5: { red: chroma, green: 0, blue: secondComponent }
+    };
+
+    let { red, green, blue } = colorMapping[huePrime] || 0;
+
+    let lightnessAdjustment = (lightness / 100) - (chroma / 2)
+    red = Math.round((red + lightnessAdjustment) * 255)
+    green = Math.round((green + lightnessAdjustment) * 255)
+    blue = Math.round((blue + lightnessAdjustment) * 255)
+
+    return [red, green, blue]
+}
+
+const isDigit = (str) => {
+    return !isNaN(str)
+}
+
+const genChunks = (src, size) => {
+    let ret = []
+
+    for (let i = 0; i < src.length; i += size) {
+        ret.push(src.slice(i, i + size))
+    }
+    return ret
+}
+
+// Convert a color code to HSL format
+const codeFormat = (color) => {
+    if (!isDigit(color)) {
+        throw Error(`Invalid code format ${color}\nValid format: A value encoded on 6 bytes`)
+    }
+
+    color = parseInt(color)
+    if (color < 0 || color > 0xffffff) {
+        throw Error(`Invalid value ${color}\nValid format: an integer (min: 0, max: 0xffffff)`)
+    }
+    color = color.toString(16)
+    const l = color.length
+    if (l < 6) {
+        color = "0".repeat(6 - l) + color
+    }
+    color = genChunks(color, 2).map(x => parseInt(x, 16))
+    if (color[0] === 255) {
+        color[0] = 0
+    }
+    color[0] = (color[0] * 360) / 255
+    color[1] = (color[1] * 100) / 255
+    color[2] = (((color[2] / 255) / 2) + 0.5) * 100
+    return color
+}
+
+const COLOR_FORMAT = {
+    "code": codeFormat
+}
+
+const blackAndWhite = (pixel) => {
+    const newValue = (pixel.r + pixel.g + pixel.b) / 3
+
+    pixel.r = newValue
+    pixel.g = newValue
+    pixel.b = newValue
+}
+
+const defaultOp = (pixel, color) => {
+    pixel.r = (pixel.r * color.r) / 255
+    pixel.g = (pixel.g * color.g) / 255
+    pixel.b = (pixel.b * color.b) / 255
+    pixel.a = (pixel.a * color.a) / 255
+}
+
+const COLOR_MODE = {
+    "default": defaultOp,
+    "grayscale": blackAndWhite
+}
+
+
+// TeeAssembler.js
 const SKIN = {
     "size": {
         "width": 256,
@@ -20,10 +128,10 @@ const SKIN = {
     }
 }
 
-const genRandomID = (len = 16) => {
+const genRandomID = (length = 16) => {
     charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     let randomString = ""
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < length; i++) {
         let randomPos = Math.floor(Math.random() * charSet.length)
         randomString += charSet.substring(randomPos, randomPos + 1)
     }
@@ -36,44 +144,44 @@ const setContainer = (_this, container) => {
         _this.container.id = _this.randomID
 
         _this.container.innerHTML = `
-			<div class='line'>
-				<div class='marker'></div>
+			<div class="line">
+				<div class="marker"></div>
 			</div>
 
-			<div class='body_shadow' body-part></div>
+			<div class="body_shadow" body-part></div>
 
-			<div class='back_foot_shadow' body-part></div>
-			<div class='back_foot' body-part></div>
+			<div class="back_foot_shadow" body-part></div>
+			<div class="back_foot" body-part></div>
 
-			<div class='body' body-part></div>
+			<div class="body" body-part></div>
 
-			<div class='eyes'>
-				<div class='lEye' body-part></div>
-				<div class='rEye' body-part></div>
+			<div class="eyes">
+				<div class="lEye" body-part></div>
+				<div class="rEye" body-part></div>
 			</div>
 
-			<div class='front_foot_shadow' body-part></div>
-			<div class='front_foot' body-part></div>`
+			<div class="front_foot_shadow" body-part></div>
+			<div class="front_foot" body-part></div>`
 
-        ; (async () => {
-            let style = document.createElement("style")
-            if (_this.container.getAttribute("data-bodycolor") && _this.container.getAttribute("data-feetcolor")) {
-                await _this.getTeeImage(_this.container.getAttribute("data-bodycolor"), _this.container.getAttribute("data-feetcolor"), _this.container.getAttribute("data-coloringmode"))
-            }
-            else {
-                await _this.getTeeImage()
-            }
-            style.innerHTML = `
+            ; (async () => {
+                let style = document.createElement("style")
+                if (_this.container.getAttribute("data-bodycolor") && _this.container.getAttribute("data-feetcolor")) {
+                    await _this.getTeeImage(_this.container.getAttribute("data-bodycolor"), _this.container.getAttribute("data-feetcolor"), _this.container.getAttribute("data-coloringmode"))
+                }
+                else {
+                    await _this.getTeeImage()
+                }
+                style.innerHTML = `
 				#${_this.randomID}.tee div[body-part] {
 					background-image: url(${_this.imageResult});
 					background-size: 256em 128em;
 				}`
-            let tempStyle = document.querySelector(`#${_this.randomID}.tee style`)
-            if (tempStyle) {
-                tempStyle.remove()
-            }
-            _this.container.appendChild(style)
-        })()
+                let tempStyle = document.querySelector(`#${_this.randomID}.tee style`)
+                if (tempStyle) {
+                    tempStyle.remove()
+                }
+                _this.container.appendChild(style)
+            })()
         _this.lookAt(_this.eyesAngle)
     }
     else {
@@ -214,13 +322,6 @@ class Tee {
     setCanvas() {
         this.currentCtx.putImageData(new ImageData(this.someImgData, this.d[2], this.d[3]), 0, 0)
     }
-    isRatioLegal() {
-        const ratio = SKIN.size.width / SKIN.size.height
-        return this.image.width / this.image.height === ratio
-    }
-    getMultiplier() {
-        return this.image.width / SKIN.size.width
-    }
     getColorArg(color, standard) {
         if (Object.keys(COLOR_FORMAT).includes(standard) == false) {
             throw Error(`Invalid color format: ${standard}\nValid formats: rgb, hsl, code`)
@@ -316,13 +417,6 @@ class Tee {
             throw Error("Image has wrong ratio.")
         }
     }
-    bindContainer(container) {
-        setContainer(this, container)
-    }
-    unbindContainer() {
-        this.container.removeAttribute("id")
-        this.container = undefined
-    }
     teeEyesTranslateFunction() {
         this.markerCoord = {
             x: this.marker.getBoundingClientRect().x,
@@ -346,9 +440,8 @@ class Tee {
         }
 
         this.moveTeeEyesFunction = (e) => {
-            this.eyesAngle = Math.atan2(e.clientY - originCoord.y, e.clientX - originCoord.x) * 180 / Math.PI
-            this.line.style.transform = `translate(-1em, .5em) rotate(${this.eyesAngle}deg)`
-            this.teeEyesTranslateFunction()
+            let deg = Math.atan2(e.clientY - originCoord.y, e.clientX - originCoord.x) * 180 / Math.PI
+            this.lookAt(deg)
         }
 
         this.eyeMoveEvent = document.addEventListener("mousemove", this.moveTeeEyesFunction)
