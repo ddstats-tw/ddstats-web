@@ -1,5 +1,5 @@
 SELECT * FROM (
-    SELECT DISTINCT ON (name COLLATE "C")
+    SELECT DISTINCT ON (name)
         name,
         cp1,
         cp2,
@@ -32,7 +32,7 @@ SELECT * FROM (
     WHERE
         map = $1
     ORDER BY
-        name COLLATE "C",
+        name,
         time
 )
 ORDER BY

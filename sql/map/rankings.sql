@@ -7,4 +7,4 @@ WHERE
 ORDER BY
     rank
 LIMIT
-	$2
+    $2
