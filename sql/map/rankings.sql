@@ -1,4 +1,9 @@
-SELECT *
+SELECT rank,
+    timestamp,
+    name,
+    time,
+    map,
+    server
 FROM
     rankings
 WHERE
