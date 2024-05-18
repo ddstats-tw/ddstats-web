@@ -84,6 +84,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1rem;
+    overflow-x: auto;
 }
 
 .topnav {
@@ -241,13 +242,14 @@ main>h1 {
 
 .buttons li {
     list-style-type: none;
+    padding-bottom: 0.5rem;
 }
 
 .buttons a {
     text-decoration: none;
     color: palette.$text;
     border-bottom: 0.2rem solid palette.$primary;
-    padding: 0.4rem;
+    padding: 0.3rem;
     margin: 0.5rem;
 }
 
@@ -340,8 +342,8 @@ main>h1 {
 .transparent th,
 .transparent td {
     text-align: left;
-    padding-right: 1.2rem;
     padding: 2px;
+    padding-right: 10px;
     padding-bottom: 5px;
 }
 
@@ -493,6 +495,12 @@ li {
     grid-template-columns: 0.6fr 0.4fr;
 }
 
+img {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 @media screen and (max-width:1000px) {
     .container,
     .left-bigger {
@@ -503,6 +511,19 @@ li {
 @media screen and (max-width:600px) {
     main {
         max-width: 95%;
+    }
+    .profile-border>div {
+        padding: 0.5em;
+        overflow: hidden;
+    }
+    .search-nav {
+        position: initial;
+    }
+    .box th, .box td {
+        white-space: nowrap;
+    }
+    h1 {
+        font-size: 1.75rem;
     }
 }
 
