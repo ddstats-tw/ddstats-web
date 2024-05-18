@@ -27,7 +27,12 @@
 			<h2 class="link"><a href="/">DDStats</a></h2>
 			<div class="search-nav">
 				<form class="form-search-nav" action="/search" method="get">
-					<input class="input-search-nav" id="typeahead-nav" type="text" name="q" autocomplete="off" placeholder="nameless tee, Multeasymap, ...">
+					<input class="input-search-nav" id="typeahead-nav" 
+						type="text" name="q" autocomplete="off" 
+						placeholder="nameless tee, Multeasymap, ..." autofocus 
+						hx-get="/search/api" 
+						hx-trigger="input changed" 
+						hx-target="#result-nav">
 					<div class="result-nav" id="result-nav"></div>
 				</form>
 			</div>
