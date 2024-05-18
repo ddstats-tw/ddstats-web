@@ -31,7 +31,7 @@ pub async fn error_middleware(
     if status != 200 {
         return (
             status,
-            render(state.template, "error.html.html", &Context::new()).unwrap(),
+            render(state.template, "error.html", &Context::new()).unwrap(),
         )
             .into_response();
     }
