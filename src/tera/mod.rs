@@ -34,18 +34,14 @@ pub fn init_tera() -> Arc<RwLock<Tera>> {
 
 #[cfg(debug_assertions)]
 fn autoreload_templates(tera: Arc<RwLock<Tera>>, path: impl AsRef<std::path::Path>) {
-    use notify::{PollWatcher, RecursiveMode};
+    use notify::{RecommendedWatcher, RecursiveMode};
     use notify_debouncer_mini::new_debouncer_opt;
     use std::sync::mpsc::channel;
     use std::thread;
-    use std::time::Duration;
 
     let (tx, rx) = channel();
-    let notify_config = notify::Config::default().with_poll_interval(Duration::from_secs(2));
-    let debouncer_config = notify_debouncer_mini::Config::default()
-        .with_timeout(Duration::from_secs(2))
-        .with_notify_config(notify_config);
-    let mut debouncer = new_debouncer_opt::<_, PollWatcher>(debouncer_config, tx).unwrap();
+    let debouncer_config = notify_debouncer_mini::Config::default();
+    let mut debouncer = new_debouncer_opt::<_, RecommendedWatcher>(debouncer_config, tx).unwrap();
     debouncer
         .watcher()
         .watch(path.as_ref(), RecursiveMode::Recursive)
@@ -53,6 +49,8 @@ fn autoreload_templates(tera: Arc<RwLock<Tera>>, path: impl AsRef<std::path::Pat
 
     thread::spawn(move || {
         while rx.recv().is_ok() {
+            let _ = rx.recv().unwrap(); // wtf?
+
             tracing::info!("Reloading Tera templates");
             let mut tera = tera.write().unwrap();
             if let Err(e) = tera.full_reload() {
