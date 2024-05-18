@@ -26,10 +26,13 @@ pub fn init_tera() -> Arc<RwLock<Tera>> {
     tera_writer.register_filter("time_format", time_format);
     tera_writer.register_filter("mapper_array", mapper_array);
 
+    #[cfg(debug_assertions)]
     autoreload_templates(tera.clone(), "./templates");
+
     tera
 }
 
+#[cfg(debug_assertions)]
 fn autoreload_templates(tera: Arc<RwLock<Tera>>, path: impl AsRef<std::path::Path>) {
     use notify::{watcher, RecursiveMode, Watcher};
     use std::sync::mpsc::channel;
