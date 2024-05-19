@@ -1,10 +1,5 @@
 {% extends "player/base.html" %}
 
-{% block head %}
-    <script src="/static/js/chart-umd.js"></script>
-    <script src="/static/js/ddstats.js"></script>
-{% endblock %}
-
 {% block player %}
 
 <div class="container">
@@ -134,6 +129,8 @@
     </div>
 </div>
 
+<script src="/static/js/chart-umd.js"></script>
+<script src="/static/js/ddstats.js"></script>
 <script>
     const ctx_gametypes = document.getElementById('mostPlayedGametypes'); {# rename these ids #}
     const ctx_categories = document.getElementById('mostPlayedCategories');
