@@ -6,6 +6,7 @@
     <div class="box">
         <h2 style="float: left">Recent player info</h2>
         <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity">Go back</a>
+        <p style="clear: left"><i>You can click on a skin to copy it to your clipboard, then you can use it by pasting the contents to the local console (f1)</i></p><br>
 
         <table class="transparent">
             <thead>
@@ -15,7 +16,6 @@
                 <th>Country</th>
                 <th>Skin</th>
                 <th>Time played</th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -34,9 +34,6 @@
                         </div>
                     </td>
                     <td>{{ activity.seconds_played | time_format }}</td>
-                    <td>
-                        <button class="btn-copy-ex" onClick="copySkin('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">Copy</button>
-                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
