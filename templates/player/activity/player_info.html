@@ -23,7 +23,7 @@
                 <tr>
                     <td>{{ activity.last_seen }}</td>
                     <td>{{ activity.clan }}</td>
-                    <td title="{{ activity.country | code_to_country }}">
+                    <td title="{{ activity.country | code_to_country }} ({{ activity.country }})">
                         {{ macros::player_flag(height=28, code=activity.country) }}
                     </td>
                     <td>

@@ -9,7 +9,7 @@
     <div class="profile-border">
         {% if profile.skin_name %}
         <div>
-            <h1 title="{{ profile.country | code_to_country }}">
+            <h1 title="{{ profile.country | code_to_country }} ({{ profile.country }})">
                 {{ macros::player_flag(height=28, code=profile.country) }}
             </h1>
         </div>
