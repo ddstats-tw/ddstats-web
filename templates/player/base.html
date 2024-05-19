@@ -10,11 +10,8 @@
         {% if profile.skin_name %}
         <div>
             <h1 title="{{ profile.country | code_to_country }}">
-                <img 
-                    height="28px" 
-                    src="https://ddnet.org/status/countryflags/{{ profile.country | code_to_country }}.png" 
-                    alt="flag_{{ profile.country | code_to_country }}">
-                </h1>
+                {{ macros::player_flag(height=28, code=profile.country) }}
+            </h1>
         </div>
         <div class="profile-mid">
             <h1>{{ name }}</h1>

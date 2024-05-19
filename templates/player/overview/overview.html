@@ -19,7 +19,9 @@
                 {% for finish in recent_finishes %}
                 <tr>
                     <td>{{ finish.timestamp | date(format="%F %T") }}</td>
-                    <td><img height="17rem" src="https://ddnet.org/countryflags/{{ finish.server }}.png"></td>
+                    <td title="{{ finish.server }}">
+                        {{ macros::server_flag(height=17, server=finish.server) }}
+                    </td>
                     <td>{{ finish.map.server }}</td>
                     <td><a href="/map/{{ finish.map.map | urlencode | safe }}">{{ finish.map.map }}</a></td>
                     <td>{{ finish.time | fancy_time }}</td>

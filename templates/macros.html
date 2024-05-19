@@ -5,11 +5,11 @@
 
 {% macro diff (diff1, diff2) %}
 {% if diff1 - diff2 < 0 %}
-<td><span style="color: #EF5255;">+{{ (diff2 - diff1) | fancy_time }}</span></td>
+<span style="color: #EF5255;">+{{ (diff2 - diff1) | fancy_time }}</span>
 {% elif diff1 - diff2 > 0 %}
-<td><span style="color: #3DDF89;">-{{ (diff1 - diff2) | fancy_time }}</span></td>
+<span style="color: #3DDF89;">-{{ (diff1 - diff2) | fancy_time }}</span>
 {% else %}
-<td><span style="color: #3DDF89;">-00:00.00</span></td>
+<span style="color: #3DDF89;">-00:00.00</span>
 {% endif %}
 {% endmacro %}
 
@@ -122,9 +122,13 @@ new Chart(
 {% endmacro %}
 
 {% macro server_flag(height, server) %}
-<img height="{{ height }}px" src="https://ddnet.org/countryflags/{% if server == "" %}UNK{% else %}{{ server }}{% endif %}.png" alt="server_flag_{{ server }}">
+<img width="{{ height * 2 }}px" height="{{ height }}px"
+  src="https://ddnet.org/countryflags/{% if server == "" %}UNK{% else %}{{ server }}{% endif %}.png"
+  alt="server_flag_{{ server }}">
 {% endmacro %}
 
 {% macro player_flag(height, code) %}
-<img height="{{ height }}px" src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png" alt="player_flag_{{ code | code_to_country }}">
+<img width="{{ height * 2 }}px" height="{{ height }}px"
+  src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png"
+  alt="player_flag_{{ code | code_to_country }}">
 {% endmacro %}

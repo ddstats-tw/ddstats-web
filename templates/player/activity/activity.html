@@ -50,10 +50,7 @@
                     <td>{{ activity.last_seen }}</td>
                     <td>{{ activity.clan }}</td>
                     <td title="{{ activity.country | code_to_country }}">
-                        <img 
-                            height="28px" 
-                            src="https://ddnet.org/status/countryflags/{{ activity.country | code_to_country }}.png" 
-                            alt="flag_{{ activity.country | code_to_country }}">
+                        {{ macros::player_flag(height=28, code=activity.country) }}
                     </td>
                     <td>
                         <div title="{{ activity.skin_name }}" class="tee-medium">

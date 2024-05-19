@@ -20,7 +20,9 @@
                 {% for rank in recent_top_10s %}
                 <tr>
                     <td>{{ rank.timestamp | date(format="%F %T") }}</td>
-                    <td><img height="14px" src="https://ddnet.org/countryflags/{{ rank.server }}.png"></td>
+                    <td title="{{ rank.server }}">
+                        {{ macros::server_flag(height=14, server=rank.server) }}
+                    </td>
                     <td><a href="/map/{{ rank.map | urlencode | safe }}">{{ rank.map }}</a></td>
                     <td>{{ rank.time | fancy_time }}</td>
                     <td>{{ rank.rank }}<sup>{{ rank.rank | ordinal }}</sup></td>

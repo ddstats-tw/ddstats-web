@@ -71,6 +71,7 @@
             <thead>
             <tr>
                 <th>Rank</th>
+                <th>Server</th>
                 <th>Player</th>
                 <th>Time</th>
                 <th>Diff</th>
@@ -83,9 +84,12 @@
                 {% for rank in rankings %}
                 <tr>
                     <td>{{ rank.rank }}<sup>{{ rank.rank | ordinal }}</sup></td>
-                    <td>{{ macros::server_flag(height=14, server=rank.server) }} <a href="/player/{{ rank.name | urlencode }}">{{ rank.name }}</a></td>
+                    <td title="{{ rank.server }}">
+                        {{ macros::server_flag(height=14, server=rank.server) }}
+                    </td>
+                    <td><a href="/player/{{ rank.name | urlencode }}">{{ rank.name }}</a></td>
                     <td>{{ rank.time | fancy_time }}</td>
-                    {{ macros::diff(diff1=rankings[0].time, diff2=rank.time) }}
+                    <td>{{ macros::diff(diff1=rankings[0].time, diff2=rank.time) }}</td>
                     {% if not team_rankings | length %}
                     <td>{{ rank.timestamp | date(format="%F %T") }}</td>
                     {% endif %}
@@ -106,6 +110,7 @@
             <thead>
             <tr>
                 <th>Rank</th>
+                <th>Server</th>
                 <th>Players</th>
                 <th>Time</th>
                 <th>Diff</th>
@@ -115,24 +120,12 @@
                 {% for rank in team_rankings %}
                 <tr>
                     <td>{{ rank.rank }}<sup>{{ rank.rank | ordinal }}</sup></td>
-                    <td>
-                    {{ macros::server_flag(height=14, server=rank.server) }}
-                    {% for player in rank.players %}
-                        {% if loop.first and rank.players | length > 2 %}
-                        <a href="/player/{{ player | urlencode }}">{{ player }}</a>,
-                        {% elif loop.first and rank.players | length == 2 %}
-                        <a href="/player/{{ player | urlencode }}">{{ player }}</a> &
-                        {% elif loop.last and rank.players | length > 2 %}
-                        & <a href="/player/{{ player | urlencode }}">{{ player }}</a>
-                        {% elif not loop.last %}
-                        <a href="/player/{{ player | urlencode }}">{{ player }}</a>,
-                        {% else %}
-                        <a href="/player/{{ player | urlencode }}">{{ player }}</a>
-                        {% endif %}
-                    {% endfor %}
+                    <td title="{{ rank.server }}">
+                        {{ macros::server_flag(height=14, server=rank.server) }}
                     </td>
+                    <td>{{ macros::join_array(array=rank.players, link="/player/%s") }}</td>
                     <td>{{ rank.time | fancy_time }}</td>
-                    {{ macros::diff(diff1=team_rankings[0].time, diff2=rank.time) }}
+                    <td>{{ macros::diff(diff1=team_rankings[0].time, diff2=rank.time) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
