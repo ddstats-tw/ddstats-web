@@ -3,8 +3,14 @@ use crate::http::render;
 use crate::http::AppState;
 use crate::models::map::Map;
 use axum::extract::Path;
+use axum::extract::Request;
 use axum::extract::State;
+use axum::http::StatusCode;
+use axum::middleware;
+use axum::middleware::Next;
 use axum::response::Html;
+use axum::response::IntoResponse;
+use axum::response::Response;
 use axum::{routing::get, Router};
 use sqlx::Pool;
 use sqlx::Postgres;
@@ -57,10 +63,30 @@ pub async fn map_playtime(
     render(state.template, "map/playtime.html", &context)
 }
 
-pub fn router() -> Router<AppState> {
+pub async fn map_middleware(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+    request: Request,
+    next: Next,
+) -> Response {
+    match Map::info(&state.db, &name).await.is_ok() {
+        true => next.run(request).await,
+        false => (
+            StatusCode::NOT_FOUND,
+            render(state.template, "map/404.html", &Context::new()).unwrap(),
+        )
+            .into_response(),
+    }
+}
+
+pub fn router(state: AppState) -> Router<AppState> {
     Router::new()
         .route("/", get(map_overview))
         .route("/overview", get(map_overview))
         .route("/timecps", get(map_time_cps))
         .route("/playtime", get(map_playtime))
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            map_middleware,
+        ))
 }
