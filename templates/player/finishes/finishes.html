@@ -7,65 +7,67 @@
 
 <div class="container">
     <div class="box">
-        <h2>{{ category }}</h2>
-        {% if finishes[category] %}
-        <div class="points">
-            <table class="transparent">
+        <details open>
+            <summary class="summary-title">{{ category }}</summary>
+            {% if finishes[category] %}
+            <div class="points">
+                <table class="transparent">
+                    <thead>
+                    <tr>
+                        <th>Points</th>
+                        <th>Rank Points</th>
+                        <th>Team Points</th>
+                        <th>Team Rank1s</th>
+                        <th>Rank 1s</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ macros::points(data=points.points, category=category) }}</td>
+                            <td>{{ macros::points(data=points.rank_points, category=category) }}</td>
+                            <td>{{ macros::points(data=points.team_points, category=category) }}</td>
+                            <td>Unranked</td>
+                            <td>Unranked</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table class="sortable n-last">
                 <thead>
-                <tr>
-                    <th>Points</th>
-                    <th>Rank Points</th>
-                    <th>Team Points</th>
-                    <th>Team Rank1s</th>
-                    <th>Rank 1s</th>
-                </tr>
+                    <tr>
+                        <th id="default-sort" class="wide dir-u">Map</th>
+                        <th>Time</th>
+                        <th>Team Rank</th>
+                        <th>Rank</th>
+                        <th>Playtime</th>
+                        <th>Points</th>
+                    </tr>
                 </thead>
                 <tbody>
+                {% for finish in finishes[category] %}
                     <tr>
-                        <td>{{ macros::points(data=points.points, category=category) }}</td>
-                        <td>{{ macros::points(data=points.rank_points, category=category) }}</td>
-                        <td>{{ macros::points(data=points.team_points, category=category) }}</td>
-                        <td>Unranked</td>
-                        <td>Unranked</td>
+                        <td><a href="/map/{{ finish.map.map | urlencode | safe }}">{{ finish.map.map }}</a></td>
+                        <td data-sort="{{ finish.time }}">{{ finish.time | fancy_time }}</td>
+                        {% if finish.team_rank %}
+                        <td data-sort="{{ finish.team_rank }}">{{ finish.team_rank }}<sup>{{ finish.team_rank | ordinal }}</sup></td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td data-sort="{{ finish.rank }}">{{ finish.rank }}<sup>{{ finish.rank | ordinal }}</sup></td>
+                        {% if finish.seconds_played %}
+                        <td data-sort="{{ finish.seconds_played }}">{{ finish.seconds_played | time_format }}</td>
+                        {% else %}
+                        <td data-sort="0">Unplayed</td>
+                        {% endif %}
+                        <td>{{ finish.map.points }}</td>
                     </tr>
+                {% endfor %}
                 </tbody>
             </table>
-        </div>
-        <table class="sortable n-last">
-            <thead>
-                <tr>
-                    <th id="default-sort" class="wide dir-u">Map</th>
-                    <th>Time</th>
-                    <th>Team Rank</th>
-                    <th>Rank</th>
-                    <th>Playtime</th>
-                    <th>Points</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for finish in finishes[category] %}
-                <tr>
-                    <td><a href="/map/{{ finish.map.map | urlencode | safe }}">{{ finish.map.map }}</a></td>
-                    <td data-sort="{{ finish.time }}">{{ finish.time | fancy_time }}</td>
-                    {% if finish.team_rank %}
-                    <td data-sort="{{ finish.team_rank }}">{{ finish.team_rank }}<sup>{{ finish.team_rank | ordinal }}</sup></td>
-                    {% else %}
-                        <td></td>
-                    {% endif %}
-                    <td data-sort="{{ finish.rank }}">{{ finish.rank }}<sup>{{ finish.rank | ordinal }}</sup></td>
-                    {% if finish.seconds_played %}
-                    <td data-sort="{{ finish.seconds_played }}">{{ finish.seconds_played | time_format }}</td>
-                    {% else %}
-                    <td data-sort="0">Unplayed</td>
-                    {% endif %}
-                    <td>{{ finish.map.points }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>{{ name }} has not finished any {{ category }} maps and is unranked within the category.</p>
-        {% endif %}
+            {% else %}
+            <p>{{ name }} has not finished any {{ category }} maps and is unranked within the category.</p>
+            {% endif %}
+        </details>
     </div>
 </div>
 {% endfor %}
