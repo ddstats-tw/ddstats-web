@@ -18,12 +18,14 @@
             <h1>{{ profile.clan }}</h1>
         </div>
         <div title="{{ profile.skin_name }}" class="tee-large">
-            <div class="tee" 
-                data-skinimage="https://ddstats.qwik.space/skins/{{ profile.skin_name | urlencode }}.png" 
-                data-bodycolor="{{ profile.skin_color_body }}" 
-                data-feetcolor="{{ profile.skin_color_feet }}" 
-                data-coloringmode="code">
-            </div>
+            <button class="btn-copy" onClick="copySkin('{{ profile.skin_name }}', '{{ profile.skin_color_body }}', '{{ profile.skin_color_feet }}')">
+                <div class="tee" 
+                    data-skinimage="https://ddstats.qwik.space/skins/{{ profile.skin_name | urlencode }}.png" 
+                    data-bodycolor="{{ profile.skin_color_body }}" 
+                    data-feetcolor="{{ profile.skin_color_feet }}" 
+                    data-coloringmode="code">
+                </div>
+            </button>
         </div>
         {% else %}
         <div class="profile-mid">
