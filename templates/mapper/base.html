@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>{{ name }} | {{ page | capitalize }} | Mapper Profile | DDStats</title>
+{% endblock %}
+
+{% block main %}
+<div class="profile">
+    <div class="profile-border">
+        {% if profile.skin_name %}
+        <div>
+            <h1 title="{{ profile.country | code_to_country }} ({{ profile.country }})">
+                {{ macros::player_flag(height=28, code=profile.country) }}
+            </h1>
+        </div>
+        <div class="profile-mid">
+            <h1>{{ name }}</h1>
+            <h1>{{ profile.clan }}</h1>
+        </div>
+        <div title="{{ profile.skin_name }}" class="tee-large">
+            <button class="btn-copy" onClick="copySkin('{{ profile.skin_name }}', '{{ profile.skin_color_body }}', '{{ profile.skin_color_feet }}')">
+                <div class="tee" 
+                    data-skinimage="https://ddstats.tw/skins/{{ profile.skin_name | urlencode }}.png" 
+                    data-bodycolor="{{ profile.skin_color_body }}" 
+                    data-feetcolor="{{ profile.skin_color_feet }}" 
+                    data-coloringmode="code">
+                </div>
+            </button>
+        </div>
+        {% else %}
+        <div class="profile-mid">
+            <h1>{{ name }}</h1>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<ul class="buttons">
+    <li>
+        <a class="{% if page == "maps" %}active{% endif %}" href="/mapper/{{ name | urlencode | safe }}">Maps</a>
+    </li>
+    {% if profile %}
+    <li>
+        <a href="/player/{{ name | urlencode | safe }}">Player profile</a>
+    </li>
+    {% endif %}
+</ul>
+
+{% block mapper %}
+
+{% endblock %}
+<script src="/static/js/TeeAssembler.js"></script>
+{# NOTE: The look at cursor works weirdly if it isn't placed at the bottom for some reason #}
+<script>
+    const tee = teeArray[0]
+    if(tee) {
+        tee.lookAtCursor()
+    }
+    function copySkin(skin, body, feet) {
+        if (body && feet)
+            navigator.clipboard.writeText(`player_skin ${skin}; player_color_body ${body}; player_color_feet ${feet}; player_use_custom_color 1`);
+        else
+            navigator.clipboard.writeText(`player_skin ${skin}; player_use_custom_color 0`);
+        alert("Copied skin to clipboard");
+    }
+</script>
+{% endblock %}

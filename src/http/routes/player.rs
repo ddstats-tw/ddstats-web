@@ -1,6 +1,7 @@
 use crate::http::error::Error;
 use crate::http::render;
 use crate::http::AppState;
+use crate::models::mapper::Mapper;
 use crate::models::player::Finish;
 use crate::models::player::Player;
 use crate::utils::create_index_by_field;
@@ -20,10 +21,11 @@ use tera::Context;
 
 pub async fn player_context(db: &Pool<Postgres>, name: &str, page: &str) -> Result<Context, Error> {
     let profile = Player::get_profile(db, name).await?;
+    let is_mapper = !Mapper::maps(db, name, Some(1)).await.unwrap().is_empty();
     let mut context = Context::new();
     context.insert("name", &name);
     context.insert("profile", &profile);
-    context.insert("is_mapper", &false); // TODO
+    context.insert("is_mapper", &is_mapper);
     context.insert("page", &page);
 
     Ok(context)
