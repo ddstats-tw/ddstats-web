@@ -225,7 +225,7 @@ class Tee {
         try {
             await this.image.decode()
         } catch (err) {
-            this.image.src = "https://ddstats.qwik.space/skins/default.png"
+            this.image.src = "https://ddstats.tw/skins/default.png"
             await this.image.decode()
         }
         this.canvas.width = this.image.width
