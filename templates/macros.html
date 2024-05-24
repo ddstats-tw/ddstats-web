@@ -132,3 +132,19 @@ new Chart(
   src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png"
   alt="player_flag_{{ code | code_to_country }}">
 {% endmacro %}
+
+{% macro search(form, input, htmx, value) %}
+<form {% if form %}class="form-search-{{ form }}"{% endif %} action="/search" method="get">
+    <input class="input-search-{{ input }}" type="search"
+        name="q" autocomplete="off" spellcheck="false"
+        placeholder="nameless tee, Multeasymap, ..." autofocus
+        {% if value %}value="{{ value }}"{% endif %}
+        {% if htmx %}
+        hx-get="/search/api"
+        hx-trigger="input changed"
+        hx-target="#result-{{ input }}"
+        {% endif %}
+        >
+    <div class="result-{{ input }}" id="result-{{ input }}"></div>
+</form>
+{% endmacro %}

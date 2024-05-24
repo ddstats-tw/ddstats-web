@@ -26,15 +26,7 @@
         <nav id="nav" class="topnav">
             <h2 class="link"><a href="/">DDStats</a></h2>
             <div class="search-nav">
-                <form class="form-search-nav" action="/search" method="get">
-                    <input class="input-search-nav" id="typeahead-nav" 
-                        type="search" name="q" autocomplete="off"
-                        placeholder="nameless tee, Multeasymap, ..."
-                        hx-get="/search/api"
-                        hx-trigger="input changed"
-                        hx-target="#result-nav">
-                    <div class="result-nav" id="result-nav"></div>
-                </form>
+                {{ macros::search(form="nav", input="nav", htmx=true, value="")}}
             </div>
             <p class="link"><a href="/leaderboards">Leaderboards</a></p>
         </nav>
