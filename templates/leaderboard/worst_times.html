@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Leaderboard | Worst times | DDStats</title>
+{% endblock %}
+
+{% block main %}
+<h1>Leaderboard for the worst times</h1>
+
+{# Move this to a different file, merge with the other #}
+{% set categories = ["Total", "Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", 
+                     "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
+
+<ul class="buttons space-inbetween-small">
+    {% for category in categories %}
+    <li>
+        <a class="{% if current_category == category %}active{% endif %}" 
+           href="/leaderboard/worsttimes/category/{{ category }}">{{ category }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<div class="leaderboard">
+    <table>
+        <tbody>
+            <tr>
+                <th>#</th>
+                <th class="wide">Player</th>
+                <th>Map</th>
+                <th>Time (hours)</th>
+            </tr>
+            {% for player in leaderboard %}
+            <tr>
+                <td class="rank">{{ player.rank }}</td>
+                <td class="wide"><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
+                <td class="grey">{{ player.map }}</td>
+                <td class="grey">{{ player.worst }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

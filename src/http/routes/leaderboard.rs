@@ -57,11 +57,29 @@ pub async fn rank1s(
     render(state.template, "leaderboard/rank1s.html", &context)
 }
 
+pub async fn worst_times(
+    Path(params): Path<HashMap<String, String>>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let category = params
+        .get("category")
+        .unwrap_or(&"Total".to_string())
+        .to_owned();
+
+    let leaderboard = Leaderboard::worst_times(&state.db, &category).await?;
+
+    let mut context = Context::new();
+    context.insert("leaderboard", &leaderboard);
+    context.insert("current_category", &category);
+
+    render(state.template, "leaderboard/worst_times.html", &context)
+}
+
 pub fn router() -> Router<AppState> {
     Router::new()
-        // Landing
-        .route("/leaderboards", get(leaderboards))
         // Leaderboards
+        .route("/leaderboards", get(leaderboards))
+        // Rank1s
         // There is probably a better a way of doing it.
         .route(
             "/leaderboard/rank1s",
@@ -86,5 +104,11 @@ pub fn router() -> Router<AppState> {
         .route(
             "/leaderboard/teamrank1s/category/:category/sortby/:sorting",
             get(move |params, state| rank1s(RankType::Teamrank1s, params, state)),
+        )
+        // Worst times
+        .route("/leaderboard/worsttimes", get(worst_times))
+        .route(
+            "/leaderboard/worsttimes/category/:category",
+            get(worst_times),
         )
 }
