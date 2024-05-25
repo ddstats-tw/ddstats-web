@@ -21,6 +21,16 @@ pub struct WorstTimes {
     pub worst: f64,
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct MostPlayed {
+    pub rank: i64,
+    pub server: String,
+    pub map: String,
+    pub seconds: i64,
+    pub mostaddicted: String,
+    pub mostaddicted_seconds: i64,
+}
+
 pub struct Leaderboard;
 
 impl Leaderboard {
@@ -62,6 +72,16 @@ impl Leaderboard {
         category: &str,
     ) -> Result<Vec<WorstTimes>, sqlx::Error> {
         sqlx::query_file_as!(WorstTimes, "sql/leaderboard/worst_times.sql", category)
+            .fetch_all(db)
+            .await
+    }
+
+    /// Get leaderboard for most played maps within `category`
+    pub async fn most_played(
+        db: &Pool<Postgres>,
+        category: &str,
+    ) -> Result<Vec<MostPlayed>, sqlx::Error> {
+        sqlx::query_file_as!(MostPlayed, "sql/leaderboard/most_played.sql", category)
             .fetch_all(db)
             .await
     }

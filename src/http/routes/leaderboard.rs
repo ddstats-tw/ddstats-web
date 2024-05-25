@@ -75,6 +75,24 @@ pub async fn worst_times(
     render(state.template, "leaderboard/worst_times.html", &context)
 }
 
+pub async fn most_played(
+    Path(params): Path<HashMap<String, String>>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let category = params
+        .get("category")
+        .unwrap_or(&"Total".to_string())
+        .to_owned();
+
+    let leaderboard = Leaderboard::most_played(&state.db, &category).await?;
+
+    let mut context = Context::new();
+    context.insert("leaderboard", &leaderboard);
+    context.insert("current_category", &category);
+
+    render(state.template, "leaderboard/most_played.html", &context)
+}
+
 pub fn router() -> Router<AppState> {
     Router::new()
         // Leaderboards
@@ -110,5 +128,11 @@ pub fn router() -> Router<AppState> {
         .route(
             "/leaderboard/worsttimes/category/:category",
             get(worst_times),
+        )
+        // Most played
+        .route("/leaderboard/mostplayed", get(most_played))
+        .route(
+            "/leaderboard/mostplayed/category/:category",
+            get(most_played),
         )
 }

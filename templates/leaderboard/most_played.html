@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Leaderboard | Most played maps | DDStats</title>
+{% endblock %}
+
+{% block main %}
+<h1>Leaderboard for the most played maps</h1>
+
+{# Move this to a different file, merge with the other #}
+{% set categories = ["Total", "Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", 
+                     "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
+
+<ul class="buttons space-inbetween-small">
+    {% for category in categories %}
+    <li>
+        <a class="{% if current_category == category %}active{% endif %}" 
+           href="/leaderboard/mostplayed/category/{{ category }}">{{ category }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<div class="leaderboard">
+    <table>
+        <tbody>
+            <tr>
+                <th>#</th>
+                <th>Category</th>
+                <th class="wide">Map</th>
+                <th>Playtime</th>
+                <th>Most addicted</th>
+            </tr>
+            {% for map in leaderboard %}
+            <tr>
+                <td class="rank">{{ map.rank }}</td>
+                <td class="">{{ map.server }}</td>
+                <td class="wide"><a href="/map/{{ map.map | urlencode }}">{{ map.map }}</a></td>
+                <td class="grey">{{ map.seconds | time_format }}</td>
+                <td class="wide">
+                    <a href="/player/{{ map.mostaddicted | urlencode }}">{{ map.mostaddicted }}</a>
+                    ({{ map.mostaddicted_seconds | time_format }})
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
