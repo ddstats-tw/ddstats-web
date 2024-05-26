@@ -434,12 +434,11 @@ class Tee {
     }
     lookAtCursor() {
         this.setTeeEyesVariables()
-        let originCoord = {
-            x: this.line.getBoundingClientRect().x.toFixed(),
-            y: this.line.getBoundingClientRect().y.toFixed()
-        }
-
         this.moveTeeEyesFunction = (e) => {
+            let originCoord = {
+                x: this.line.getBoundingClientRect().x.toFixed(),
+                y: this.line.getBoundingClientRect().y.toFixed()
+            }
             let deg = Math.atan2(e.clientY - originCoord.y, e.clientX - originCoord.x) * 180 / Math.PI
             this.lookAt(deg)
         }
