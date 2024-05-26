@@ -137,7 +137,8 @@ new Chart(
 <form {% if form %}class="form-search-{{ form }}"{% endif %} action="/search" method="get">
     <input class="input-search-{{ input }}" type="search"
         name="q" autocomplete="off" spellcheck="false"
-        placeholder="nameless tee, Multeasymap, ..." autofocus
+        placeholder="nameless tee, Multeasymap, ..."
+        {% if form == "home" %}autofocus{% endif %}
         {% if value %}value="{{ value }}"{% endif %}
         {% if htmx %}
         hx-get="/search/api"
