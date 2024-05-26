@@ -31,7 +31,7 @@
             </tr>
             {% for player in leaderboard %}
             <tr>
-                <td class="rank">{{ player.rank }}</td>
+                <td class="rank">{{ player.rank + 100 * (current_page - 1) }}</td>
                 <td class="wide"><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
                 <td class="grey">{{ player.map }}</td>
                 <td class="grey">{{ player.worst }}</td>
@@ -39,5 +39,10 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
+{% set url = ["/leaderboard/", "worsttimes", "/category/", current_category, "/page"] | join %}
+<div class="pages">
+    {{ macros::pager(current_page=current_page, next=leaderboard.100 is defined, path=url) }}
 </div>
 {% endblock %}

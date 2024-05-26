@@ -16,4 +16,4 @@ GROUP BY
     name
 HAVING
     COUNT(CASE WHEN rank = $1 THEN 1 END) > 0
-LIMIT 100
+LIMIT 101 OFFSET 100*$3::smallint

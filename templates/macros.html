@@ -149,3 +149,13 @@ new Chart(
     <div class="result-{{ input }}" id="result-{{ input }}"></div>
 </form>
 {% endmacro %}
+
+{% macro pager(current_page, next, path) %}
+    {% if current_page > 1 %}
+    <a class="page" href="{{ path | safe }}/{{ current_page - 1 }}">Previous</a>
+    {% endif %}
+
+    {% if next %}
+    <a class="page" href="{{ path | safe }}/{{ current_page + 1 }}">Next</a>
+    {% endif %}
+{% endmacro %}

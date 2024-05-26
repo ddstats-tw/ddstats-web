@@ -53,8 +53,8 @@
     </table>
 </div>
 
-{# {% set url = ["/leaderboard/", type, "/category/", category, "/sortby/", sorting, "/page"] | join %}
+{% set url = ["/leaderboard/", type, "/category/", current_category, "/sortby/", sorting, "/page"] | join %}
 <div class="pages">
-    {{ utils.pager(leaderboard.page.page, leaderboard.page.total, url) }}
-</div> #}
+    {{ macros::pager(current_page=current_page, next=leaderboard.100 is defined, path=url) }}
+</div>
 {% endblock %}

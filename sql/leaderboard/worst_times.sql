@@ -15,5 +15,5 @@ FROM (
         mapinfo.BONUS = false
     ORDER BY
         time DESC
-    LIMIT 100
+    LIMIT 101 OFFSET 100*$2::smallint
 )

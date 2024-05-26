@@ -39,12 +39,14 @@ impl Leaderboard {
         db: &Pool<Postgres>,
         sorting: i32,
         category: &str,
+        page: i16,
     ) -> Result<Vec<MostRank1s>, sqlx::Error> {
         sqlx::query_file_as!(
             MostRank1s,
             "sql/leaderboard/most_rank1s.sql",
             sorting,
-            category
+            category,
+            page - 1
         )
         .fetch_all(db)
         .await
@@ -55,12 +57,14 @@ impl Leaderboard {
         db: &Pool<Postgres>,
         sorting: i32,
         category: &str,
+        page: i16,
     ) -> Result<Vec<MostRank1s>, sqlx::Error> {
         sqlx::query_file_as!(
             MostRank1s,
             "sql/leaderboard/most_team_rank1s.sql",
             sorting,
-            category
+            category,
+            page - 1
         )
         .fetch_all(db)
         .await
@@ -70,19 +74,31 @@ impl Leaderboard {
     pub async fn worst_times(
         db: &Pool<Postgres>,
         category: &str,
+        page: i16,
     ) -> Result<Vec<WorstTimes>, sqlx::Error> {
-        sqlx::query_file_as!(WorstTimes, "sql/leaderboard/worst_times.sql", category)
-            .fetch_all(db)
-            .await
+        sqlx::query_file_as!(
+            WorstTimes,
+            "sql/leaderboard/worst_times.sql",
+            category,
+            page - 1
+        )
+        .fetch_all(db)
+        .await
     }
 
     /// Get leaderboard for most played maps within `category`
     pub async fn most_played(
         db: &Pool<Postgres>,
         category: &str,
+        page: i16,
     ) -> Result<Vec<MostPlayed>, sqlx::Error> {
-        sqlx::query_file_as!(MostPlayed, "sql/leaderboard/most_played.sql", category)
-            .fetch_all(db)
-            .await
+        sqlx::query_file_as!(
+            MostPlayed,
+            "sql/leaderboard/most_played.sql",
+            category,
+            page - 1
+        )
+        .fetch_all(db)
+        .await
     }
 }
