@@ -1,5 +1,5 @@
 SELECT to_char(date::date, 'YYYY-MM') AS "year_month!",
-    to_char(date::date, 'Month') AS "month!",
+    to_char(date::date, 'FMMonth') AS "month!",
     SUM(time) AS "seconds_played!"
 FROM
     playtime
