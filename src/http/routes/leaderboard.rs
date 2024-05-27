@@ -99,18 +99,11 @@ pub async fn most_played(
         .unwrap_or(&"Total".to_string())
         .to_owned();
 
-    let page: i16 = params
-        .get("page")
-        .unwrap_or(&"1".to_string())
-        .parse()
-        .unwrap_or(1);
-
-    let leaderboard = Leaderboard::most_played(&state.db, &category, page).await?;
+    let leaderboard = Leaderboard::most_played(&state.db, &category).await?;
 
     let mut context = Context::new();
     context.insert("leaderboard", &leaderboard);
     context.insert("current_category", &category);
-    context.insert("current_page", &page);
 
     render(state.template, "leaderboard/most_played.html", &context)
 }
@@ -167,10 +160,6 @@ pub fn router() -> Router<AppState> {
         .route("/leaderboard/mostplayed", get(most_played))
         .route(
             "/leaderboard/mostplayed/category/:category",
-            get(most_played),
-        )
-        .route(
-            "/leaderboard/mostplayed/category/:category/page/:page",
             get(most_played),
         )
 }

@@ -12,4 +12,3 @@ WHERE
     maps.server LIKE CASE WHEN $1 = 'Total' THEN '%' ELSE $1 END
 ORDER BY
     p.seconds DESC
-LIMIT 101 OFFSET 100*$2::smallint

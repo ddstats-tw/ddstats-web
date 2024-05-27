@@ -90,15 +90,9 @@ impl Leaderboard {
     pub async fn most_played(
         db: &Pool<Postgres>,
         category: &str,
-        page: i16,
     ) -> Result<Vec<MostPlayed>, sqlx::Error> {
-        sqlx::query_file_as!(
-            MostPlayed,
-            "sql/leaderboard/most_played.sql",
-            category,
-            page - 1
-        )
-        .fetch_all(db)
-        .await
+        sqlx::query_file_as!(MostPlayed, "sql/leaderboard/most_played.sql", category)
+            .fetch_all(db)
+            .await
     }
 }
