@@ -1,3 +1,4 @@
+use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use sqlx::{self, types::chrono::NaiveDateTime, Pool, Postgres};
 use std::{collections::HashMap, env, fmt::Debug};
@@ -93,7 +94,7 @@ pub struct RanksTogether {
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct RecentActivity {
     pub name: String,
-    pub date: String, /* TODO: This shouldn't be as string */
+    pub date: NaiveDate,
     pub map_name: String,
     pub map: Option<Map>,
     pub seconds_played: i64,
@@ -107,7 +108,7 @@ pub struct RecentPlayerInfo {
     pub skin_name: String,
     pub skin_color_body: Option<i32>,
     pub skin_color_feet: Option<i32>,
-    pub last_seen: String, /* TODO: This shouldn't be as string */
+    pub last_seen: NaiveDate,
     pub seconds_played: i64,
 }
 
