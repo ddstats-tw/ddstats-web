@@ -1,11 +1,11 @@
-SELECT map,
-    server,
-    points,
-    stars,
-    mapper,
-    timestamp
+SELECT maps AS "map!: Map",
+    median_time AS "median_time?",
+    finishes AS "finishes?",
+    finishes_rank AS "finishes_rank?"
 FROM
     maps
+JOIN mapstats ON
+    maps.map = mapstats.map
 WHERE
-    map ILIKE FORMAT('%%%s%%', $1::text)
+    maps.map ILIKE FORMAT('%%%s%%', $1::text)
 LIMIT $2

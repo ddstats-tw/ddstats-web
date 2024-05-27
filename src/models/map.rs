@@ -84,8 +84,8 @@ impl Map {
         db: &Pool<Postgres>,
         query: &str,
         n: Option<i64>,
-    ) -> Result<Vec<Map>, sqlx::Error> {
-        sqlx::query_file_as!(Map, "sql/map/search.sql", query, n)
+    ) -> Result<Vec<Info>, sqlx::Error> {
+        sqlx::query_file_as!(Info, "sql/map/search.sql", query, n)
             .fetch_all(db)
             .await
     }
