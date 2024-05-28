@@ -51,10 +51,11 @@ pub async fn mapper_middleware(
         .is_empty()
     {
         false => next.run(request).await,
-        true => (
-            StatusCode::NOT_FOUND,
-            render(state.template, "mapper/404.html", &Context::new()).unwrap(),
-        )
+        true => (StatusCode::NOT_FOUND, {
+            let mut context = Context::new();
+            context.insert("hide_search", &true);
+            render(state.template, "mapper/404.html", &context).unwrap()
+        })
             .into_response(),
     }
 }

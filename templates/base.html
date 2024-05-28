@@ -25,9 +25,11 @@
     <body>
         <nav id="nav" class="topnav">
             <h2 class="link"><a href="/">DDStats</a></h2>
+            {% if hide_search is not defined %}
             <div class="search-nav">
                 {{ macros::search(form="nav", input="nav", htmx=true, value="")}}
             </div>
+            {% endif %}
             <p class="link"><a href="/leaderboards">Leaderboards</a></p>
         </nav>
 

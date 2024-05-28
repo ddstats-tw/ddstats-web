@@ -71,10 +71,11 @@ pub async fn map_middleware(
 ) -> Response {
     match Map::info(&state.db, &name).await.is_ok() {
         true => next.run(request).await,
-        false => (
-            StatusCode::NOT_FOUND,
-            render(state.template, "map/404.html", &Context::new()).unwrap(),
-        )
+        false => (StatusCode::NOT_FOUND, {
+            let mut context = Context::new();
+            context.insert("hide_search", &true);
+            render(state.template, "map/404.html", &context).unwrap()
+        })
             .into_response(),
     }
 }

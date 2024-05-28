@@ -16,7 +16,10 @@ pub struct SearchQuery {
 }
 
 pub async fn landing(State(state): State<AppState>) -> Result<Html<String>, Error> {
-    render(state.template, "landing.html", &Context::new())
+    let mut context = Context::new();
+    context.insert("hide_search", &true);
+
+    render(state.template, "landing.html", &context)
 }
 
 pub async fn search(
@@ -30,6 +33,7 @@ pub async fn search(
     context.insert("query", &query.q.clone());
     context.insert("maps", &maps);
     context.insert("players", &players);
+    context.insert("hide_search", &true);
 
     render(state.template, "search.html", &context)
 }

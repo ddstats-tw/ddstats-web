@@ -199,10 +199,11 @@ pub async fn player_middleware(
 ) -> Response {
     match Player::get_profile(&state.db, &name).await.is_ok() {
         true => next.run(request).await,
-        false => (
-            StatusCode::NOT_FOUND,
-            render(state.template, "player/404.html", &Context::new()).unwrap(),
-        )
+        false => (StatusCode::NOT_FOUND, {
+            let mut context = Context::new();
+            context.insert("hide_search", &true);
+            render(state.template, "player/404.html", &context).unwrap()
+        })
             .into_response(),
     }
 }
