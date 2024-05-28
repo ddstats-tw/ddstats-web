@@ -5,20 +5,7 @@
 <div class="container">
     {% for map in maps %}
     <div class="box">  
-        <div class="center">
-            <h2>{{ map.map.server }}  - <a href="/map/{{ map.map.map | urlencode }}">{{ map.map.map }}</a></h2>
-            {% if map.map.timestamp %}
-            <p>{{ map.map.timestamp | date(format="%F %T") }}</p>
-            {% else %}
-            <p>Unknown release date</p>
-            {% endif %}
-            <p>{{ macros::stars(stars=map.map.stars, max=5) }}</p>
-            <p>{{ macros::join_array(array=map.map.mapper | mapper_array, link="/mapper/%s") }}</p>
-            <a href="/map/{{ map.map.map | urlencode }}">
-                <img class="center" src="https://ddnet.org/ranks/maps/{{ map.map.map | map_thumbnail }}.png">
-            </a>
-            <p>{{ map.finishes_rank }}<sup>{{ map.finishes_rank | ordinal }}</sup> with {{ map.finishes }} finish{{ map.finishes | pluralize(plural="es") }}</p>
-        </div>
+        {{ macros::map_card(map=map) }}
     </div>
     {% endfor %}
 </div>
