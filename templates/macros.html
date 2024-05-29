@@ -21,6 +21,181 @@ Unranked
 {% endif %}
 {% endmacro %}
 
+{% macro join_array(array, link) %}
+  {% for item in array %}
+    <a href="{{ link | replace(from='%s', to=item | urlencode ) }}">{{ item }}</a>
+    {%- if not loop.last and array | length - loop.index0 != 2 -%}, {%- endif -%}
+    {% if array | length - loop.index0 == 2 %} & {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro server_flag(height, server) %}
+<img width="{{ height * 2 }}px" height="{{ height }}px"
+  src="https://ddnet.org/countryflags/{% if server == "" %}UNK{% else %}{{ server }}{% endif %}.png"
+  alt="server_flag_{{ server }}">
+{% endmacro %}
+
+{% macro player_flag(height, code) %}
+<img width="{{ height * 2 }}px" height="{{ height }}px"
+  src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png"
+  alt="player_flag_{{ code | code_to_country }}">
+{% endmacro %}
+
+{% macro search(form, input, htmx, value) %}
+<form {% if form %}class="form-search-{{ form }}"{% endif %} action="/search" method="get">
+    <input class="input-search-{{ input }}" type="search"
+        name="q" autocomplete="off" spellcheck="false"
+        placeholder="nameless tee, Multeasymap, ..."
+        {% if form == "home" %}autofocus{% endif %}
+        {% if value %}value="{{ value }}"{% endif %}
+        {% if htmx %}
+        hx-get="/search/api"
+        hx-trigger="input changed"
+        hx-target="#result-{{ input }}"
+        {% endif %}
+        >
+    <div class="result-{{ input }}" id="result-{{ input }}"></div>
+</form>
+{% endmacro %}
+
+{% macro pager(current_page, next, path) %}
+    {% if current_page > 1 %}
+    <a class="page" href="{{ path | safe }}/{{ current_page - 1 }}">Previous</a>
+    {% endif %}
+
+    {% if next %}
+    <a class="page" href="{{ path | safe }}/{{ current_page + 1 }}">Next</a>
+    {% endif %}
+{% endmacro %}
+
+{% macro map_card(map) %}
+<div class="center">
+    <h2>{{ map.map.server }} - <a href="/map/{{ map.map.map | urlencode }}">{{ map.map.map }}</a></h2>
+    {% if map.map.timestamp %}
+    <p>{{ map.map.timestamp | date(format="%F %T") }}</p>
+    {% else %}
+    <p>Unknown release date</p>
+    {% endif %}
+    <p>{{ macros::stars(stars=map.map.stars, max=5) }}</p>
+    <p>{{ macros::join_array(array=map.map.mapper | mapper_array, link="/mapper/%s") }}</p>
+    <a href="/map/{{ map.map.map | urlencode }}">
+        <img class="center" src="https://ddnet.org/ranks/maps/{{ map.map.map | map_thumbnail }}.png">
+    </a>
+    <p>{{ map.finishes_rank }}<sup>{{ map.finishes_rank | ordinal }}</sup> with {{ map.finishes }} finish{{ map.finishes | pluralize(plural="es") }}</p>
+</div>
+{% endmacro %}
+
+{% macro points_graph(ctx, data) %}
+
+let data = [
+  {%- for row in data -%}
+  {
+    x: '{{ row.date }}',
+    rank_points: {{ row.rank_points }},
+    team_points: {{ row.team_points }},
+    points: {{ row.points }}
+  },
+  {%- endfor -%}
+]
+
+new Chart(
+  {{ ctx }},
+  {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Rank Points',
+            data: data,
+            fill: false,
+            borderColor: '#4C9CEF',
+            tension: 0,
+            pointRadius: 0,
+            parsing: {
+              yAxisKey: 'rank_points'
+            }
+        },
+        {
+            label: 'Team Points',
+            data: data,
+            fill: false,
+            borderColor: '#EF5255',
+            tension: 0,
+            pointRadius: 0,
+            parsing: {
+              yAxisKey: 'team_points'
+            }
+        },
+        {
+            label: 'Points',
+            data: data,
+            fill: false,
+            borderColor: '#EFB1F1',
+            tension: 0,
+            pointRadius: 0,
+            parsing: {
+              yAxisKey: 'points'
+            }
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        spanGaps: true,
+        animation: false,
+        plugins: {
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+            },
+            title: {
+                display: true,
+                align: 'start',
+                text: "Points graph",
+                padding: {
+                    top: 0,
+                    bottom: 0
+                },
+                font: {
+                    weight: 'bold',
+                    size: 23,
+                },
+            }
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: false
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: "#30304F"
+                },
+                ticks: {
+                    font: {
+                        weight: 'bold',
+                        size: 20,
+                    }
+                },
+                type: 'time',
+                time: {
+                    unit: 'year'
+                },
+            },
+            y: {
+                suggestedMax: 250,
+                grid: {
+                    color: "#30304F"
+                },
+                ticks: {
+                    font: {
+                        size: 17,
+                    }
+                }
+            }
+        }
+    }
+})
+{% endmacro %}
+
 {% macro doughnut_chart(ctx, data) %}
 new Chart(
   {{ ctx }},
@@ -111,68 +286,4 @@ new Chart(
     }
   }
 })
-{% endmacro %}
-
-{% macro join_array(array, link) %}
-  {% for item in array %}
-    <a href="{{ link | replace(from='%s', to=item | urlencode ) }}">{{ item }}</a>
-    {%- if not loop.last and array | length - loop.index0 != 2 -%}, {%- endif -%}
-    {% if array | length - loop.index0 == 2 %} & {% endif %}
-  {% endfor %}
-{% endmacro %}
-
-{% macro server_flag(height, server) %}
-<img width="{{ height * 2 }}px" height="{{ height }}px"
-  src="https://ddnet.org/countryflags/{% if server == "" %}UNK{% else %}{{ server }}{% endif %}.png"
-  alt="server_flag_{{ server }}">
-{% endmacro %}
-
-{% macro player_flag(height, code) %}
-<img width="{{ height * 2 }}px" height="{{ height }}px"
-  src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png"
-  alt="player_flag_{{ code | code_to_country }}">
-{% endmacro %}
-
-{% macro search(form, input, htmx, value) %}
-<form {% if form %}class="form-search-{{ form }}"{% endif %} action="/search" method="get">
-    <input class="input-search-{{ input }}" type="search"
-        name="q" autocomplete="off" spellcheck="false"
-        placeholder="nameless tee, Multeasymap, ..."
-        {% if form == "home" %}autofocus{% endif %}
-        {% if value %}value="{{ value }}"{% endif %}
-        {% if htmx %}
-        hx-get="/search/api"
-        hx-trigger="input changed"
-        hx-target="#result-{{ input }}"
-        {% endif %}
-        >
-    <div class="result-{{ input }}" id="result-{{ input }}"></div>
-</form>
-{% endmacro %}
-
-{% macro pager(current_page, next, path) %}
-    {% if current_page > 1 %}
-    <a class="page" href="{{ path | safe }}/{{ current_page - 1 }}">Previous</a>
-    {% endif %}
-
-    {% if next %}
-    <a class="page" href="{{ path | safe }}/{{ current_page + 1 }}">Next</a>
-    {% endif %}
-{% endmacro %}
-
-{% macro map_card(map) %}
-<div class="center">
-    <h2>{{ map.map.server }} - <a href="/map/{{ map.map.map | urlencode }}">{{ map.map.map }}</a></h2>
-    {% if map.map.timestamp %}
-    <p>{{ map.map.timestamp | date(format="%F %T") }}</p>
-    {% else %}
-    <p>Unknown release date</p>
-    {% endif %}
-    <p>{{ macros::stars(stars=map.map.stars, max=5) }}</p>
-    <p>{{ macros::join_array(array=map.map.mapper | mapper_array, link="/mapper/%s") }}</p>
-    <a href="/map/{{ map.map.map | urlencode }}">
-        <img class="center" src="https://ddnet.org/ranks/maps/{{ map.map.map | map_thumbnail }}.png">
-    </a>
-    <p>{{ map.finishes_rank }}<sup>{{ map.finishes_rank | ordinal }}</sup> with {{ map.finishes }} finish{{ map.finishes | pluralize(plural="es") }}</p>
-</div>
 {% endmacro %}

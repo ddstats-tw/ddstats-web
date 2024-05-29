@@ -142,6 +142,14 @@ pub struct PlaytimePerMonth {
     pub seconds_played: i64,
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct PointsGraph {
+    pub date: NaiveDate,
+    pub points: i64,
+    pub rank_points: i64,
+    pub team_points: i64,
+}
+
 pub struct Player;
 
 impl Player {
@@ -334,6 +342,16 @@ impl Player {
         )
         .fetch_all(db)
         .await
+    }
+
+    /// Get the historical rank-, team- and points data
+    pub async fn points_graph(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<Vec<PointsGraph>, sqlx::Error> {
+        sqlx::query_file_as!(PointsGraph, "sql/player/points-graph.sql", player)
+            .fetch_all(db)
+            .await
     }
 
     /// Get points of a `player`.

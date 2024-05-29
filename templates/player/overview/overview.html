@@ -1,6 +1,15 @@
 {% extends "player/base.html" %}
 
 {% block player %}
+
+<div class="container">
+    <div class="box">
+        <div class="graph">
+            <canvas id="pointsChart"></canvas>
+        </div>
+    </div>
+</div>
+
 <div class="container left-bigger">
     <div class="box">
         <h2 style="float: left">Last finishes</h2>
@@ -52,5 +61,17 @@
         </table>
     </div>
 </div>
+
+<script src="/static/js/chart-umd.js"></script>
+<script src="/static/js/chart-date-fns.js"></script>
+<script>
+    const ctx_points_graph = document.getElementById('pointsChart'); {# rename these ids #}
+
+    Chart.defaults.color = "#E0E0FF"
+    Chart.defaults.font.family = "'Roboto Regular', sans-serif"
+    Chart.defaults.font.size = 12
+
+    {{ macros::points_graph(ctx="ctx_points_graph", data=points_graph) }}
+</script>
 
 {% endblock %}
