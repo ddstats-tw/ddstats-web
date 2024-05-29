@@ -419,7 +419,9 @@ b {
 }
 
 .result-nav {
-    width: min(30ch, 30vw);
+    position: fixed;
+    top: 4rem;
+    width: 30ch;
     background-color: palette.$surface;
 }
 
@@ -482,23 +484,20 @@ img {
     max-height: 100%;
 }
 
-@media screen and (max-width:1000px) {
+@media screen and (max-width:1100px) {
     .container,
     .left-bigger {
         grid-template-columns: 1fr;
     }
 }
 
-@media screen and (max-width:600px) {
+@media screen and (max-width:650px) {
     main {
         max-width: 95%;
     }
     .profile-border>div {
         padding: 0.5em;
         overflow: hidden;
-    }
-    .search-nav {
-        position: initial;
     }
     .box th, .box td {
         white-space: nowrap;
@@ -508,6 +507,12 @@ img {
     }
     .space-inbetween-small {
         justify-content: space-between;
+    }
+}
+
+@media screen and (max-width:400px) {
+    .search-nav {
+        position: initial;
     }
 }
 
