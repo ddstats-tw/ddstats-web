@@ -193,9 +193,6 @@ pub async fn player_rank1s_partners(
 pub async fn player_middleware(
     Path(name): Path<String>,
     State(state): State<AppState>,
-    // you can add more extractors here but the last
-    // extractor must implement `FromRequest` which
-    // `Request` does
     request: Request,
     next: Next,
 ) -> Response {
