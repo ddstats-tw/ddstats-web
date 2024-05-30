@@ -16,7 +16,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="/static/css/main.css?v=123">
         <link rel="icon" type="image/png" href="/static/media/favicon-96x96.png">
-        <script src="/static/htmx.min.js" defer></script>
+        {# <script src="/static/htmx.min.js" defer></script> #}
         {% block head %}
             <title>DDStats</title>
         {% endblock %}
@@ -27,7 +27,7 @@
             <h2 class="link"><a href="/">DDStats</a></h2>
             {% if hide_search is not defined %}
             <div class="search-nav">
-                {{ macros::search(form="nav", input="nav", htmx=true, value="")}}
+                {{ macros::search(form="nav", input="nav", autocomplete=true, value="")}}
             </div>
             {% endif %}
             <p class="link"><a href="/leaderboards">Leaderboards</a></p>
@@ -48,4 +48,5 @@
             </p>
         </footer>
     </body>
+    <script src="/static/js/ddstats.js"></script>
 </html>

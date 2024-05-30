@@ -6,7 +6,7 @@
 
 {% block main %}
 
-{{ macros::search(form="", input="home", htmx=false, value=query) }}
+{{ macros::search(form="", input="home", autocomplete=false, value=query) }}
 
 <h2>Maps</h2>
 {% if maps %}

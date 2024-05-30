@@ -1,18 +1,30 @@
 use crate::http::error::Error;
 use crate::http::render;
 use crate::http::AppState;
+use crate::models::map::Info;
 use crate::models::map::Map;
 use crate::models::player::Player;
+use crate::models::player::Profile;
 use axum::extract::Query;
 use axum::extract::State;
 use axum::response::Html;
+use axum::response::IntoResponse;
+use axum::response::Response;
+use axum::Json;
 use axum::{routing::get, Router};
 use serde::Deserialize;
+use serde::Serialize;
 use tera::Context;
 
 #[derive(Deserialize)]
 pub struct SearchQuery {
     q: String,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct SearchJson {
+    pub maps: Vec<Info>,
+    pub players: Vec<Profile>,
 }
 
 pub async fn landing(State(state): State<AppState>) -> Result<Html<String>, Error> {
@@ -41,18 +53,11 @@ pub async fn search(
 pub async fn search_api(
     query: Query<SearchQuery>,
     State(state): State<AppState>,
-) -> Result<Html<String>, Error> {
+) -> Result<Response, Error> {
     let maps = Map::search(&state.db, &query.q, Some(5)).await?;
-    let players = match !query.q.is_empty() {
-        true => Player::search(&state.db, &query.q, Some(5)).await?,
-        false => Vec::new(),
-    };
-    let mut context = Context::new();
-    context.insert("query", &query.q.clone());
-    context.insert("maps", &maps);
-    context.insert("players", &players);
+    let players = Player::search(&state.db, &query.q, Some(5)).await?;
 
-    render(state.template, "search-api.html", &context)
+    Ok(Json(SearchJson { maps, players }).into_response())
 }
 
 pub async fn faq(State(state): State<AppState>) -> Result<Html<String>, Error> {

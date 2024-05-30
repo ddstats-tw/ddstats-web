@@ -451,8 +451,8 @@ input:focus {
     list-style-type: none;
 }
 
-.result-home .selectedHome,
-.result-nav .selectedNav {
+.result-home .selected-home,
+.result-nav .selected-nav {
     background-color: palette.$grey5;
     color: palette.$text;
 }
