@@ -1,0 +1,44 @@
+{% extends "player/base.html" %}
+
+{% block player %}
+
+<div class="container">
+    <div class="box">
+        <h2 style="float: left">Recent player info</h2>
+        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity">Go back</a>
+        <p style="clear: left"><i>You can click on a skin to copy it to your clipboard, then you can use it by pasting the contents to the local console (f1)</i></p><br>
+
+        <table class="transparent">
+            <thead>
+            <tr>
+                <th>Last seen</th>
+                <th>Clan</th>
+                <th>Country</th>
+                <th>Skin</th>
+                <th>Time played</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for activity in recent_player_info %}
+                <tr>
+                    <td>{{ activity.last_seen }}</td>
+                    <td>{{ activity.clan }}</td>
+                    <td title="{{ activity.country | code_to_country }} ({{ activity.country }})">
+                        {{ macros::player_flag(height=28, code=activity.country) }}
+                    </td>
+                    <td>
+                        <div title="{{ activity.skin_name }}" class="tee-medium">
+                            <button class="btn-copy" onClick="copySkin('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
+                                <div class="tee" data-skinimage="https://ddstats.tw/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
+                            </button>
+                        </div>
+                    </td>
+                    <td>{{ activity.seconds_played | time_format }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

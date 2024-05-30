@@ -1,0 +1,84 @@
+{% macro stars (stars, max) %}
+{% for i in range(start=0, end=stars) %}★{% endfor %}
+{%- for i in range(start=0, end=max-stars) %}☆{% endfor %}
+{% endmacro %}
+
+{% macro diff (diff1, diff2) %}
+{% if diff1 - diff2 < 0 %}
+<span style="color: #EF5255;">+{{ (diff2 - diff1) | fancy_time }}</span>
+{% elif diff1 - diff2 > 0 %}
+<span style="color: #3DDF89;">-{{ (diff1 - diff2) | fancy_time }}</span>
+{% else %}
+<span style="color: #3DDF89;">-00:00.00</span>
+{% endif %}
+{% endmacro %}
+
+{% macro points (data, category) %}
+{% if data[category] %}
+{{ data[category].rank }}<sup>{{ data[category].rank | ordinal }}</sup> with {{ data[category].points }} points
+{% else %}
+Unranked
+{% endif %}
+{% endmacro %}
+
+{% macro join_array(array, link) %}
+  {% for item in array %}
+    <a href="{{ link | replace(from='%s', to=item | urlencode ) }}">{{ item }}</a>
+    {%- if not loop.last and array | length - loop.index0 != 2 -%}, {%- endif -%}
+    {% if array | length - loop.index0 == 2 %} & {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro server_flag(height, server) %}
+<img width="{{ height * 2 }}px" height="{{ height }}px"
+  src="https://ddnet.org/countryflags/{% if server == "" %}UNK{% else %}{{ server }}{% endif %}.png"
+  alt="server_flag_{{ server }}">
+{% endmacro %}
+
+{% macro player_flag(height, code) %}
+<img width="{{ height * 2 }}px" height="{{ height }}px"
+  src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png"
+  alt="player_flag_{{ code | code_to_country }}">
+{% endmacro %}
+
+{% macro search(form, input, autocomplete, value) %}
+<form {% if form %}class="form-search-{{ form }}"{% endif %} action="/search" method="get">
+    <input class="input-search-{{ input }}" type="search"
+        {% if autocomplete %}
+        id="search-{{ input }}"
+        {% endif %}
+        name="q" autocomplete="off" spellcheck="false"
+        placeholder="nameless tee, Multeasymap, ..."
+        {% if form == "home" %}autofocus{% endif %}
+        {% if value %}value="{{ value }}"{% endif %}
+        >
+    <div class="result-{{ input }}" id="result-{{ input }}"></div>
+</form>
+{% endmacro %}
+
+{% macro pager(current_page, next, path) %}
+    {% if current_page > 1 %}
+    <a class="page" href="{{ path | safe }}/{{ current_page - 1 }}">Previous</a>
+    {% endif %}
+
+    {% if next %}
+    <a class="page" href="{{ path | safe }}/{{ current_page + 1 }}">Next</a>
+    {% endif %}
+{% endmacro %}
+
+{% macro map_card(map) %}
+<div class="center">
+    <h2>{{ map.map.server }} - <a href="/map/{{ map.map.map | urlencode }}">{{ map.map.map }}</a></h2>
+    {% if map.map.timestamp %}
+    <p>{{ map.map.timestamp | date(format="%F %T") }}</p>
+    {% else %}
+    <p>Unknown release date</p>
+    {% endif %}
+    <p>{{ macros::stars(stars=map.map.stars, max=5) }}</p>
+    <p>{{ macros::join_array(array=map.map.mapper | mapper_array, link="/mapper/%s") }}</p>
+    <a href="/map/{{ map.map.map | urlencode }}">
+        <img class="center" src="https://ddnet.org/ranks/maps/{{ map.map.map | map_thumbnail }}.png">
+    </a>
+    <p>{{ map.finishes_rank }}<sup>{{ map.finishes_rank | ordinal }}</sup> with {{ map.finishes }} finish{{ map.finishes | pluralize(plural="es") }}</p>
+</div>
+{% endmacro %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Mapper not found | DDStats</title>
+{% endblock %}
+
+{% block main %}
+
+<h1>404 - Mapper not found!</h1>
+
+<div class="center">
+    {{ macros::search(form="home", input="home", autocomplete=true, value="") }}
+</div>
+
+{% endblock %}

@@ -1,0 +1,216 @@
+
+{% macro points_graph(ctx, data) %}
+let data = [
+  {%- for row in data -%}
+  {
+    x: "{{ row.date }}",
+    rank_points: {{ row.rank_points }},
+    team_points: {{ row.team_points }},
+    points: {{ row.points }}
+  },
+  {%- endfor -%}
+]
+
+new Chart(
+  {{ ctx }},
+  {
+    type: "line",
+    data: {
+        datasets: [{
+            label: "Rank Points",
+            data: data,
+            fill: false,
+            borderColor: "#4C9CEF",
+            tension: 0,
+            pointRadius: 0,
+            parsing: {
+              yAxisKey: "rank_points"
+            }
+        },
+        {
+            label: "Team Points",
+            data: data,
+            fill: false,
+            borderColor: "#EF5255",
+            tension: 0,
+            pointRadius: 0,
+            parsing: {
+              yAxisKey: "team_points"
+            }
+        },
+        {
+            label: "Points",
+            data: data,
+            fill: false,
+            borderColor: "#EFB1F1",
+            tension: 0,
+            pointRadius: 0,
+            parsing: {
+              yAxisKey: "points"
+            }
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        spanGaps: true,
+        animation: false,
+        plugins: {
+            tooltip: {
+                mode: "index",
+                intersect: false,
+            },
+            title: {
+                display: true,
+                align: "start",
+                text: "Points graph",
+                padding: {
+                    top: 0,
+                    bottom: 0
+                },
+                font: {
+                    weight: "bold",
+                    size: 23,
+                },
+            }
+        },
+        hover: {
+            mode: "nearest",
+            intersect: false
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: "#30304F"
+                },
+                ticks: {
+                    font: {
+                        weight: "bold",
+                        size: 20,
+                    }
+                },
+                type: "time",
+                time: {
+                    unit: "year"
+                },
+            },
+            y: {
+                suggestedMax: 250,
+                grid: {
+                    color: "#30304F"
+                },
+                ticks: {
+                    font: {
+                        size: 17,
+                    }
+                }
+            }
+        }
+    }
+})
+{% endmacro %}
+
+{% macro doughnut_chart(ctx, data) %}
+new Chart(
+    {{ ctx }},
+    {
+    type: "doughnut",
+    data: {
+        labels: [
+            {% for row in data %}
+            "{{ row.key }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            label: "",
+            data: [
+                {% for row in data %}
+                {
+                label: "{{ row.seconds_played | time_format }}",
+                value: "{{ row.seconds_played }}"
+                },
+                {% endfor %}
+            ],
+            backgroundColor: [
+                "#EE588F",
+                "#E175DB",
+                "#967CF4",
+                "#4C6DEF",
+                "#4C9CEF",
+                "#4CDCDF",
+                "#3DDF89",
+                "#72D661",
+                "#AED651",
+                "#F4C025",
+                "#EB801B",
+                "#EF5255"
+            ],
+            hoverOffset: 4
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        plugins: {
+                legend: {
+                    display: true,
+                    position: "left"
+                },
+                tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const index = context.dataIndex;
+                        let label = context.dataset.data[index].label || "";
+                        return label;
+                    }
+                }
+            }
+        }
+    }
+})
+{% endmacro %}
+
+{% macro bar_chart(ctx, data) %}
+new Chart(
+    {{ ctx }},
+    {
+    type: "bar",
+    data: {
+        datasets: [{
+            label: "",
+            data: [
+                {% for row in data | reverse %}
+                {
+                x: "{{ row.month }}",
+                y: "{{ row.seconds_played / 60 / 60 }}",
+                label: "{{ row.seconds_played | time_format }}"
+                },
+                {% endfor %}
+            ],
+            backgroundColor: "#4C9CEF",
+            hoverOffset: 4
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                suggestedMax: 100
+            }
+        },
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                intersect: false,
+                callbacks: {
+                    label: function(context) {
+                        const index = context.dataIndex;
+                        let label = context.dataset.data[index].label || "";
+                        return label;
+                    }
+                }
+            }
+        }
+    }
+})
+{% endmacro %}

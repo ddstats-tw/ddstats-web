@@ -1,4 +1,6 @@
-node_modules/
-dist/
+/target
 .env
-*.log
+/static/css/main.css
+Cargo.lock
+players.msgpack
+.sqlx/

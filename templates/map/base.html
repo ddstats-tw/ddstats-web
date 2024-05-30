@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>{{ info.map.map }} | {{ page | capitalize }} | DDStats</title>
+{% endblock %}
+
+{% block main %}
+    <h1>{{ info.map.map }}</h1>
+    <ul class="buttons">
+        <li>
+            <a class="{% if page == "overview" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}">Overview</a>
+        </li>
+        <li>
+            <a class="{% if page == "timecps" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}/timecps">Time CPS</a>
+        </li>
+        <li>
+            <a class="{% if page == "playtime" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}/playtime">Playtime</a>
+        </li>
+    </ul>
+
+    {% block map %}
+
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,6 @@
+{
+    "[rust]": { "editor.formatOnSave": true },
+    "html.validate.scripts": false,
+    "rust-analyzer.check.command": "clippy",
+    "files.insertFinalNewline": true
+}

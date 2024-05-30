@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block head %}
+    <title>Player not found | Player Profile | DDStats</title>
+{% endblock %}
+
+{% block main %}
+
+<h1>404 - Player not found!</h1>
+
+<div class="center">
+    {{ macros::search(form="home", input="home", autocomplete=true, value="") }}
+</div>
+
+{% endblock %}

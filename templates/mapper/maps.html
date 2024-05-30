@@ -1,0 +1,13 @@
+{% extends "mapper/base.html" %}
+
+{% block mapper %}
+
+<div class="container">
+    {% for map in maps %}
+    <div class="box">  
+        {{ macros::map_card(map=map) }}
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

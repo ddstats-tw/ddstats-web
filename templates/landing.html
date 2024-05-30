@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>DDStats</title>
+    <meta name="description" content="DDStats, the website showing more in depth statistics for DDNet">
+{% endblock %}
+
+{% block main %}
+
+<div class="center">
+    <h1>Search for a player or map...</h1>
+    {{ macros::search(form="home", input="home", autocomplete=true, value="") }}
+</div>
+{% endblock %}

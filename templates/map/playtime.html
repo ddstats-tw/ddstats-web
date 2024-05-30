@@ -1,0 +1,24 @@
+{% extends "map/base.html" %}
+
+{% block map %}
+
+<div class="container">
+    <div class="box">
+        <table class="transparent">
+            <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Playtime</th>
+            </tr>
+            {% for player in playtime %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
+                <td>{{ player.time | time_format }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

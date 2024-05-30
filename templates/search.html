@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>DDStats</title>
+{% endblock %}
+
+{% block main %}
+
+{{ macros::search(form="", input="home", autocomplete=false, value=query) }}
+
+<h2>Maps</h2>
+{% if maps %}
+<div class="container">
+    {% for map in maps %}
+    <div class="box">
+        {{ macros::map_card(map=map) }}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No maps found.</p>
+{% endif %}
+
+<h2>Players</h2>
+{% if players %}
+{% for player in players %}
+<div class="container">
+    <a href="/player/{{ player.name | urlencode }}">
+        <div class="box">
+            <h3>{{ player.name }} - {{ player.points }} points</h3>
+        </div>
+    </a>
+</div>
+{% endfor %}
+{% else %}
+<p>No players found.</p>
+{% endif %}
+{% endblock %}
