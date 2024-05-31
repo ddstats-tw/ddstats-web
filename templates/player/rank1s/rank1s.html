@@ -4,8 +4,8 @@
 
 <div class="container left-bigger">
     <div class="box">
-        <h2 style="float: left">Recent Top10s</h2>
-
+        <h2>Recent Top 10s</h2>
+        {% if recent_top_10s | length %}
         <table class="transparent">
             <thead>
             <tr>
@@ -30,6 +30,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p>This player has no recent top 10s</p>
+        {% endif %}
     </div>
 
     <div class="box">
@@ -37,6 +40,7 @@
         {% if favourite_rank1s_teammates | length >= 10 %}
         <a class="show-more" href="/player/{{ name | urlencode | safe }}/rank1s/partners">Show more</a>
         {% endif %}
+        {% if favourite_rank1s_teammates | length %}
         <table class="transparent">
             <thead>
             <tr>
@@ -53,13 +57,16 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p style="clear: both">This player has no team rank1s</p>
+        {% endif %}
     </div>
 </div>
 
 <div class="container">
     <div class="box">
-        <h2 style="float: left">Total Top10s</h2>
-
+        <h2>Total Top10s</h2>
+        {% if all_top_10s | length %}
         <table class="transparent">
             <thead>
             <tr>
@@ -103,6 +110,9 @@
                 </tr>
             </tbody>
         </table>
+        {% else %}
+        <p>This player has no top 10s</p>
+        {% endif %}
     </div>
     <div class="box">
 
@@ -112,7 +122,7 @@
 <div class="container">
     <div class="box">
         <h2>All Top10s</h2>
-
+        {% if all_top_10s | length %}
         <table class="sortable n-last">
             <thead>
                 <tr>
@@ -142,6 +152,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p>This player has no top 10s</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
