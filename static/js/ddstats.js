@@ -108,9 +108,5 @@ function onKeydown(event) {
             event.preventDefault()
             window.location.href = selectedItem.firstChild.firstChild.getAttribute("href")
         }
-        if(playerList.childElementCount === 0) {
-            event.preventDefault()
-            window.location.href = "/player/" + encodeURIComponent(inputNav.value)
-        }
     }
 }
