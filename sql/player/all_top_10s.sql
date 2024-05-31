@@ -39,5 +39,6 @@ LEFT JOIN (
 ON
     maps.map = teamrankings.map
 WHERE
+    maps.server != 'Fun' AND (
     rankings.rank <= 10 OR
-    teamrankings.rank <= 10
+    teamrankings.rank <= 10)
