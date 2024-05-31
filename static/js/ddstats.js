@@ -54,19 +54,19 @@ function showResults(results, id) {
             if(type == "maps") {
                 a.setAttribute("href", "/map/" + encodeURIComponent(item.map.map))
                 span.textContent = `${item.map.server}`
-                a.textContent = item.map.map
+                p.textContent = item.map.map
             }
             else {
                 a.setAttribute("href", "/player/" + encodeURIComponent(item.name))
                 span.textContent = `${item.points} points`
-                a.textContent = item.name
+                p.textContent = item.name
             }
         
 
-            p.appendChild(a)
             p.appendChild(span)
+            a.appendChild(p)
             
-            li.appendChild(p)
+            li.appendChild(a)
             ul.appendChild(li)
         })
         resultDiv.appendChild(ul)
@@ -102,11 +102,11 @@ function onKeydown(event) {
     } else if (event.key === "Enter") {
         if(playerList.firstChild && playerList.firstChild == playerList.lastChild) {
             event.preventDefault()
-            window.location.href = playerList.firstChild.firstChild.firstChild.getAttribute("href")
+            window.location.href = playerList.firstChild.firstChild.getAttribute("href")
         }
         if(selectedItem) {
             event.preventDefault()
-            window.location.href = selectedItem.firstChild.firstChild.getAttribute("href")
+            window.location.href = selectedItem.firstChild.getAttribute("href")
         }
     }
 }
