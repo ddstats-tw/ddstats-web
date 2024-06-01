@@ -26,8 +26,18 @@
 {% for player in players %}
 <div class="container">
     <a href="/player/{{ player.name | urlencode }}">
-        <div class="box">
-            <h3>{{ player.name }} - {{ player.points }} points</h3>
+        <div class="box" style="display: flex">
+            {% if player.skin_name %}
+            <div title="{{ player.skin_name }}" class="tee-small">
+                <div class="tee"
+                    data-skinimage="https://ddstats.tw/skins/{{ player.skin_name | urlencode }}.png"
+                    data-bodycolor="{{ player.skin_color_body }}"
+                    data-feetcolor="{{ player.skin_color_feet }}"
+                    data-coloringmode="code">
+                </div>
+            </div>
+            {% endif %}
+            <h3 style="margin-left: 3.5rem;">{{ player.name }} - {{ player.points }} points</h3>
         </div>
     </a>
 </div>
@@ -35,4 +45,5 @@
 {% else %}
 <p>No players found.</p>
 {% endif %}
+<script src="/static/js/TeeAssembler.js"></script>
 {% endblock %}
