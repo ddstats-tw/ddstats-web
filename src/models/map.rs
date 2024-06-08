@@ -75,7 +75,7 @@ pub struct TimeCps {
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Playtime {
     pub name: String,
-    pub time: i64,
+    pub seconds_played: i64,
 }
 
 impl Map {

@@ -1,5 +1,5 @@
-SELECT name AS "name!",
-    seconds_played AS "time!"
+SELECT name,
+    seconds_played
 FROM
     playtime_maps
 WHERE
