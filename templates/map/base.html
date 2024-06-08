@@ -2,6 +2,7 @@
 
 {% block head %}
     <title>{{ info.map.map }} | {{ page | capitalize }} | DDStats</title>
+    <link rel="alternate" type="application/json" title="Map info in JSON" href="/map/json?map={{ info.map.map | urlencode }}">
 {% endblock %}
 
 {% block main %}

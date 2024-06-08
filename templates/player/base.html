@@ -2,6 +2,7 @@
 {% block head %}
     <script src="/static/js/sortable.js" defer></script>
     <title>{{ name }} | {{ page | capitalize }} | Player Profile | DDStats</title>
+    <link rel="alternate" type="application/json" title="Player info in JSON" href="/player/json?player={{ name | urlencode }}">
 {% endblock %}
 
 {% block main %}

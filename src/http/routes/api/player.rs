@@ -123,7 +123,6 @@ pub async fn player_middleware(
 
 pub fn router(state: AppState) -> Router<AppState> {
     Router::new()
-        // Overview
         .route("/", get(player_json))
         .layer(middleware::from_fn_with_state(
             state.clone(),
