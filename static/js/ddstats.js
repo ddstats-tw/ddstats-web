@@ -1,5 +1,6 @@
 // Auto complete
 let cacheSearch = {}
+let currentValue
 
 let search_ids = ["search-home", "search-nav"]
 for (let id of search_ids) {
@@ -11,7 +12,7 @@ for (let id of search_ids) {
 }
 
 function onInput(event) {
-    const value = event.target.value
+    const value = encodeURIComponent(event.target.value)
     const id = event.target.id.split("-")[1]
 
     if(!value.length) {
@@ -20,19 +21,23 @@ function onInput(event) {
             resultDiv.innerHTML = ""
         return
     }
+    currentValue = value
     if (cacheSearch[value])
-        showResults(cacheSearch[value], id)
+        showResults(value, cacheSearch[value], id)
     else {
         fetch("/search/api?q=" + value)
             .then(response => response.json())
             .then(data => {
                 cacheSearch[value] = data
-                showResults(data, id)
+                showResults(value, data, id)
             })
     }
 }
 
-function showResults(results, id) {
+function showResults(value, results, id) {
+    if(value != currentValue)
+        return
+
     const resultDiv = document.getElementById(`result-${id}`)
     if(!resultDiv)
         return
