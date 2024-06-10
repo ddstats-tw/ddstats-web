@@ -1,0 +1,25 @@
+{% if query %}
+<ul{% if id %} id="result-list-{{ id }}"{% endif %}>
+    {% for map in maps %}
+    <li class="">
+        <a href="/map/{{ map.map.map | urlencode }}">
+            <p>
+                {{ map.map.map }}
+                <span class="right">{{ map.map.server }}</span>
+            </p>
+        </a>
+    </li>
+    {% endfor %}
+    {% for player in players %} 
+    <li class="">
+        <a href="/player/{{ player.name | urlencode }}">
+            <p>
+                {{ player.name }}
+                <span class="right">{{ player.points }} points</span>
+            </p>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+

@@ -25,8 +25,13 @@ function onInput(event) {
     if (cacheSearch[value])
         showResults(value, cacheSearch[value], id)
     else {
-        fetch("/search/api?q=" + value)
-            .then(response => response.json())
+        fetch("/search/api?id=" + id + "&" + "q=" + value)
+            .then(response => {
+                if(response.ok)
+                    return response.text()
+                
+                throw new Error("Failed to get autocompletions")
+            })
             .then(data => {
                 cacheSearch[value] = data
                 showResults(value, data, id)
@@ -42,76 +47,43 @@ function showResults(value, results, id) {
     if(!resultDiv)
         return
 
-    resultDiv.innerHTML = ""
-
-    let ul = document.createElement("ul")
-    ul.setAttribute("id", `playerList-${id}`)
-
-    for(const type of ["maps", "players"]) {
-        results[type].forEach(item => {
-            let li = document.createElement("li")
-            let p = document.createElement("p")
-            let a = document.createElement("a")
-            let span = document.createElement("span")
-
-            span.classList.add("right")
-
-            if(type == "maps") {
-                a.setAttribute("href", "/map/" + encodeURIComponent(item.map.map))
-                span.textContent = `${item.map.server}`
-                p.textContent = item.map.map
-            }
-            else {
-                a.setAttribute("href", "/player/" + encodeURIComponent(item.name))
-                span.textContent = `${item.points} points`
-                p.textContent = item.name
-            }
-        
-
-            p.appendChild(span)
-            a.appendChild(p)
-            
-            li.appendChild(a)
-            ul.appendChild(li)
-        })
-        resultDiv.appendChild(ul)
-    }
+    resultDiv.innerHTML = results
 }
 
 function onKeydown(event) {
     const id = event.target.id.split("-")[1]
-    let playerList = document.getElementById(`playerList-${id}`)
+    let resultList = document.getElementById(`result-list-${id}`)
 
-    if(!playerList)
+    if(!resultList)
         return
 
     const selectedItemID = `selected-${id}`
-    const selectedItem = playerList.querySelector("." + selectedItemID)
+    const selectedItem = resultList.querySelector("." + selectedItemID)
 
     if(event.key === "ArrowDown") {
-        if(selectedItem && selectedItem.nextSibling) {
-            selectedItem.nextSibling.classList.add(selectedItemID)
+        if(selectedItem && selectedItem.nextElementSibling) {
+            selectedItem.nextElementSibling.classList.add(selectedItemID)
             selectedItem.classList.remove(selectedItemID)
         } else {
-            playerList.firstChild.classList.add(selectedItemID)
-            playerList.lastChild.classList.remove(selectedItemID)
+            resultList.firstElementChild.classList.add(selectedItemID)
+            resultList.lastElementChild.classList.remove(selectedItemID)
         }
     } else if (event.key === "ArrowUp") {
-        if(selectedItem && selectedItem.previousSibling) {
-            selectedItem.previousSibling.classList.add(selectedItemID)
+        if(selectedItem && selectedItem.previousElementSibling) {
+            selectedItem.previousElementSibling.classList.add(selectedItemID)
             selectedItem.classList.remove(selectedItemID)
         } else {
-            playerList.lastChild.classList.add(selectedItemID)
-            playerList.firstChild.classList.remove(selectedItemID)
+            resultList.lastElementChild.classList.add(selectedItemID)
+            resultList.firstElementChild.classList.remove(selectedItemID)
         }
     } else if (event.key === "Enter") {
-        if(playerList.firstChild && playerList.firstChild == playerList.lastChild) {
+        if(resultList.firstElementChild && resultList.firstElementChild == resultList.lastElementChild) {
             event.preventDefault()
-            window.location.href = playerList.firstChild.firstChild.getAttribute("href")
+            window.location.href = resultList.firstElementChild.firstChild.getAttribute("href")
         }
         if(selectedItem) {
             event.preventDefault()
-            window.location.href = selectedItem.firstChild.getAttribute("href")
+            window.location.href = selectedItem.firstElementChild.getAttribute("href")
         }
     }
 }
