@@ -1,0 +1,12 @@
+{
+    "name": "DDStats",
+    "icons": [
+        {
+            "src": "/android-chrome-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "https://ddstats.tw",
+    "display": "standalone"
+}

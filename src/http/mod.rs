@@ -4,7 +4,7 @@ use self::{
 };
 use crate::points::Leaderboard;
 use ::tera::Tera;
-use axum::{extract::Request, middleware, response::Html, Router, ServiceExt};
+use axum::{extract::Request, handler::Handler, middleware, response::Html, Router, ServiceExt};
 use sqlx::{PgPool, Pool, Postgres};
 use std::{
     net::SocketAddr,
@@ -56,6 +56,9 @@ pub fn render(
 }
 
 fn router(state: AppState) -> Router {
+    let fallback_service = ServeDir::new("static/root")
+        .not_found_service(Handler::with_state(not_found, state.clone()));
+
     Router::new()
         .nest("/", routes::misc::router())
         .nest("/", routes::leaderboard::router())
@@ -70,6 +73,6 @@ fn router(state: AppState) -> Router {
             state.clone(),
             error_middleware,
         ))
-        .fallback(not_found)
+        .fallback_service(fallback_service)
         .with_state(state)
 }
