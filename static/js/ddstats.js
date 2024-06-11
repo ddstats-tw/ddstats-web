@@ -79,7 +79,7 @@ function onKeydown(event) {
     } else if (event.key === "Enter") {
         if(resultList.firstElementChild && resultList.firstElementChild == resultList.lastElementChild) {
             event.preventDefault()
-            window.location.href = resultList.firstElementChild.firstChild.getAttribute("href")
+            window.location.href = resultList.firstElementChild.firstElementChild.getAttribute("href")
         }
         if(selectedItem) {
             event.preventDefault()
