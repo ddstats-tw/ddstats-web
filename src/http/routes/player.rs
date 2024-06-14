@@ -196,6 +196,18 @@ pub async fn player_rank1s_partners(
     render(state.template, "player/rank1s/partners.html", &context)
 }
 
+pub async fn player_rank1s_recent(
+    Path(name): Path<String>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let recent_top_10s = Player::recent_top_10s(&state.db, &name, None).await?;
+
+    let mut context = player_context(&state.db, &name, "rank1s").await?;
+    context.insert("recent_top_10s", &recent_top_10s);
+
+    render(state.template, "player/rank1s/recent.html", &context)
+}
+
 pub async fn player_middleware(
     Path(name): Path<String>,
     State(state): State<AppState>,
@@ -233,6 +245,7 @@ pub fn router(state: AppState) -> Router<AppState> {
         // Rank 1s
         .route("/rank1s", get(player_rank1s))
         .route("/rank1s/partners", get(player_rank1s_partners))
+        .route("/rank1s/recent", get(player_rank1s_recent))
         .layer(middleware::from_fn_with_state(
             state.clone(),
             player_middleware,

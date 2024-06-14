@@ -4,8 +4,11 @@
 
 <div class="container left-bigger">
     <div class="box">
-        <h2>Recent Top 10s</h2>
+        <h2 style="float: left">Recent Top 10s</h2>
         {% if recent_top_10s | length %}
+        {% if recent_top_10s | length >= 9 %}
+        <a class="show-more" href="/player/{{ name | urlencode | safe }}/rank1s/recent">Show more</a>
+        {% endif %}
         <table class="transparent">
             <thead>
             <tr>
