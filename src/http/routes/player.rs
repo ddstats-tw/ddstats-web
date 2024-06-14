@@ -37,11 +37,13 @@ pub async fn player_overview(
     State(state): State<AppState>,
 ) -> Result<Html<String>, Error> {
     let points_graph = Player::points_graph(&state.db, &name).await?;
+    let points = Player::points(&state.points, &name);
     let recent_finishes = Player::recent_finishes(&state.db, &name, Some(10)).await?;
     let favourite_teammates = Player::favourite_teammates(&state.db, &name, Some(10)).await?;
 
     let mut context = player_context(&state.db, &name, "overview").await?;
     context.insert("points_graph", &points_graph);
+    context.insert("points", &points);
     context.insert("recent_finishes", &recent_finishes);
     context.insert("favourite_teammates", &favourite_teammates);
 

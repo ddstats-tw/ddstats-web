@@ -10,6 +10,44 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="box">
+        <h2>Leaderboard rankings</h2>
+        <div class="points">
+            <table class="transparent">
+                <thead>
+                <tr>
+                    <th>Points</th>
+                    <th>Rank Points</th>
+                    <th>Team Points</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ macros::points(data=points.points, category="Total") }}</td>
+                        <td>{{ macros::points(data=points.rank_points, category="Total") }}</td>
+                        <td>{{ macros::points(data=points.team_points, category="Total") }}</td>
+                    </tr>
+                </tbody>
+                <thead>
+                <tr>
+                    <th>Yearly points</th>
+                    <th>Monthly points</th>
+                    <th>Weekly points</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ macros::points(data=points.yearly_points) }}</td>
+                        <td>{{ macros::points(data=points.monthly_points) }}</td>
+                        <td>{{ macros::points(data=points.weekly_points) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div class="container left-bigger">
     <div class="box">
         <h2 style="float: left">Last finishes</h2>

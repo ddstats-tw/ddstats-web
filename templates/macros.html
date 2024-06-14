@@ -13,12 +13,22 @@
 {% endif %}
 {% endmacro %}
 
-{% macro points (data, category) %}
+{% macro points (data, category="none") %}
+{% if category != "none" %}
 {% if data[category] %}
 {{ data[category].rank }}<sup>{{ data[category].rank | ordinal }}</sup> with {{ data[category].points }} points
 {% else %}
 Unranked
 {% endif %}
+{% else %}
+{% if data %}
+{{ data.rank }}<sup>{{ data.rank | ordinal }}</sup> with {{ data.points }} points
+{% else %}
+Unranked
+{% endif %}
+{% endif %}
+
+
 {% endmacro %}
 
 {% macro join_array(array, link) %}
