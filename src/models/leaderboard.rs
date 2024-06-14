@@ -1,6 +1,9 @@
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use sqlx::{self, Pool, Postgres};
 use std::fmt::Debug;
+
+use crate::points::LeaderboardRank;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct MostRank1s {
@@ -29,6 +32,13 @@ pub struct MostPlayed {
     pub seconds: i64,
     pub mostaddicted: String,
     pub mostaddicted_seconds: i64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct MostPoints {
+    pub rank: u64,
+    pub name: String,
+    pub points: u64,
 }
 
 pub struct Leaderboard;
@@ -94,5 +104,25 @@ impl Leaderboard {
         sqlx::query_file_as!(MostPlayed, "sql/leaderboard/most_played.sql", category)
             .fetch_all(db)
             .await
+    }
+
+    /// Get leaderboard for most played maps within `category`
+    pub fn most_points(
+        points: &IndexMap<String, LeaderboardRank>,
+    ) -> Result<Vec<MostPoints>, sqlx::Error> {
+        let mut leaderboard: Vec<MostPoints> = Vec::new();
+        for (i, (name, rank)) in points.iter().enumerate() {
+            if i == 100 {
+                break;
+            }
+
+            leaderboard.push(MostPoints {
+                rank: rank.rank,
+                name: name.clone(),
+                points: rank.points,
+            });
+        }
+
+        Ok(leaderboard)
     }
 }

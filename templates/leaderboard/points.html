@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Leaderboard | {{ current_type | capitalize }} | DDStats</title>
+{% endblock %}
+
+{% block main %}
+<h1>Leaderboard for most {{ current_type }}</h1>
+
+{# Move this to a different file, merge with the other #}
+{% set categories = ["Total", "Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", 
+                     "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race"] %}
+
+<ul class="buttons space-inbetween-small">
+    {% for category in categories %}
+    <li>
+        <a class="{% if current_category == category %}active{% endif %}" 
+           href="/leaderboard/points/category/{{ category }}/type/{{ current_type }}">{{ category }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<h3 class="center">Type</h3>
+<ul class="buttons">
+    <li><a class="{% if current_type == "points" %}active{% endif %}" href="/leaderboard/points/category/{{ current_category }}/type/points">Points</a></li>
+    <li><a class="{% if current_type == "rankpoints" %}active{% endif %}" href="/leaderboard/points/category/{{ current_category }}/type/rankpoints">Rank Points</a></li>
+    <li><a class="{% if current_type == "teampoints" %}active{% endif %}" href="/leaderboard/points/category/{{ current_category }}/type/teampoints">Team Points</a></li>
+</ul>
+
+<div class="leaderboard">
+    <table>
+        <tbody>
+            <tr>
+                <th>#</th>
+                <th class="wide">Player</th>
+                <th>Points</th>
+            </tr>
+            {% for player in leaderboard %}
+            <tr>
+                <td class="rank">{{ player.rank }}</td>
+                <td class="wide"><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
+                <td class="grey">{{ player.points }} point{{ player.points | pluralize }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

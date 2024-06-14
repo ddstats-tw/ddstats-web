@@ -35,19 +35,19 @@ pub enum Category {
     Fun,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 struct Rank {
-    name: String,
-    points: u64,
+    pub name: String,
+    pub points: u64,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct LeaderboardRank {
-    points: u64,
-    rank: u64,
+    pub points: u64,
+    pub rank: u64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 struct ServerRanks {
     _total_points: u64,
     points_ranks: Vec<Rank>,
@@ -55,7 +55,7 @@ struct ServerRanks {
     rankpoints_ranks: Vec<Rank>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Leaderboard {
     pub weekly_points: IndexMap<String, LeaderboardRank>,
     pub monthly_points: IndexMap<String, LeaderboardRank>,

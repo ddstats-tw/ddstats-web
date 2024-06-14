@@ -1,12 +1,12 @@
-use std::collections::HashMap;
-
 use crate::http::error::Error;
 use crate::http::{render, AppState};
 use crate::models::leaderboard::Leaderboard;
+use crate::points::Category;
 use axum::extract::{Path, State};
 use axum::response::Html;
 use axum::{routing::get, Router};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use strum_macros::EnumString;
 use tera::Context;
 
@@ -16,6 +16,19 @@ pub enum RankType {
     Rank1s,
     #[serde(rename = "teamrank1s")]
     Teamrank1s,
+}
+
+#[derive(EnumString, PartialEq, Eq, Hash, Clone, Copy, Debug, Deserialize, Serialize)]
+pub enum PointsType {
+    #[strum(to_string = "points")]
+    #[serde(rename = "points")]
+    Points,
+    #[strum(to_string = "rankpoints")]
+    #[serde(rename = "rankpoints")]
+    RankPoints,
+    #[strum(to_string = "teampoints")]
+    #[serde(rename = "teampoints")]
+    TeamPoints,
 }
 
 pub async fn leaderboards(State(state): State<AppState>) -> Result<Html<String>, Error> {
@@ -108,6 +121,41 @@ pub async fn most_played(
     render(state.template, "leaderboard/most_played.html", &context)
 }
 
+pub async fn most_points(
+    Path(params): Path<HashMap<String, String>>,
+    State(state): State<AppState>,
+) -> Result<Html<String>, Error> {
+    let category: Category = params
+        .get("category")
+        .unwrap_or(&"Total".to_string())
+        .to_owned()
+        .parse()
+        .unwrap();
+
+    let points_type: PointsType = params
+        .get("type")
+        .unwrap_or(&"points".to_string())
+        .to_owned()
+        .parse()
+        .unwrap();
+
+    let leaderboard = match points_type {
+        PointsType::Points => Leaderboard::most_points(&state.points.points[&category]).unwrap(),
+        PointsType::RankPoints => {
+            Leaderboard::most_points(&state.points.rank_points[&category]).unwrap()
+        }
+        PointsType::TeamPoints => {
+            Leaderboard::most_points(&state.points.team_points[&category]).unwrap()
+        }
+    };
+    let mut context = Context::new();
+    context.insert("leaderboard", &leaderboard);
+    context.insert("current_category", &category);
+    context.insert("current_type", &points_type);
+
+    render(state.template, "leaderboard/points.html", &context)
+}
+
 pub fn router() -> Router<AppState> {
     Router::new()
         // Leaderboards
@@ -161,5 +209,11 @@ pub fn router() -> Router<AppState> {
         .route(
             "/leaderboard/mostplayed/category/:category",
             get(most_played),
+        )
+        .route("/leaderboard/points", get(most_points))
+        .route("/leaderboard/points/category/:category", get(most_points))
+        .route(
+            "/leaderboard/points/category/:category/type/:type",
+            get(most_points),
         )
 }
