@@ -1,6 +1,7 @@
 use crate::http::error::Error;
 use crate::http::render;
 use crate::http::AppState;
+use crate::models::map::Info;
 use crate::models::mapper::Mapper;
 use crate::models::player::Finish;
 use crate::models::player::Player;
@@ -87,11 +88,16 @@ pub async fn player_finishes(
         Player::finishes(&state.db, &name).await?,
         |finish| finish.map.server.clone(),
     );
+    let unfinished_maps = create_index_by_field::<Info, String>(
+        Player::unfinished_maps(&state.db, &name).await?,
+        |map| map.map.server.clone(),
+    );
     let points = Player::points(&state.points, &name);
 
     let mut context = player_context(&state.db, &name, "finishes").await?;
     context.insert("points", &points);
     context.insert("finishes", &finishes);
+    context.insert("unfinished_maps", &unfinished_maps);
 
     render(state.template, "player/finishes/finishes.html", &context)
 }

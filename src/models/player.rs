@@ -6,7 +6,7 @@ use strum::IntoEnumIterator;
 
 use crate::points::{Category, Leaderboard, LeaderboardRank};
 
-use super::map::Map;
+use super::map::{Info, Map};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct RaceFinish {
@@ -217,6 +217,16 @@ impl Player {
     /// Get all finishes of a `player`.
     pub async fn finishes(db: &Pool<Postgres>, player: &str) -> Result<Vec<Finish>, sqlx::Error> {
         sqlx::query_file_as!(Finish, "sql/player/finishes.sql", player,)
+            .fetch_all(db)
+            .await
+    }
+
+    /// Get all unfinished maps of a `player`.
+    pub async fn unfinished_maps(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<Vec<Info>, sqlx::Error> {
+        sqlx::query_file_as!(Info, "sql/player/unfinished_maps.sql", player,)
             .fetch_all(db)
             .await
     }

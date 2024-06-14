@@ -3,10 +3,21 @@
 {% block player %}
 
 {% set categories = ["Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race", "Fun"] %}
-{% for category in categories %}
 
 <div class="container">
     <div class="box">
+        <h2 class="center">Quick jump</h2>
+        <ul class="buttons">
+            {% for category in categories %}
+            <li><a href="#{{ category }}">{{ category }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% for category in categories %}
+<div class="container">
+    <div id="{{ category }}" class="box">
         <details open>
             <summary class="summary-title">{{ category }}</summary>
             {% if finishes[category] %}
@@ -66,6 +77,64 @@
             </table>
             {% else %}
             <p>{{ name }} has not finished any {{ category }} maps and is unranked within the category.</p>
+            {% endif %}
+            {% if unfinished_maps[category] %}
+            <details>
+            <summary class="summary-title">Unfinished maps</summary>
+
+            <div class="points">
+                <table class="transparent">
+                    <thead>
+                    <tr>
+                        <th>Unfinished maps</th>
+                        <th>Missing points</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ unfinished_maps[category] | length }} map{{ unfinished_maps[category] | length | pluralize }}</td>
+                            {% set_global missing_points = 0 %}
+                            {% for map in unfinished_maps[category] %}
+                            {% set_global missing_points = missing_points + map.map.points %}
+                            {% endfor %}
+                            <td>{{ missing_points }} point{{ missing_points | pluralize }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table class="sortable n-last">
+                <thead>
+                    <tr>
+                        <th id="default-sort" class="wide dir-u">Map</th>
+                        <th>Points</th>
+                        <th>Finishes</th>
+                        <th>Median Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for map in unfinished_maps[category] %}
+                    <tr>
+                        <td>
+                            <a href="/map/{{ map.map.map | urlencode }}">{{ map.map.map }}</a>
+                        </td>
+                        <td>{{ map.map.points }} point{{ map.map.points | pluralize }}</td>
+                        {% if map.finishes %}
+                        <td data-sort="{{ map.finishes }}">{{ map.finishes_rank }}<sup>{{ map.finishes_rank | ordinal }}</sup> with {{ map.finishes }} finish{{ map.finishes | pluralize(plural="es") }}</td>
+                        {% else %}
+                        <td>Unfinished</td>
+                        {% endif %}
+                        {% if map.finishes %}
+                        <td data-sort="{{ map.median_time }}">{{ map.median_time | fancy_time }}</td>
+                        {% else %}
+                        <td>Unfinished</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </details>
+            {% else %}
+            <p><b>All maps finished in {{ category }}.</b></p>
             {% endif %}
         </details>
     </div>

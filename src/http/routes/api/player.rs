@@ -1,5 +1,6 @@
 use crate::http::error::Error;
 use crate::http::AppState;
+use crate::models::map::Info;
 use crate::models::mapper::Mapper;
 use crate::models::player::*;
 use axum::extract::Query;
@@ -23,6 +24,7 @@ pub struct PlayerJson {
     pub profile: Profile,
     pub is_mapper: bool,
     pub finishes: Vec<Finish>,
+    pub unfinished_maps: Vec<Info>,
     pub points: Points,
     pub recent_activity: Vec<RecentActivity>,
     pub recent_player_info: Vec<RecentPlayerInfo>,
@@ -65,6 +67,7 @@ pub async fn player_json(
 
     // Finishes
     let finishes = Player::finishes(&state.db, &name).await?;
+    let unfinished_maps = Player::unfinished_maps(&state.db, &name).await?;
     let points = Player::points(&state.points, &name);
 
     // Activity
@@ -89,6 +92,7 @@ pub async fn player_json(
         recent_finishes,
         favourite_teammates,
         finishes,
+        unfinished_maps,
         points,
         recent_activity,
         recent_player_info,
