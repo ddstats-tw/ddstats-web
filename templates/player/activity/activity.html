@@ -5,7 +5,7 @@
 <div class="container">
     <div class="box">
         <h2 style="float: left">Recent playtime</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity/playtime">Show more</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/activity/playtime">Show more</a>
 
         <table class="transparent">
             <thead>
@@ -20,7 +20,7 @@
                 <tr>
                     <td>{{ activity.date }}</td>
                     {% if activity.map %}
-                    <td><a href="/map/{{ activity.map_name | urlencode | safe }}">{{ activity.map_name }}</a></td>
+                    <td><a href="/map/{{ activity.map_name | urlencode_strict | safe }}">{{ activity.map_name }}</a></td>
                     {% else %}
                     <td>{{ activity.map_name | truncate(length=32) }}</td>
                     {% endif %}
@@ -33,7 +33,7 @@
 
     <div class="box">
         <h2 style="float: left">Recent player info</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity/playerinfo">Show more</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/activity/playerinfo">Show more</a>
 
         <table class="transparent">
             <thead>
@@ -55,7 +55,7 @@
                     <td>
                         <div title="{{ activity.skin_name }}" class="tee-medium">
                             <button class="btn-copy" onClick="copySkin('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
-                                <div class="tee" data-skinimage="https://ddstats.tw/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
+                                <div class="tee" data-skinimage="https://ddstats.tw/skins/{{ activity.skin_name | urlencode_strict }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
                             </button>
                         </div>
                     </td>
@@ -76,7 +76,7 @@
 
     <div class="box">
         <h2 style="float: left">Most played maps</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity/mostplayed">Show more</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/activity/mostplayed">Show more</a>
 
         <table class="transparent">
             <thead>
@@ -89,7 +89,7 @@
                 {% for most_played in most_played_maps %}
                 <tr>
                     {% if most_played.map %}
-                    <td><a href="/map/{{ most_played.map.map | urlencode | safe }}">{{ most_played.map.map }}</a></td>
+                    <td><a href="/map/{{ most_played.map.map | urlencode_strict | safe }}">{{ most_played.map.map }}</a></td>
                     {% else %}
                     <td>{{ most_played.map_name | truncate(length=32) }}</td>
                     {% endif %}

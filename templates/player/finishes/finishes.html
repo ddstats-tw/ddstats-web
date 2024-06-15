@@ -57,7 +57,7 @@
                 <tbody>
                 {% for finish in finishes[category] %}
                     <tr>
-                        <td><a href="/map/{{ finish.map.map | urlencode | safe }}">{{ finish.map.map }}</a></td>
+                        <td><a href="/map/{{ finish.map.map | urlencode_strict | safe }}">{{ finish.map.map }}</a></td>
                         <td data-sort="{{ finish.time }}">{{ finish.time | fancy_time }}</td>
                         {% if finish.team_rank %}
                         <td data-sort="{{ finish.team_rank }}">{{ finish.team_rank }}<sup>{{ finish.team_rank | ordinal }}</sup></td>
@@ -115,7 +115,7 @@
                 {% for map in unfinished_maps[category] %}
                     <tr>
                         <td>
-                            <a href="/map/{{ map.map.map | urlencode }}">{{ map.map.map }}</a>
+                            <a href="/map/{{ map.map.map | urlencode_strict }}">{{ map.map.map }}</a>
                         </td>
                         <td>{{ map.map.points }} point{{ map.map.points | pluralize }}</td>
                         {% if map.finishes %}

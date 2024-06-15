@@ -6,7 +6,7 @@
     <div class="box">
         <h2 style="float: left">Recent Top 10s</h2>
         {% if recent_top_10s | length %}
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/rank1s/">Go back</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/rank1s/">Go back</a>
         <table class="transparent">
             <thead>
             <tr>
@@ -24,7 +24,7 @@
                     <td title="{{ rank.server }}">
                         {{ macros::server_flag(height=14, server=rank.server) }}
                     </td>
-                    <td><a href="/map/{{ rank.map | urlencode | safe }}">{{ rank.map }}</a></td>
+                    <td><a href="/map/{{ rank.map | urlencode_strict | safe }}">{{ rank.map }}</a></td>
                     <td>{{ rank.time | fancy_time }}</td>
                     <td>{{ rank.rank }}<sup>{{ rank.rank | ordinal }}</sup></td>
                 </tr>

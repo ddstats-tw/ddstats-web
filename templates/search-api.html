@@ -2,7 +2,7 @@
 <ul{% if id %} id="result-list-{{ id }}"{% endif %}>
     {% for map in maps %}
     <li class="">
-        <a href="/map/{{ map.map.map | urlencode }}">
+        <a href="/map/{{ map.map.map | urlencode_strict }}">
             <p>
                 {{ map.map.map }}
                 <span class="right">{{ map.map.server }}</span>
@@ -12,7 +12,7 @@
     {% endfor %}
     {% for player in players %} 
     <li class="">
-        <a href="/player/{{ player.name | urlencode }}">
+        <a href="/player/{{ player.name | urlencode_strict }}">
             <p>
                 {{ player.name }}
                 <span class="right">{{ player.points }} points</span>

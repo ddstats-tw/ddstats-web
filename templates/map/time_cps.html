@@ -19,7 +19,7 @@
                 {% for rank in time_cps %}
                 <tr>
                     <td class="timecps small">{{ loop.index }}</td>
-                    <td class="timecps big"><pre><a href="/player/{{ rank.name | urlencode }}">{{ rank.name }}</a></pre></td>
+                    <td class="timecps big"><pre><a href="/player/{{ rank.name | urlencode_strict }}">{{ rank.name }}</a></pre></td>
                     <td class="timecps mid">{{ rank.time | fancy_time }}</td>
                     {% for i in range(start=1, end=26) %}
                     {% set cp = "cp" ~ i %}

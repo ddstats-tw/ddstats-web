@@ -5,7 +5,7 @@
 <div class="container">
     <div class="box">
         <h2 style="float: left">Favourite partners</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}">Go back</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}">Go back</a>
         <table class="transparent">
             <thead>
                 <tr>
@@ -16,7 +16,7 @@
             <tbody>
                 {% for teammate in favourite_teammates %}
                 <tr>
-                    <td><a href="/player/{{ teammate.name | urlencode }}">{{ teammate.name }}</a></td>
+                    <td><a href="/player/{{ teammate.name | urlencode_strict }}">{{ teammate.name }}</a></td>
                     <td>{{ teammate.ranks_together }} rank{{ teammate.ranks_together | pluralize }}</td>
                 </tr>
                 {% endfor %}

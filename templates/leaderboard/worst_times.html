@@ -32,8 +32,8 @@
             {% for player in leaderboard %}
             <tr>
                 <td class="rank">{{ player.rank + 100 * (current_page - 1) }}</td>
-                <td class="wide"><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
-                <td class="grey"><a href="/map/{{ player.map | urlencode }}">{{ player.map }}</a></td>
+                <td class="wide"><a href="/player/{{ player.name | urlencode_strict }}">{{ player.name }}</a></td>
+                <td class="grey"><a href="/map/{{ player.map | urlencode_strict }}">{{ player.map }}</a></td>
                 <td class="grey">{{ player.worst }}</td>
             </tr>
             {% endfor %}

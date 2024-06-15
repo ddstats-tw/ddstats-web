@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="box">
-        <a href="https://ddstats.tw/map-inspect/?map={{ info.map.map | urlencode }}">
+        <a href="https://ddstats.tw/map-inspect/?map={{ info.map.map | urlencode_strict }}">
             <img class="center" src="https://ddnet.org/ranks/maps/{{ info.map.map | map_thumbnail }}.png">
         </a>
     </div>
@@ -56,8 +56,8 @@
 <div class="container">
     <div class="box">
         <h3>
-            <a href="https://github.com/ddnet/ddnet-maps/raw/master/types/{{ info.map.server | lower }}/maps/{{ info.map.map | urlencode }}.map">Download Map</a> -
-            <a href="https://ddstats.tw/map-inspect/?map={{ info.map.map | urlencode }}">Preview Map</a>
+            <a href="https://github.com/ddnet/ddnet-maps/raw/master/types/{{ info.map.server | lower }}/maps/{{ info.map.map | urlencode_strict }}.map">Download Map</a> -
+            <a href="https://ddstats.tw/map-inspect/?map={{ info.map.map | urlencode_strict }}">Preview Map</a>
         </h3>
     </div>
 </div>
@@ -87,7 +87,7 @@
                     <td title="{{ rank.server }}">
                         {{ macros::server_flag(height=14, server=rank.server) }}
                     </td>
-                    <td><a href="/player/{{ rank.name | urlencode }}">{{ rank.name }}</a></td>
+                    <td><a href="/player/{{ rank.name | urlencode_strict }}">{{ rank.name }}</a></td>
                     <td>{{ rank.time | fancy_time }}</td>
                     <td>{{ macros::diff(diff1=rankings[0].time, diff2=rank.time) }}</td>
                     {% if not team_rankings | length %}

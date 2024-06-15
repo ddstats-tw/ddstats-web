@@ -13,7 +13,7 @@
             {% for player in playtime %}
             <tr>
                 <td>{{ loop.index }}</td>
-                <td><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
+                <td><a href="/player/{{ player.name | urlencode_strict }}">{{ player.name }}</a></td>
                 <td>{{ player.seconds_played | time_format }}</td>
             </tr>
             {% endfor %}

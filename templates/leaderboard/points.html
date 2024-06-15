@@ -38,7 +38,7 @@
             {% for player in leaderboard %}
             <tr>
                 <td class="rank">{{ player.rank }}</td>
-                <td class="wide"><a href="/player/{{ player.name | urlencode }}">{{ player.name }}</a></td>
+                <td class="wide"><a href="/player/{{ player.name | urlencode_strict }}">{{ player.name }}</a></td>
                 <td class="grey">{{ player.points }} point{{ player.points | pluralize }}</td>
             </tr>
             {% endfor %}

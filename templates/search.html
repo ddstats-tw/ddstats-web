@@ -25,12 +25,12 @@
 {% if players %}
 {% for player in players %}
 <div class="container">
-    <a href="/player/{{ player.name | urlencode }}">
+    <a href="/player/{{ player.name | urlencode_strict }}">
         <div class="box" style="display: flex">
             {% if player.skin_name %}
             <div title="{{ player.skin_name }}" class="tee-small">
                 <div class="tee"
-                    data-skinimage="https://ddstats.tw/skins/{{ player.skin_name | urlencode }}.png"
+                    data-skinimage="https://ddstats.tw/skins/{{ player.skin_name | urlencode_strict }}.png"
                     data-bodycolor="{{ player.skin_color_body }}"
                     data-feetcolor="{{ player.skin_color_feet }}"
                     data-coloringmode="code">

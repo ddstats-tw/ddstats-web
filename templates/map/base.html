@@ -2,20 +2,20 @@
 
 {% block head %}
     <title>{{ info.map.map }} | {{ page | capitalize }} | DDStats</title>
-    <link rel="alternate" type="application/json" title="Map info in JSON" href="/map/json?map={{ info.map.map | urlencode }}">
+    <link rel="alternate" type="application/json" title="Map info in JSON" href="/map/json?map={{ info.map.map | urlencode_strict }}">
 {% endblock %}
 
 {% block main %}
     <h1>{{ info.map.map }}</h1>
     <ul class="buttons">
         <li>
-            <a class="{% if page == "overview" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}">Overview</a>
+            <a class="{% if page == "overview" %}active{% endif %}" href="/map/{{ info.map.map | urlencode_strict | safe }}">Overview</a>
         </li>
         <li>
-            <a class="{% if page == "timecps" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}/timecps">Time CPS</a>
+            <a class="{% if page == "timecps" %}active{% endif %}" href="/map/{{ info.map.map | urlencode_strict | safe }}/timecps">Time CPS</a>
         </li>
         <li>
-            <a class="{% if page == "playtime" %}active{% endif %}" href="/map/{{ info.map.map | urlencode | safe }}/playtime">Playtime</a>
+            <a class="{% if page == "playtime" %}active{% endif %}" href="/map/{{ info.map.map | urlencode_strict | safe }}/playtime">Playtime</a>
         </li>
     </ul>
 

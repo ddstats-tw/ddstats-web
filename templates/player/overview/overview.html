@@ -51,7 +51,7 @@
 <div class="container left-bigger">
     <div class="box">
         <h2 style="float: left">Last finishes</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/overview/finishes">Show more</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/overview/finishes">Show more</a>
         <table class="transparent">
             <thead>
                 <tr>
@@ -70,7 +70,7 @@
                         {{ macros::server_flag(height=17, server=finish.server) }}
                     </td>
                     <td>{{ finish.map.server }}</td>
-                    <td><a href="/map/{{ finish.map.map | urlencode | safe }}">{{ finish.map.map }}</a></td>
+                    <td><a href="/map/{{ finish.map.map | urlencode_strict | safe }}">{{ finish.map.map }}</a></td>
                     <td>{{ finish.time | fancy_time }}</td>
                 </tr>
                 {% endfor %}
@@ -80,7 +80,7 @@
 
     <div class="box">
         <h2 style="float: left">Favourite partners</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/overview/partners">Show more</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/overview/partners">Show more</a>
         <table class="transparent">
             <thead>
                 <tr>
@@ -91,7 +91,7 @@
             <tbody>
                 {% for teammate in favourite_teammates %}
                 <tr>
-                    <td><a href="/player/{{ teammate.name | urlencode }}">{{ teammate.name }}</a></td>
+                    <td><a href="/player/{{ teammate.name | urlencode_strict }}">{{ teammate.name }}</a></td>
                     <td>{{ teammate.ranks_together }} rank{{ teammate.ranks_together | pluralize }}</td>
                 </tr>
                 {% endfor %}

@@ -5,7 +5,7 @@
 <div class="container">
     <div class="box">
         <h2 style="float: left">Most played maps</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity">Go back</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/activity">Go back</a>
 
         <table class="transparent">
             <thead>
@@ -26,7 +26,7 @@
                     <td>Non-DDNet</td>
                     {% endif %}
                     {% if most_played.map %}
-                    <td><a href="/map/{{ most_played.map_name | urlencode | safe }}">{{ most_played.map_name }}</a></td>
+                    <td><a href="/map/{{ most_played.map_name | urlencode_strict | safe }}">{{ most_played.map_name }}</a></td>
                     {% else %}
                     <td>{{ most_played.map_name | truncate(length=32) }}</td>
                     {% endif %}

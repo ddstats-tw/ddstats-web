@@ -34,10 +34,10 @@
             <tr>
                 <td class="rank">{{ map.rank }}</td>
                 <td class="">{{ map.server }}</td>
-                <td class="wide"><a href="/map/{{ map.map | urlencode }}">{{ map.map }}</a></td>
+                <td class="wide"><a href="/map/{{ map.map | urlencode_strict }}">{{ map.map }}</a></td>
                 <td class="grey">{{ map.seconds | time_format }}</td>
                 <td class="wide">
-                    <a href="/player/{{ map.mostaddicted | urlencode }}">{{ map.mostaddicted }}</a>
+                    <a href="/player/{{ map.mostaddicted | urlencode_strict }}">{{ map.mostaddicted }}</a>
                     ({{ map.mostaddicted_seconds | time_format }})
                 </td>
             </tr>

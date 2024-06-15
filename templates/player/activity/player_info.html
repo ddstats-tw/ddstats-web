@@ -5,7 +5,7 @@
 <div class="container">
     <div class="box">
         <h2 style="float: left">Recent player info</h2>
-        <a class="show-more" href="/player/{{ name | urlencode | safe }}/activity">Go back</a>
+        <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/activity">Go back</a>
         <p style="clear: left"><i>You can click on a skin to copy it to your clipboard, then you can use it by pasting the contents to the local console (f1)</i></p><br>
 
         <table class="transparent">
@@ -29,7 +29,7 @@
                     <td>
                         <div title="{{ activity.skin_name }}" class="tee-medium">
                             <button class="btn-copy" onClick="copySkin('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
-                                <div class="tee" data-skinimage="https://ddstats.tw/skins/{{ activity.skin_name | urlencode }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
+                                <div class="tee" data-skinimage="https://ddstats.tw/skins/{{ activity.skin_name | urlencode_strict }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
                             </button>
                         </div>
                     </td>

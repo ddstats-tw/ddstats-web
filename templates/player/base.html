@@ -2,7 +2,7 @@
 {% block head %}
     <script src="/static/js/sortable.js" defer></script>
     <title>{{ name }} | {{ page | capitalize }} | Player Profile | DDStats</title>
-    <link rel="alternate" type="application/json" title="Player info in JSON" href="/player/json?player={{ name | urlencode }}">
+    <link rel="alternate" type="application/json" title="Player info in JSON" href="/player/json?player={{ name | urlencode_strict }}">
 {% endblock %}
 
 {% block main %}
@@ -21,7 +21,7 @@
         <div title="{{ profile.skin_name }}" class="tee-large">
             <button class="btn-copy" onClick="copySkin('{{ profile.skin_name }}', '{{ profile.skin_color_body }}', '{{ profile.skin_color_feet }}')">
                 <div class="tee" 
-                    data-skinimage="https://ddstats.tw/skins/{{ profile.skin_name | urlencode }}.png" 
+                    data-skinimage="https://ddstats.tw/skins/{{ profile.skin_name | urlencode_strict }}.png" 
                     data-bodycolor="{{ profile.skin_color_body }}" 
                     data-feetcolor="{{ profile.skin_color_feet }}" 
                     data-coloringmode="code">
@@ -38,20 +38,20 @@
 
 <ul class="buttons">
     <li>
-        <a class="{% if page == "overview" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}">Overview</a>
+        <a class="{% if page == "overview" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}">Overview</a>
     </li>
     <li>
-        <a class="{% if page == "finishes" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}/finishes">Finishes</a>
+        <a class="{% if page == "finishes" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/finishes">Finishes</a>
     </li>
     <li>
-        <a class="{% if page == "activity" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}/activity">Activity</a>
+        <a class="{% if page == "activity" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/activity">Activity</a>
     </li>
     <li>
-        <a class="{% if page == "rank1s" %}active{% endif %}" href="/player/{{ name | urlencode | safe }}/rank1s">Rank 1s</a>
+        <a class="{% if page == "rank1s" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/rank1s">Rank 1s</a>
     </li>
     {% if is_mapper %}
     <li>
-        <a href="/mapper/{{ name | urlencode | safe }}">Mapper profile</a>
+        <a href="/mapper/{{ name | urlencode_strict | safe }}">Mapper profile</a>
     </li>
     {% endif %}
 </ul>
