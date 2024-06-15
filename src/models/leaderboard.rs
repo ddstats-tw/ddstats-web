@@ -109,13 +109,10 @@ impl Leaderboard {
     /// Get leaderboard for most played maps within `category`
     pub fn most_points(
         points: &IndexMap<String, LeaderboardRank>,
+        page: usize,
     ) -> Result<Vec<MostPoints>, sqlx::Error> {
         let mut leaderboard: Vec<MostPoints> = Vec::new();
-        for (i, (name, rank)) in points.iter().enumerate() {
-            if i == 100 {
-                break;
-            }
-
+        for (name, rank) in points.iter().skip((page - 1) * 100).take(101) {
             leaderboard.push(MostPoints {
                 rank: rank.rank,
                 name: name.clone(),

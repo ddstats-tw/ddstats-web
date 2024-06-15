@@ -139,19 +139,28 @@ pub async fn most_points(
         .parse()
         .unwrap();
 
+    let page: usize = params
+        .get("page")
+        .unwrap_or(&"1".to_string())
+        .parse()
+        .unwrap_or(1);
+
     let leaderboard = match points_type {
-        PointsType::Points => Leaderboard::most_points(&state.points.points[&category]).unwrap(),
+        PointsType::Points => {
+            Leaderboard::most_points(&state.points.points[&category], page).unwrap()
+        }
         PointsType::RankPoints => {
-            Leaderboard::most_points(&state.points.rank_points[&category]).unwrap()
+            Leaderboard::most_points(&state.points.rank_points[&category], page).unwrap()
         }
         PointsType::TeamPoints => {
-            Leaderboard::most_points(&state.points.team_points[&category]).unwrap()
+            Leaderboard::most_points(&state.points.team_points[&category], page).unwrap()
         }
     };
     let mut context = Context::new();
     context.insert("leaderboard", &leaderboard);
     context.insert("current_category", &category);
     context.insert("current_type", &points_type);
+    context.insert("current_page", &page);
 
     render(state.template, "leaderboard/points.html", &context)
 }
@@ -210,10 +219,15 @@ pub fn router() -> Router<AppState> {
             "/leaderboard/mostplayed/category/:category",
             get(most_played),
         )
+        // Points
         .route("/leaderboard/points", get(most_points))
         .route("/leaderboard/points/category/:category", get(most_points))
         .route(
             "/leaderboard/points/category/:category/type/:type",
+            get(most_points),
+        )
+        .route(
+            "/leaderboard/points/category/:category/type/:type/page/:page",
             get(most_points),
         )
 }

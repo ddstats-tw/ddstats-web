@@ -45,4 +45,9 @@
         </tbody>
     </table>
 </div>
+
+{% set url = ["/leaderboard/", "points", "/category/", current_category, "/type/", current_type, "/page"] | join %}
+<div class="pages">
+    {{ macros::pager(current_page=current_page, next=leaderboard.100 is defined, path=url) }}
+</div>
 {% endblock %}
