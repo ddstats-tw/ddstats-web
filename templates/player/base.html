@@ -43,9 +43,11 @@
     <li>
         <a class="{% if page == "finishes" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/finishes">Finishes</a>
     </li>
+    {% if profile.country %}
     <li>
         <a class="{% if page == "activity" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/activity">Activity</a>
     </li>
+    {% endif %}
     <li>
         <a class="{% if page == "rank1s" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/rank1s">Rank 1s</a>
     </li>
