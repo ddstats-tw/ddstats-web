@@ -158,7 +158,7 @@ main>h1 {
     border-collapse: collapse;
 }
 
-.leaderboard table tbody thead {
+.leaderboard table tbody, .leaderboard table thead {
     border-collapse: separate;
     border-spacing: 0.5rem;
     display: table;
