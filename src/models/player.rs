@@ -377,6 +377,10 @@ impl Player {
 
         if parse_points {
             for category in Category::iter() {
+                if category == Category::All {
+                    continue;
+                }
+
                 points.insert(
                     category,
                     players_msgpack
