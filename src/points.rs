@@ -7,10 +7,13 @@ use std::time::Instant;
 use std::{collections::HashMap, fs::File, io::Read};
 
 use std::str::FromStr;
-use strum_macros::{EnumIter, EnumString};
+use strum_macros::{Display, EnumIter, EnumString};
 
-#[derive(EnumString, PartialEq, Eq, Hash, Clone, Copy, Debug, Deserialize, Serialize, EnumIter)]
+#[derive(
+    EnumString, PartialEq, Eq, Hash, Clone, Copy, Debug, Deserialize, Serialize, EnumIter, Display,
+)]
 pub enum Category {
+    All,
     Total,
     Novice,
     Moderate,

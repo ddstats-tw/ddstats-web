@@ -92,6 +92,12 @@ footer {
     overflow-x: auto;
 }
 
+.right-nav {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
 .topnav {
     overflow: hidden;
     position: sticky;
@@ -152,7 +158,7 @@ main>h1 {
     border-collapse: collapse;
 }
 
-.leaderboard table tbody {
+.leaderboard table tbody thead {
     border-collapse: separate;
     border-spacing: 0.5rem;
     display: table;
@@ -567,4 +573,8 @@ img {
 .page:hover {
     transition: color .3s, border .3s;
     border: .1rem solid palette.$blue3;
+}
+
+.wrap {
+    white-space: wrap;
 }

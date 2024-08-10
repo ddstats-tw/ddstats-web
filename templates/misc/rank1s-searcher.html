@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>{{ current_type | capitalize }} searcher | DDStats</title>
+    <script src="/static/js/sortable.js" defer></script>
+{% endblock %}
+
+{% block main %}
+<h1>Rank 1s searcher</h1>
+
+{# Move this to a different file, merge with the other #}
+{% set categories = ["All", "Novice", "Moderate", "Brutal", "Insane", "Dummy", "DDmaX.Easy", 
+                     "DDmaX.Next", "DDmaX.Pro", "DDmaX.Nut", "Oldschool", "Solo", "Race"] %}
+
+<ul class="buttons space-inbetween-small">
+    {% for category in categories %}
+    <li>
+        <a class="{% if current_category == category %}active{% endif %}" 
+           href="/misc/{{ current_type }}-searcher/category/{{ category }}">{{ category }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<h3 class="center">Type</h3>
+<ul class="buttons">
+    <li><a class="{% if current_type == "rank1s" %}active{% endif %}" href="/misc/rank1s-searcher/category/{{ current_category }}/">Rank 1s</a></li>
+    <li><a class="{% if current_type == "teamrank1s" %}active{% endif %}" href="/misc/teamrank1s-searcher/category/{{ current_category }}/">Teamrank 1s</a></li>
+</ul>
+<br>
+
+<div class="box">
+    <div class="container">
+        <table class="sortable n-last">
+            <thead>
+                <tr>
+                    <th>Map</th>
+                    <th>Player{% if current_type == "teamrank1s" %}s{% endif %}</th>
+                    <th>Server</th>
+                    <th>Time</th>
+                    <th id="default-sort">Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for rank in results %}
+            <tr>
+                <td><a href="/map/{{ rank.map | urlencode_strict }}">{{ rank.map }}</a></td>
+                {% if current_type == "rank1s" %}
+                <td><a href="/player/{{ rank.name | urlencode_strict }}">{{ rank.name }}</a></td>
+                {% else %}
+                <td data-sort="{{ rank.players | length }}" 
+                    class="wrap">{{ macros::join_array(array=rank.players, link="/player/%s") }} ({{ rank.players | length }})</td>
+                {% endif %}
+                
+                <td>{{ rank.server }}</td>
+                <td data-sort="{{ rank.time }}">{{ rank.time | fancy_time }}</td>
+                <td data-sort="{{ rank.timestamp | date(format="%s") }}">{{ rank.timestamp | date(format="%F %T") }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
