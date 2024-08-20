@@ -24,6 +24,7 @@ pub fn init_tera() -> Arc<RwLock<Tera>> {
     tera_writer.register_filter("code_to_country", code_to_country);
     tera_writer.register_filter("ordinal", ordinal);
     tera_writer.register_filter("time_format", time_format);
+    tera_writer.register_filter("time_format_with_years", time_format_with_years);
     tera_writer.register_filter("mapper_array", mapper_array);
 
     #[cfg(debug_assertions)]

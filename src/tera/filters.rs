@@ -63,23 +63,34 @@ pub fn ordinal(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error
 
 pub fn time_format(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
     let seconds = value.as_u64().unwrap_or(0);
+    Ok(to_value(time_format_wrapper(seconds, false))?)
+}
 
+pub fn time_format_with_years(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
+    let seconds = value.as_u64().unwrap_or(0);
+    Ok(to_value(time_format_wrapper(seconds, true))?)
+}
+
+pub fn time_format_wrapper(seconds: u64, include_years: bool) -> String {
     let mut remaining = seconds;
     let years = remaining / 31536000;
-    remaining %= 31536000;
+    if include_years {
+        remaining %= 31536000;
+    }
+
     let hours = remaining / 3600;
     remaining %= 3600;
     let minutes = remaining / 60;
     remaining %= 60;
 
-    if years > 0 {
-        Ok(to_value(plural(years, "year"))?)
+    if years > 0 && include_years {
+        plural(years, "year")
     } else if hours > 0 {
-        Ok(to_value(plural(hours, "hour"))?)
+        plural(hours, "hour")
     } else if minutes > 0 {
-        Ok(to_value(plural(minutes, "minute"))?)
+        plural(minutes, "minute")
     } else {
-        Ok(to_value(plural(remaining, "second"))?)
+        plural(remaining, "second")
     }
 }
 
