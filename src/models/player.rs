@@ -86,6 +86,16 @@ pub struct Profile {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ProfileOld {
+    pub name: String,
+    pub clan: Option<String>,
+    pub country: Option<i32>,
+    pub skin_name: Option<String>,
+    pub skin_color_body: Option<i32>,
+    pub skin_color_feet: Option<i32>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct RanksTogether {
     pub name: String,
     pub ranks_together: i64,
@@ -178,6 +188,16 @@ impl Player {
     /// Get profile of `player`
     pub async fn get_profile(db: &Pool<Postgres>, player: &str) -> Result<Profile, sqlx::Error> {
         sqlx::query_file_as!(Profile, "sql/player/profile_by_name.sql", player)
+            .fetch_one(db)
+            .await
+    }
+
+    /// Get profile of `player` that doesn't have points
+    pub async fn get_profile_old(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<ProfileOld, sqlx::Error> {
+        sqlx::query_file_as!(ProfileOld, "sql/player/profile_old_by_name.sql", player)
             .fetch_one(db)
             .await
     }

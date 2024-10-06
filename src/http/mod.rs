@@ -62,6 +62,7 @@ fn router(state: AppState) -> Router {
     Router::new()
         .nest("/", routes::misc::router())
         .nest("/", routes::leaderboard::router())
+        .nest("/profile/json", routes::api::profile::router(state.clone()))
         .nest("/player/json", routes::api::player::router(state.clone()))
         .nest("/player/:name", routes::player::router(state.clone()))
         .nest("/map/json", routes::api::map::router(state.clone()))
