@@ -11,16 +11,6 @@ use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProfileJson {
-    pub profile: Profile,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProfileOldJson {
-    pub profile: ProfileOld,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
 struct JsonError {
     error: String,
 }
