@@ -43,7 +43,7 @@
     <li>
         <a class="{% if page == "finishes" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/finishes">Finishes</a>
     </li>
-    {% if profile.country %}
+    {% if profile.country or profile.country == 0 %}
     <li>
         <a class="{% if page == "activity" %}active{% endif %}" href="/player/{{ name | urlencode_strict | safe }}/activity">Activity</a>
     </li>
