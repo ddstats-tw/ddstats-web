@@ -6,6 +6,7 @@ use self::filters::*;
 
 mod country_codes;
 mod filters;
+mod server_codes;
 
 pub fn init_tera() -> Arc<RwLock<Tera>> {
     let tera = match Tera::new("templates/**/*.html") {
@@ -22,6 +23,7 @@ pub fn init_tera() -> Arc<RwLock<Tera>> {
     tera_writer.register_filter("map_thumbnail", map_thumbnail);
     tera_writer.register_filter("fancy_time", fancy_time);
     tera_writer.register_filter("code_to_country", code_to_country);
+    tera_writer.register_filter("server_to_country", server_to_country);
     tera_writer.register_filter("ordinal", ordinal);
     tera_writer.register_filter("time_format", time_format);
     tera_writer.register_filter("time_format_with_years", time_format_with_years);

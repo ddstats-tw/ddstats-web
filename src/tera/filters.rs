@@ -2,7 +2,7 @@ use regex::Regex;
 use std::collections::HashMap;
 use tera::{to_value, try_get_value, Error, Value};
 
-use super::country_codes::COUNTRY_CODES;
+use super::{country_codes::COUNTRY_CODES, server_codes::SERVER_COUNTRIES};
 
 pub fn map_thumbnail(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
     let mut s = try_get_value!("map_thumbnail", "value", String, value);
@@ -43,6 +43,14 @@ pub fn code_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Valu
     let country_code = value.as_i64().unwrap_or(-1);
 
     let country_string = COUNTRY_CODES.get(&country_code).unwrap_or(&"default");
+
+    Ok(to_value(country_string)?)
+}
+
+pub fn server_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
+    let server_string = value.as_str().unwrap_or("");
+
+    let country_string = SERVER_COUNTRIES.get(server_string).unwrap_or(&"");
 
     Ok(to_value(country_string)?)
 }

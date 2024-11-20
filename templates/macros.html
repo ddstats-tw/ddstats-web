@@ -41,7 +41,7 @@ Unranked
 
 {% macro server_flag(height, server) %}
 <img width="{{ height * 2 }}px" height="{{ height }}px"
-  src="https://ddnet.org/countryflags/{% if server == "" %}UNK{% else %}{{ server }}{% endif %}.png"
+  src="/static/countryflags/{{ server | server_to_country }}.png"
   alt="server_flag_{{ server }}">
 {% endmacro %}
 
