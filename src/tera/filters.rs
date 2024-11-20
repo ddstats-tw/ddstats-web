@@ -42,7 +42,7 @@ pub fn fancy_time(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Er
 pub fn code_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
     let country_code = value.as_i64().unwrap_or(-1);
 
-    let country_string = COUNTRY_CODES.get(&country_code).unwrap_or(&"default");
+    let country_string = COUNTRY_CODES.get(&country_code).unwrap_or(&"unknown");
 
     Ok(to_value(country_string)?)
 }
