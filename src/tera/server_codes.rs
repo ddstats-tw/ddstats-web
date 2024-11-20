@@ -25,7 +25,8 @@ pub static SERVER_COUNTRIES: phf::Map<&'static str, &'static str> = phf_map! {
     "SGP" => "SG",
     "TUR" => "TR",
     "TWN" => "TW",
-    "UAE" => "UA",
+    "UAE" => "AE",
+    "UKR" => "UA",
     "USA" => "US",
     "ZAF" => "ZA"
 };

@@ -50,7 +50,7 @@ pub fn code_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Valu
 pub fn server_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
     let server_string = value.as_str().unwrap_or("");
 
-    let country_string = SERVER_COUNTRIES.get(server_string).unwrap_or(&"");
+    let country_string = SERVER_COUNTRIES.get(server_string).unwrap_or(&"default");
 
     Ok(to_value(country_string)?)
 }
