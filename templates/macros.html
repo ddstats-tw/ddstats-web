@@ -47,7 +47,7 @@ Unranked
 
 {% macro player_flag(height, code) %}
 <img width="{{ height * 2 }}px" height="{{ height }}px"
-  src="https://ddnet.org/status/countryflags/{{ code | code_to_country }}.png"
+  src="/static/countryflags/{{ code | code_to_country }}.png"
   alt="player_flag_{{ code | code_to_country }}">
 {% endmacro %}
 
