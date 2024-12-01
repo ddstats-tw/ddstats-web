@@ -42,7 +42,7 @@ Unranked
 {# Possible values for size are "small" / "medium" / "large" #}
 {% macro tee_skin(name, color_body="", color_feet="", size, enable_copy=true) %}
 <div title="{{ name }}" class="tee-{{ size }}">
-  {% set santa_skin = "santa_" ~ name %}
+  {% set santa_skin = "santa_" ~ name ~ ".png" %}
 
   {% if enable_copy %}
   <button class="btn-copy" onClick="copySkin('{{ name }}', '{{ color_body }}', '{{ color_feet }}')">
