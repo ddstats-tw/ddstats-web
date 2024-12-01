@@ -42,11 +42,17 @@ Unranked
 {# Possible values for size are "small" / "medium" / "large" #}
 {% macro tee_skin(name, color_body="", color_feet="", size, enable_copy=true) %}
 <div title="{{ name }}" class="tee-{{ size }}">
+  {% set santa_skin = "santa_" ~ name %}
+
   {% if enable_copy %}
   <button class="btn-copy" onClick="copySkin('{{ name }}', '{{ color_body }}', '{{ color_feet }}')">
   {% endif %}
   <div class="tee"
+      {% if get_env(name="SANTA_HATS", default="false") == "true" and santa_skin | skin_exists %}
+      data-skinimage="https://ddstats.tw/skins/{{ santa_skin | urlencode_strict }}.png"
+      {% else %}
       data-skinimage="https://ddstats.tw/skins/{{ name | urlencode_strict }}.png"
+      {% endif %}
       data-bodycolor="{{ color_body }}"
       data-feetcolor="{{ color_feet }}"
       data-coloringmode="code">

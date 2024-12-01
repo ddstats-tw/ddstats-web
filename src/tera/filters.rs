@@ -1,5 +1,5 @@
 use regex::Regex;
-use std::collections::HashMap;
+use std::{collections::HashMap, path::Path};
 use tera::{to_value, try_get_value, Error, Value};
 
 use super::{country_codes::COUNTRY_CODES, server_codes::SERVER_COUNTRIES};
@@ -53,6 +53,12 @@ pub fn server_to_country(value: &Value, _: &HashMap<String, Value>) -> Result<Va
     let country_string = SERVER_COUNTRIES.get(server_string).unwrap_or(&"default");
 
     Ok(to_value(country_string)?)
+}
+
+pub fn skin_exists(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
+    let skin = value.as_str().unwrap_or("default");
+    let www_path = Path::join(Path::new("/var/www/skins/"), skin.replace("/", ""));
+    Ok(to_value(www_path.exists())?)
 }
 
 pub fn ordinal(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {

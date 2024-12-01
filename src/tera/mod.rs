@@ -28,6 +28,7 @@ pub fn init_tera() -> Arc<RwLock<Tera>> {
     tera_writer.register_filter("time_format", time_format);
     tera_writer.register_filter("time_format_with_years", time_format_with_years);
     tera_writer.register_filter("mapper_array", mapper_array);
+    tera_writer.register_filter("skin_exists", skin_exists);
 
     #[cfg(debug_assertions)]
     autoreload_templates(tera.clone(), "./templates");
