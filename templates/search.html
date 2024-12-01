@@ -28,14 +28,13 @@
     <a href="/player/{{ player.name | urlencode_strict }}">
         <div class="box" style="display: flex">
             {% if player.skin_name %}
-            <div title="{{ player.skin_name }}" class="tee-small">
-                <div class="tee"
-                    data-skinimage="https://ddstats.tw/skins/{{ player.skin_name | urlencode_strict }}.png"
-                    data-bodycolor="{{ player.skin_color_body }}"
-                    data-feetcolor="{{ player.skin_color_feet }}"
-                    data-coloringmode="code">
-                </div>
-            </div>
+            {{ macros::tee_skin(name=player.skin_name,
+                color_body=player.skin_color_body,
+                color_feet=player.skin_color_feet,
+                size="small", enable_copy=false) }}
+            {% else %}
+            {{ macros::tee_skin(name="default",
+                size="small", enable_copy=false) }}
             {% endif %}
             <h3 style="margin-left: 3.5rem;">{{ player.name }} - {{ player.points }} points</h3>
         </div>

@@ -39,6 +39,24 @@ Unranked
   {% endfor %}
 {% endmacro %}
 
+{# Possible values for size are "small" / "medium" / "large" #}
+{% macro tee_skin(name, color_body="", color_feet="", size, enable_copy=true) %}
+<div title="{{ name }}" class="tee-{{ size }}">
+  {% if enable_copy %}
+  <button class="btn-copy" onClick="copySkin('{{ name }}', '{{ color_body }}', '{{ color_feet }}')">
+  {% endif %}
+  <div class="tee"
+      data-skinimage="https://ddstats.tw/skins/{{ name | urlencode_strict }}.png"
+      data-bodycolor="{{ color_body }}"
+      data-feetcolor="{{ color_feet }}"
+      data-coloringmode="code">
+  </div>
+  {% if enable_copy %}
+  </button>
+  {% endif %}
+</div>
+{% endmacro %}
+
 {% macro server_flag(height, server) %}
 <img width="{{ height * 2 }}px" height="{{ height }}px"
   src="/static/countryflags/{{ server | server_to_country }}.png"

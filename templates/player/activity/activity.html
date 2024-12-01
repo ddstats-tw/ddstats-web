@@ -53,11 +53,10 @@
                         {{ macros::player_flag(height=28, code=activity.country) }}
                     </td>
                     <td>
-                        <div title="{{ activity.skin_name }}" class="tee-medium">
-                            <button class="btn-copy" onClick="copySkin('{{ activity.skin_name }}', '{{ activity.skin_color_body }}', '{{ activity.skin_color_feet }}')">
-                                <div class="tee" data-skinimage="https://ddstats.tw/skins/{{ activity.skin_name | urlencode_strict }}.png" data-bodycolor="{{ activity.skin_color_body }}" data-feetcolor="{{ activity.skin_color_feet }}" data-coloringmode="code"></div>
-                            </button>
-                        </div>
+                        {{ macros::tee_skin(name=activity.skin_name,
+                            color_body=activity.skin_color_body,
+                            color_feet=activity.skin_color_feet,
+                            size="medium") }}
                     </td>
                 </tr>
                 {% endfor %}
