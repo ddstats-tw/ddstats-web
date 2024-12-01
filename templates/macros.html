@@ -49,7 +49,7 @@ Unranked
   {% endif %}
   <div class="tee"
       {% if get_env(name="SANTA_HATS", default="false") == "true" and santa_skin | skin_exists %}
-      data-skinimage="https://ddstats.tw/skins/{{ santa_skin | urlencode_strict }}.png"
+      data-skinimage="https://ddstats.tw/skins/{{ santa_skin | urlencode_strict }}"
       {% else %}
       data-skinimage="https://ddstats.tw/skins/{{ name | urlencode_strict }}.png"
       {% endif %}
