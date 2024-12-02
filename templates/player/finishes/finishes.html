@@ -28,8 +28,6 @@
                         <th>Points</th>
                         <th>Rank Points</th>
                         <th>Team Points</th>
-                        <th>Team Rank1s</th>
-                        <th>Rank 1s</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,8 +35,6 @@
                             <td>{{ macros::points(data=points.points, category=category) }}</td>
                             <td>{{ macros::points(data=points.rank_points, category=category) }}</td>
                             <td>{{ macros::points(data=points.team_points, category=category) }}</td>
-                            <td>Unranked</td>
-                            <td>Unranked</td>
                         </tr>
                     </tbody>
                 </table>
