@@ -578,3 +578,29 @@ img {
 .wrap {
     white-space: wrap;
 }
+
+progress[value] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    width: 100%;
+    border: none;
+    border-radius: 0.2rem;
+    background: palette.$grey4;
+}
+
+progress[value]::-webkit-progress-bar {
+    border-radius: 0.2rem;
+    background: palette.$grey4;
+}
+
+// You may come to the conclusion that you can combine these two, but it breaks the styling, wtf
+progress[value]::-webkit-progress-value {
+    border-radius: 0.2rem;
+    background: palette.$indigo;
+}
+
+progress[value]::-moz-progress-bar {
+    border-radius: 0.2rem;
+    background: palette.$indigo;
+}

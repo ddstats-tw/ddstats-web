@@ -26,6 +26,7 @@ pub struct PlayerJson {
     pub finishes: Vec<Finish>,
     pub unfinished_maps: Vec<Info>,
     pub points: Points,
+    pub completion_progress: Vec<CompletionProgress>,
     pub recent_activity: Vec<RecentActivity>,
     pub recent_player_info: Vec<RecentPlayerInfo>,
     pub most_played_maps: Vec<MostPlayedMaps>,
@@ -69,6 +70,7 @@ pub async fn player_json(
     let finishes = Player::finishes(&state.db, &name).await?;
     let unfinished_maps = Player::unfinished_maps(&state.db, &name).await?;
     let points = Player::points(&state.points, &name);
+    let completion_progress = Player::completion_progress(&state.db, &name).await?;
 
     // Activity
     let recent_activity = Player::recent_activity(&state.db, &name, Some(11)).await?;
@@ -94,6 +96,7 @@ pub async fn player_json(
         finishes,
         unfinished_maps,
         points,
+        completion_progress,
         recent_activity,
         recent_player_info,
         most_played_maps,

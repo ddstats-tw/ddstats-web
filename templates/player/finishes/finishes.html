@@ -15,6 +15,48 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="box">
+        <h2>Category completion progress</h2>
+
+        <table class="transparent">
+            <tbody>
+                <tr>
+                    {% set_global total_maps = 0 %}
+                    {% set_global total_maps_finished = 0 %}
+                    {% for category in categories %}
+                    {% if category != 'Fun' %}
+                    {% set_global total_maps = total_maps + completion_progress[category].maps_total %}
+                    {% set_global total_maps_finished = total_maps_finished + completion_progress[category].maps_finished %}
+                    {% endif %}
+                    {% endfor %}
+                    <td style="width: 100px">Total</td>
+                    <td>
+                        <progress id="progress-total" value="{{ total_maps_finished }}" 
+                            max="{{ total_maps}}">
+                        </progress>
+                    </td>
+                    <td style="width: 100px">{{ total_maps_finished }} / {{ total_maps }}</td>
+
+                </tr>
+                {% for category in categories %}
+                {% if category != 'Fun' %}
+                <tr>
+                    <td style="width: 100px">{{ category }}</td>
+                    <td>
+                        <progress id="progress-{{ category }}" value="{{ completion_progress[category].maps_finished }}" 
+                            max="{{ completion_progress[category].maps_total }}">
+                        </progress>
+                    </td>
+                    <td style="width: 100px">{{ completion_progress[category].maps_finished }} / {{ completion_progress[category].maps_total }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {% for category in categories %}
 <div class="container">
     <div id="{{ category }}" class="box">

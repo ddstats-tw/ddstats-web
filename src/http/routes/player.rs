@@ -3,8 +3,10 @@ use crate::http::render;
 use crate::http::AppState;
 use crate::models::map::Info;
 use crate::models::mapper::Mapper;
+use crate::models::player::CompletionProgress;
 use crate::models::player::Finish;
 use crate::models::player::Player;
+use crate::utils::create_array_index_by_field;
 use crate::utils::create_index_by_field;
 use axum::extract::Path;
 use axum::extract::Request;
@@ -86,20 +88,26 @@ pub async fn player_finishes(
     Path(name): Path<String>,
     State(state): State<AppState>,
 ) -> Result<Html<String>, Error> {
-    let finishes = create_index_by_field::<Finish, String>(
+    let finishes = create_array_index_by_field::<Finish, String>(
         Player::finishes(&state.db, &name).await?,
         |finish| finish.map.server.clone(),
     );
-    let unfinished_maps = create_index_by_field::<Info, String>(
+    let unfinished_maps = create_array_index_by_field::<Info, String>(
         Player::unfinished_maps(&state.db, &name).await?,
         |map| map.map.server.clone(),
     );
+    let completion_progress = create_index_by_field::<CompletionProgress, String>(
+        Player::completion_progress(&state.db, &name).await?,
+        |row| row.category.clone(),
+    );
+
     let points = Player::points(&state.points, &name);
 
     let mut context = player_context(&state.db, &name, "finishes").await?;
     context.insert("points", &points);
     context.insert("finishes", &finishes);
     context.insert("unfinished_maps", &unfinished_maps);
+    context.insert("completion_progress", &completion_progress);
 
     render(state.template, "player/finishes/finishes.html", &context)
 }

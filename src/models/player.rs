@@ -55,6 +55,13 @@ pub struct Finish {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CompletionProgress {
+    pub category: String,
+    pub maps_finished: i64,
+    pub maps_total: i64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct TopRank {
     pub map: Map,
     pub name: String,
@@ -229,6 +236,20 @@ impl Player {
             "sql/player/favourite_rank1s_teammates.sql",
             player,
             n,
+        )
+        .fetch_all(db)
+        .await
+    }
+
+    /// Get map completion progress of all map categories of a `player`.
+    pub async fn completion_progress(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<Vec<CompletionProgress>, sqlx::Error> {
+        sqlx::query_file_as!(
+            CompletionProgress,
+            "sql/player/completion_progress.sql",
+            player,
         )
         .fetch_all(db)
         .await
