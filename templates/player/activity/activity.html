@@ -4,6 +4,15 @@
 
 <div class="container">
     <div class="box">
+        <h2>Total playtime</h2>
+        <p>{{ name }} has played a total of {{ general_activity.total_seconds_played | time_format }}
+            since {{ general_activity.start_of_playtime }} with an average of
+            {{ general_activity.average_seconds_played | time_format }} each day.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
         <h2 style="float: left">Recent playtime</h2>
         <a class="show-more" href="/player/{{ name | urlencode_strict | safe }}/activity/playtime">Show more</a>
 

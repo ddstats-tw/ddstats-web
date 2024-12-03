@@ -123,6 +123,7 @@ pub async fn player_activity(
     let most_played_categories = Player::most_played_categories(&state.db, &name, Some(15)).await?;
     let most_played_locations = Player::most_played_locations(&state.db, &name, Some(15)).await?;
     let playtime_per_month = Player::playtime_per_month(&state.db, &name, Some(12)).await?;
+    let general_activity = Player::general_activity(&state.db, &name).await?;
 
     let mut context = player_context(&state.db, &name, "activity").await?;
     context.insert("recent_activity", &recent_activity);
@@ -132,6 +133,7 @@ pub async fn player_activity(
     context.insert("most_played_categories", &most_played_categories);
     context.insert("most_played_locations", &most_played_locations);
     context.insert("playtime_per_month", &playtime_per_month);
+    context.insert("general_activity", &general_activity);
 
     render(state.template, "player/activity/activity.html", &context)
 }

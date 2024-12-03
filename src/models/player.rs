@@ -109,6 +109,13 @@ pub struct RanksTogether {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct GeneralActivity {
+    pub total_seconds_played: i64,
+    pub start_of_playtime: NaiveDate,
+    pub average_seconds_played: i64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct RecentActivity {
     pub name: String,
     pub date: NaiveDate,
@@ -290,6 +297,16 @@ impl Player {
     ) -> Result<Vec<RecentRank>, sqlx::Error> {
         sqlx::query_file_as!(RecentRank, "sql/player/recent_top_10s.sql", player, n)
             .fetch_all(db)
+            .await
+    }
+
+    /// Get the general activity of a `player`.
+    pub async fn general_activity(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<GeneralActivity, sqlx::Error> {
+        sqlx::query_file_as!(GeneralActivity, "sql/player/general_activity.sql", player,)
+            .fetch_one(db)
             .await
     }
 
