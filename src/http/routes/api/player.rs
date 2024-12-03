@@ -34,6 +34,7 @@ pub struct PlayerJson {
     pub most_played_categories: Vec<MostPlayedChart>,
     pub most_played_locations: Vec<MostPlayedChart>,
     pub playtime_per_month: Vec<PlaytimePerMonth>,
+    pub general_activity: GeneralActivity,
     pub favourite_rank1s_teammates: Vec<RanksTogether>,
     pub all_top_10s: Vec<TopRank>,
     pub recent_top_10s: Vec<RecentRank>,
@@ -80,6 +81,7 @@ pub async fn player_json(
     let most_played_categories = Player::most_played_categories(&state.db, &name, Some(15)).await?;
     let most_played_locations = Player::most_played_locations(&state.db, &name, Some(15)).await?;
     let playtime_per_month = Player::playtime_per_month(&state.db, &name, Some(12)).await?;
+    let general_activity = Player::general_activity(&state.db, &name).await?;
 
     // Rank1s
     let favourite_rank1s_teammates =
@@ -104,6 +106,7 @@ pub async fn player_json(
         most_played_categories,
         most_played_locations,
         playtime_per_month,
+        general_activity,
         favourite_rank1s_teammates,
         all_top_10s,
         recent_top_10s,
