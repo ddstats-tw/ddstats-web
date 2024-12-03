@@ -4,4 +4,6 @@ SELECT SUM(time) as "total_seconds_played!",
 FROM
     playtime
 WHERE
-    name = $1;
+    name = $1
+HAVING
+    SUM(time) > 0

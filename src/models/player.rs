@@ -304,9 +304,9 @@ impl Player {
     pub async fn general_activity(
         db: &Pool<Postgres>,
         player: &str,
-    ) -> Result<GeneralActivity, sqlx::Error> {
+    ) -> Result<Option<GeneralActivity>, sqlx::Error> {
         sqlx::query_file_as!(GeneralActivity, "sql/player/general_activity.sql", player,)
-            .fetch_one(db)
+            .fetch_optional(db)
             .await
     }
 

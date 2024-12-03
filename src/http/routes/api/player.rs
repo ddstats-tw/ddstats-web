@@ -34,7 +34,7 @@ pub struct PlayerJson {
     pub most_played_categories: Vec<MostPlayedChart>,
     pub most_played_locations: Vec<MostPlayedChart>,
     pub playtime_per_month: Vec<PlaytimePerMonth>,
-    pub general_activity: GeneralActivity,
+    pub general_activity: Option<GeneralActivity>,
     pub favourite_rank1s_teammates: Vec<RanksTogether>,
     pub all_top_10s: Vec<TopRank>,
     pub recent_top_10s: Vec<RecentRank>,
