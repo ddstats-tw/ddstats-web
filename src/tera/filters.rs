@@ -4,15 +4,6 @@ use tera::{to_value, try_get_value, Error, Value};
 
 use super::{country_codes::COUNTRY_CODES, server_codes::SERVER_COUNTRIES};
 
-pub fn map_thumbnail(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
-    let mut s = try_get_value!("map_thumbnail", "value", String, value);
-    let re1 = Regex::new(r"[À-ž]").unwrap();
-    let re2 = Regex::new(r"[^a-zA-Z0-9]").unwrap();
-    s = re1.replace_all(&s, "__").to_string();
-    s = re2.replace_all(&s, "_").to_string();
-    Ok(to_value(s)?)
-}
-
 pub fn fancy_time(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Error> {
     let input_secs = value.as_f64().unwrap_or(0.0);
 

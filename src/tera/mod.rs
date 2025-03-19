@@ -20,7 +20,6 @@ pub fn init_tera() -> Arc<RwLock<Tera>> {
 
     let binding = tera.clone();
     let mut tera_writer = binding.write().unwrap();
-    tera_writer.register_filter("map_thumbnail", map_thumbnail);
     tera_writer.register_filter("fancy_time", fancy_time);
     tera_writer.register_filter("code_to_country", code_to_country);
     tera_writer.register_filter("server_to_country", server_to_country);
