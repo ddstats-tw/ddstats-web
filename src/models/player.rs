@@ -1,4 +1,4 @@
-use chrono::NaiveDate;
+use chrono::{Duration, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{self, types::chrono::NaiveDateTime, Pool, Postgres};
 use std::{collections::HashMap, env, fmt::Debug};
@@ -164,6 +164,20 @@ pub struct PlaytimePerMonth {
     pub year_month: String,
     pub month: String,
     pub seconds_played: i64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct FirstFinished {
+    pub map: String,
+    pub timestamp: NaiveDateTime,
+    pub points: i32,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RankedPoints {
+    pub date: NaiveDate,
+    pub rank_points: i64,
+    pub team_points: i64,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -412,14 +426,75 @@ impl Player {
         .await
     }
 
+    /// Get all rankedpoints entries of a `player`
+    pub async fn all_first_finishes(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<Vec<FirstFinished>, sqlx::Error> {
+        sqlx::query_file_as!(FirstFinished, "sql/player/all_first_finishes.sql", player)
+            .fetch_all(db)
+            .await
+    }
+
+    /// Get all rankedpoints entries of a `player`
+    pub async fn rank_points_entries(
+        db: &Pool<Postgres>,
+        player: &str,
+    ) -> Result<Vec<RankedPoints>, sqlx::Error> {
+        sqlx::query_file_as!(RankedPoints, "sql/player/rank_points_entries.sql", player)
+            .fetch_all(db)
+            .await
+    }
+
     /// Get the historical rank-, team- and points data
     pub async fn points_graph(
         db: &Pool<Postgres>,
         player: &str,
     ) -> Result<Vec<PointsGraph>, sqlx::Error> {
-        sqlx::query_file_as!(PointsGraph, "sql/player/points-graph.sql", player)
-            .fetch_all(db)
-            .await
+        let rank_points_entries = Self::rank_points_entries(db, player).await?;
+        let mut all_first_finishes = Self::all_first_finishes(db, player).await?;
+
+        let mut points_counter = all_first_finishes.first().unwrap().points;
+        for finish in all_first_finishes.iter_mut() {
+            finish.points += points_counter;
+            points_counter = finish.points
+        }
+
+        let dt0 = all_first_finishes.first().unwrap().timestamp.date();
+        let dt1 = Utc::now().date_naive();
+        let mut points_graph: Vec<PointsGraph> = Vec::new();
+
+        let mut dt = dt0;
+        while dt <= dt1 {
+            let mut points = 0;
+            for finish in all_first_finishes.iter() {
+                if finish.timestamp > dt.into() {
+                    break;
+                }
+                points = finish.points
+            }
+
+            let mut rank_points = 0;
+            let mut team_points = 0;
+            for entry in rank_points_entries.iter() {
+                if entry.date > dt {
+                    break;
+                }
+                rank_points = entry.rank_points;
+                team_points = entry.team_points;
+            }
+
+            points_graph.push(PointsGraph {
+                date: dt,
+                points: points.into(),
+                rank_points,
+                team_points,
+            });
+
+            dt += Duration::days(7);
+        }
+
+        Ok(points_graph)
     }
 
     /// Get points of a `player`.

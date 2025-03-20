@@ -1,6 +1,5 @@
-use regex::Regex;
 use std::{collections::HashMap, path::Path};
-use tera::{to_value, try_get_value, Error, Value};
+use tera::{to_value, Error, Value};
 
 use super::{country_codes::COUNTRY_CODES, server_codes::SERVER_COUNTRIES};
 
