@@ -2,3 +2,4 @@ User-agent: *
 Disallow: /player/
 Disallow: /map/
 Disallow: /map-inspect/
+Disallow: *page*
