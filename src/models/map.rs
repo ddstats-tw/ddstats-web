@@ -97,6 +97,13 @@ impl Map {
             .await
     }
 
+    /// Get information about all maps
+    pub async fn get_all(db: &Pool<Postgres>) -> Result<Vec<Map>, sqlx::Error> {
+        sqlx::query_file_as!(Map, "sql/map/get_all.sql")
+            .fetch_all(db)
+            .await
+    }
+
     /// Get rankings of a map
     pub async fn rankings(
         db: &Pool<Postgres>,

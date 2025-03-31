@@ -66,6 +66,7 @@ fn router(state: AppState) -> Router {
         .nest("/player/json", routes::api::player::router(state.clone()))
         .nest("/player/:name", routes::player::router(state.clone()))
         .nest("/map/json", routes::api::map::router(state.clone()))
+        .nest("/maps/json", routes::api::maps::router())
         .nest("/map/:name", routes::map::router(state.clone()))
         .nest("/mapper/:name", routes::mapper::router(state.clone()))
         .nest_service("/static", ServeDir::new("static"))
