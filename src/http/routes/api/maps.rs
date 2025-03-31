@@ -17,7 +17,7 @@ pub struct MapsJson {
 pub async fn maps_json(State(state): State<AppState>) -> Result<Response, Error> {
     let maps = Map::get_all(&state.db).await?;
 
-    Ok(Json(MapsJson { maps }).into_response())
+    Ok(Json(maps).into_response())
 }
 
 pub fn router() -> Router<AppState> {
