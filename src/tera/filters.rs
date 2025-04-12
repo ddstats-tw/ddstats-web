@@ -20,7 +20,10 @@ pub fn fancy_time(value: &Value, _: &HashMap<String, Value>) -> Result<Value, Er
         time_str.push_str(&format!("{}:", hours));
     }
 
-    time_str.push_str(&format!("{:02}:", mins));
+    if mins > 0.0 {
+        time_str.push_str(&format!("{:02}:", mins));
+    }
+
     time_str.push_str(&format!("{:02}", secs));
     // if !remove_decimals {
     time_str.push_str(&format!(".{:02}", millis));
