@@ -3,6 +3,7 @@ use crate::http::render;
 use crate::http::AppState;
 use crate::models::map::Map;
 use axum::extract::Path;
+use axum::extract::Query;
 use axum::extract::Request;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -12,9 +13,16 @@ use axum::response::Html;
 use axum::response::IntoResponse;
 use axum::response::Response;
 use axum::{routing::get, Router};
+use serde::Deserialize;
+use serde::Serialize;
 use sqlx::Pool;
 use sqlx::Postgres;
 use tera::Context;
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TimeCpsQuery {
+    sort_by: Option<String>,
+}
 
 pub async fn map_context(db: &Pool<Postgres>, name: &str, page: &str) -> Result<Context, Error> {
     let info = Map::info(db, name).await?;
@@ -41,12 +49,17 @@ pub async fn map_overview(
 
 pub async fn map_time_cps(
     Path(name): Path<String>,
+    query: Query<TimeCpsQuery>,
     State(state): State<AppState>,
 ) -> Result<Html<String>, Error> {
-    let time_cps = Map::time_cps(&state.db, &name, Some(100)).await?;
+    let time_cps = Map::time_cps(&state.db, &name, query.sort_by.clone(), Some(100)).await?;
 
     let mut context = map_context(&state.db, &name, "timecps").await?;
     context.insert("time_cps", &time_cps);
+    context.insert(
+        "sorting",
+        &query.sort_by.clone().unwrap_or("time".to_string()),
+    );
 
     render(state.template, "map/time_cps.html", &context)
 }

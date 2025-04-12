@@ -130,11 +130,18 @@ impl Map {
     pub async fn time_cps(
         db: &Pool<Postgres>,
         map: &str,
+        sort_by: Option<String>,
         n: Option<i64>,
     ) -> Result<Vec<TimeCps>, sqlx::Error> {
-        sqlx::query_file_as!(TimeCps, "sql/map/time_cps.sql", map, n)
-            .fetch_all(db)
-            .await
+        if sort_by.is_none() {
+            sqlx::query_file_as!(TimeCps, "sql/map/time_cps.sql", map, n)
+                .fetch_all(db)
+                .await
+        } else {
+            sqlx::query_file_as!(TimeCps, "sql/map/time_cps_sort.sql", map, sort_by, n)
+                .fetch_all(db)
+                .await
+        }
     }
 
     /// Get playtime of a map

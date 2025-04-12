@@ -9,9 +9,12 @@
             <tr>
                 <th class="timecps small">Rank</th>
                 <th class="timecps big">Player</th>
-                <th class="timecps mid">Time</th>
+                <th class="timecps mid"><a href="/map/{{ info.map.map }}/timecps">Time{% if sorting == "time" %}↓{% endif %}</a></th>
                 {% for i in range(start=1, end=26) %}
-                <th class="timecps mid">CP{{ i }}</th>
+                <th class="timecps mid"><a href="/map/{{ info.map.map }}/timecps?sort_by=cp{{ i }}">
+                    {% set cp = "cp" ~ i %}
+                    CP{{ i }}{% if sorting == cp %}↓{% endif %}
+                </a></th>
                 {% endfor %}
             </tr>
             </thead>

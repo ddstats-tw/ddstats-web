@@ -45,7 +45,7 @@ pub async fn map_json(
     let team_rankings = Map::team_rankings(&state.db, &name, Some(100)).await?;
 
     // TimeCPs
-    let time_cps = Map::time_cps(&state.db, &name, Some(100)).await?;
+    let time_cps = Map::time_cps(&state.db, &name, None, Some(100)).await?;
 
     // Playtime
     let playtime = Map::playtime(&state.db, &name, Some(100)).await?;
