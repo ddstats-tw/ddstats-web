@@ -15,6 +15,7 @@
                     {% set cp = "cp" ~ i %}
                     CP{{ i }}{% if sorting == cp %}↓{% endif %}
                 </a></th>
+                <th class="timecps mid">Diff</th>
                 {% endfor %}
             </tr>
             </thead>
@@ -30,6 +31,24 @@
                     <td class="timecps mid">{{ rank[cp] | fancy_time }}</td>
                     {% else %}
                     <td class="timecps mid">-</td>
+                    {% endif %}
+                    {% if i < 25 %}
+                    {% set y = i + 1 %}
+                    {% set next_cp = "cp" ~ y %}
+
+                    {% if rank[cp] == 0 or rank[next_cp] == 0 %}
+                    <td class="timecps mid">--</td>
+                    {% elif time_cps[0] == rank %}
+                    <td class="timecps mid">{{ rank[next_cp] - rank[cp] + 0.001 | fancy_time }}</td>
+                    {% elif time_cps[0][cp] == 0 or time_cps[0][next_cp] == 0 %}
+                    <td class="timecps mid">{{ rank[next_cp] - rank[cp] + 0.001 | fancy_time }}</td>
+                    {% elif time_cps[0][next_cp] - time_cps[0][cp] >= rank[next_cp] - rank[cp] %}
+                    <td class="timecps mid"><span style="color: #3DDF89;">{{ rank[next_cp] - rank[cp] + 0.001 | fancy_time }}<span></td>
+                    {% else %}
+                    <td class="timecps mid"><span style="color: #EF5255;">{{ rank[next_cp] - rank[cp] + 0.001 | fancy_time }}</span></td>
+                    {% endif %}
+                    {% else %}
+                    <td class="timecps mid">--</td>
                     {% endif %}
                     {% endfor %}
                 </tr>
