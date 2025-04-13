@@ -8,4 +8,6 @@ JOIN mapstats ON
     maps.map = mapstats.map
 WHERE
     maps.map ILIKE FORMAT('%%%s%%', $1::text)
+ORDER BY
+    maps.map
 LIMIT $2
